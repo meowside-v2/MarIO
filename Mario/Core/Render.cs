@@ -16,10 +16,6 @@ namespace Mario.Core
         private const int Render_WIDTH = 300;
         private const int RENDER_HEIGHT = 100;
 
-        private static byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
-
-        private static short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
-
         public Render()
         {
             Console.CursorVisible = true;
@@ -37,6 +33,10 @@ namespace Mario.Core
 
         private static void Buffering()
         {
+            DoubleBuffer screen = new DoubleBuffer();
+            byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
+            short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
+
             ReTry:
                 try
                 {
@@ -61,13 +61,8 @@ namespace Mario.Core
                     Console.SetBufferSize(Render_WIDTH, RENDER_HEIGHT);
                 }
 
-                for (int row = 0; row < RENDER_HEIGHT; row++)
-                {
-                    for (int column = 0; column < Render_WIDTH; column++)
-                    {
-                        //buffer[row  * Render_WIDTH + column] = 32;
-                    }
-                }
+                buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
+                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ConsoleColor.White << 4), render_colors.Length).ToArray();
 
                 foreach (var item in Program.Objects)
                 {
@@ -84,14 +79,13 @@ namespace Mario.Core
                                         buffer[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = 219;
                                         render_colors[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = item.mesh.bitmapColor[row * item.mesh.width + column];
                                     }
-                                        
                                 }
                             }
                         }
                     }
                 }
 
-                DoubleBuffer img = new DoubleBuffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
+                screen.Scr_Buffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
             }
         }
     }

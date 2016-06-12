@@ -17,7 +17,6 @@ namespace Mario
         static void Main(string[] args)
         {
             Objects.Add(player);
-            //Objects.Add(enemy1);
 
             Render game = new Render();
 

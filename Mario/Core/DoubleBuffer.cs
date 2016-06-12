@@ -69,14 +69,14 @@ namespace Mario.Core
             public short Bottom;
         }
 
-        public DoubleBuffer(int x, int y, short[] clr, byte[] chr)
+        public void Scr_Buffer(int x, int y, short[] clr, byte[] chr)
         {
             SafeFileHandle h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
             CharInfo[] buf = new CharInfo[x * y];
-
-            for(int row = 0; row < y; row++)
+            
+            for (int row = 0; row < y; row++)
             {
-                for(int column = 0; column < x; column++)
+                for (int column = 0; column < x; column++)
                 {
                     buf[row * x + column].Char.AsciiChar = chr[row * x + column];
                     buf[row * x + column].Attributes = clr[row * x + column];
