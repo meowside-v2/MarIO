@@ -17,6 +17,10 @@ namespace Mario.Core
         public int jumpheight { get; set; }
         public int jumplenght { get; set; }
 
+        public double Acceleration_Y { get; set; }
+        public double Acceleration_X { get; set; }
+        public double MaxAcceleration { get; set; }
+
         public Material mesh;
 
         public Core_objects(string type)
@@ -30,13 +34,17 @@ namespace Mario.Core
                     name = type;
 
                     X = 2;
-                    Y = 20;
+                    Y = 50;
 
                     jumpheight = 5;
                     jumplenght = 2;
 
+                    MaxAcceleration = 1;
+
+                    
                     Thread keychecker = new Thread(KeyPress);
                     keychecker.Start();
+                    
 
                     break;
 
@@ -85,65 +93,69 @@ namespace Mario.Core
             }
 
         }
-
+        
         private void Jump()
         {
-            int start_position = Y;
-            double step = Convert.ToDouble(jumpheight);
+            double start_position = Y;
+            double pos_y = Y;
+
+            bool IsFalling = false;
+
+            Acceleration_Y = MaxAcceleration;
 
             Stopwatch deltatime = new Stopwatch();
             deltatime.Start();
 
-            while (Y > start_position - jumpheight)
+            do
             {
+                if (Acceleration_Y < 0 && !IsFalling)
+                {
+                    Acceleration_Y = 0;
+                    IsFalling = true;
+                    deltatime.Restart();
+                }
 
-                Y -= Convert.ToInt32(0.5 * World.Gravity * Math.Pow(deltatime.ElapsedMilliseconds / 1000, 2));
-
+                else
+                {
+                    Acceleration_Y -= deltatime.ElapsedMilliseconds / 500;
+                }
+                
+                Y -= (int)(jumpheight * (Acceleration_Y / World.Gravity));
                 Thread.Sleep(100);
-                /*Y -= (int)Math.Sqrt(int.Parse((deltatime.ElapsedMilliseconds / 2000).ToString()));
-                Thread.Sleep(100);*/
-            }
-
-            deltatime.Restart();
-
-            while (Y < start_position)
-            {
-                Y += (int)Math.Pow(int.Parse((deltatime.ElapsedMilliseconds / 1000).ToString()), 1.5);
-                Thread.Sleep(100);
-            }
-
-            /*while (Y < Console.WindowHeight)
-            {
-                Y = Y - (int)Math.Sin(double.Parse((deltatime.ElapsedMilliseconds / 1000 * 180).ToString()));
-                Thread.Sleep(1000);
-            }*/
+            } while (Y < start_position);
 
             deltatime.Stop();
         }
 
         private void KeyPress()
-        {
+        {   
             ConsoleKeyInfo K;
 
             while (true)
             {
-                K = Console.ReadKey(true);
 
-                switch (K.Key)
+                if (Console.KeyAvailable)
                 {
-                    case ConsoleKey.A:
-                        X--;
-                        break;
+                    K = Console.ReadKey(true);
 
-                    case ConsoleKey.D:
-                        X++;
-                        break;
+                    switch (K.Key)
+                    {
+                        case ConsoleKey.A:
+                            X--;
+                            break;
 
-                    case ConsoleKey.W:
-                        Physics("jump");
-                        break;
+                        case ConsoleKey.D:
+                            X++;
+                            break;
+
+                        case ConsoleKey.W:
+                            Physics("jump");
+                            break;
+                    }
+
                 }
             }
+            
         }
     }
 }
