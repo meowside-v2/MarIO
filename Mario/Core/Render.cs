@@ -13,8 +13,8 @@ namespace Mario.Core
     class Render
     {
         
-        private const int Render_WIDTH = 300;
-        private const int RENDER_HEIGHT = 100;
+        public const int Render_WIDTH = 300;
+        public const int RENDER_HEIGHT = 100;
 
         public Render()
         {
@@ -77,7 +77,7 @@ namespace Mario.Core
                     }
                 }
 
-                foreach (var item in Program.Objects)
+                foreach (var item in Program.enemies)
                 {
                     if (item.X + Render_WIDTH - 1 >= 0 && item.X < Render_WIDTH && item.Y + RENDER_HEIGHT - 1 >= 0 && item.Y < RENDER_HEIGHT)
                     {
@@ -93,6 +93,21 @@ namespace Mario.Core
                                         render_colors[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = item.mesh.bitmapColor[row * item.mesh.width + column];
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+
+                for(int row = 0; row < Program.player.mesh.height; row++)
+                {
+                    for( int column = 0; column < Program.player.mesh.width; column++)
+                    {
+                        if (Program.player.X + column >= 0 && Program.player.X + column < Render_WIDTH && Program.player.Y + row < RENDER_HEIGHT && Program.player.Y + row >= 0)
+                        {
+                            if (Program.player.mesh.bitmapTransparent[row, column] == 255)
+                            {
+                                buffer[Program.player.Y * Render_WIDTH + row * Render_WIDTH + Program.player.X + column] = 219;
+                                render_colors[Program.player.Y * Render_WIDTH + row * Render_WIDTH + Program.player.X + column] = Program.player.mesh.bitmapColor[row * Program.player.mesh.width + column];
                             }
                         }
                     }

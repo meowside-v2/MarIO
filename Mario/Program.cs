@@ -9,7 +9,8 @@ namespace Mario
 {
     class Program
     {
-        public static List<Core_objects> Objects = new List<Core_objects>();
+        public static List<Core_objects> enemies = new List<Core_objects>();
+
 
         public static World map = new World();
         public static Core_objects player = new Core_objects("player");
@@ -18,7 +19,7 @@ namespace Mario
         static void Main(string[] args)
         {
             
-            Objects.Add(player);
+            //Objects.Add(player);
 
             Render game = new Render();
 
