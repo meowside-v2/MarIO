@@ -16,6 +16,8 @@ namespace Mario.Core
         public const int Render_WIDTH = 300;
         public const int RENDER_HEIGHT = 100;
 
+        public const int FRAME_RATE = 120;    // Frames per Second
+
         public Render()
         {
             Console.CursorVisible = true;
@@ -31,14 +33,17 @@ namespace Mario.Core
 
         
 
-        private static void Buffering()
+        private void Buffering()
         {
+            Stopwatch delay = new Stopwatch();
             DoubleBuffer screen = new DoubleBuffer();
             byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
             short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
 
             bool Sized = false;
-            
+
+            delay.Start();
+
             while (true)
             {
 
@@ -63,7 +68,7 @@ namespace Mario.Core
                 }
 
                 buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
-                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.White << 4), render_colors.Length).ToArray();
+                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
                 for(int row = 0; row < Program.map.mesh.height; row++)
                 {
@@ -117,7 +122,22 @@ namespace Mario.Core
                 }
 
                 screen.Scr_Buffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
+
+                Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
+
+                delay.Restart();
+            }
+        }
+
+        private void Vsync(int TargetFrameRate, int ImageRenderDelay)
+        {
+            int targetDelay = 1000 / TargetFrameRate;
+
+            if (ImageRenderDelay < targetDelay)
+            {
+                Thread.Sleep(targetDelay - ImageRenderDelay);
             }
         }
     }
+
 }
