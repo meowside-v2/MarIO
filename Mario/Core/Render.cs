@@ -18,6 +18,9 @@ namespace Mario.Core
 
         public const int FRAME_RATE = 120;    // Frames per Second
 
+        private byte[] temp_buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
+        private short[] temp_render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
+
         public Render()
         {
             Console.CursorVisible = true;
@@ -25,25 +28,21 @@ namespace Mario.Core
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
-            Thread Buff = new Thread(new ThreadStart(Buffering));
-
+            Thread Buff = new Thread(Buffering);
+            Thread Ren  = new Thread(Rendering);
             Buff.Start();
+            Ren.Start();
 
         }
-
         
-
         private void Buffering()
         {
-            Stopwatch delay = new Stopwatch();
-            DoubleBuffer screen = new DoubleBuffer();
+            
             byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
             short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
 
             bool Sized = false;
-
-            delay.Start();
-
+            
             while (true)
             {
 
@@ -74,8 +73,6 @@ namespace Mario.Core
                 {
                     for(int column = 0; column < Program.map.mesh.width; column++)
                     {
-
-
                         if(Program.map.mesh.bitmapTransparent[row, column] == 255)
                         {
                             buffer[row * Program.map.mesh.width + column] = Program.map.mesh.bitmapTransparent[row, column];
@@ -121,8 +118,28 @@ namespace Mario.Core
                     }
                 }
 
-                screen.Scr_Buffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
 
+                Array.Copy(buffer, temp_buffer, buffer.Length);
+                Array.Copy(render_colors, temp_render_colors, render_colors.Length);
+
+            }
+        }
+
+        private void Rendering()
+        {
+            Stopwatch delay = new Stopwatch();
+            DoubleBuffer screen = new DoubleBuffer();
+            delay.Start();
+
+            byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
+            short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
+
+            while (true)
+            {
+                Array.Copy(temp_buffer, buffer, buffer.Length);
+                Array.Copy(temp_render_colors, render_colors, render_colors.Length);
+
+                screen.Scr_Buffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
                 Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
 
                 delay.Restart();
