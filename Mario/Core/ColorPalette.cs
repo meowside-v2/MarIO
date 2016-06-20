@@ -10,26 +10,55 @@ namespace Mario.Core
 {
     class ColorPalette
     {
-        public void SetColorPalette()
+        public ColorPalette()
         {
-            foreach(ConsoleColor clr in Enum.GetValues(typeof(ConsoleColor)))
+            int counter = 0;
+
+            foreach (ConsoleColor clr in Enum.GetValues(typeof(ConsoleColor)))
             {
-                SetColor(clr, );
+                SetColor(clr, Color.FromArgb(int.Parse(color[counter], System.Globalization.NumberStyles.HexNumber)));
+                counter++;
             }
         }
 
-        private readonly int[,] color = {
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 },
-            { 0x00, 0x00, 0x00 }
+        public static readonly string[] color = {
+            "FFFFFF", // White
+            "000000", // Black
+            "FF0000", // Red
+            "00C600", // Green
+            "0000FF", // Blue
+            "F0FF00", // Yellow
+            "5F3800", // Brown
+            "42C1DC", // Aqua
+            "E65200", // Orange
+            "F19D25", // Light Brown
+            "B2B2B2", // Light Gray
+            "1E2F6C", // Dark Blue
+            "008100", // Dark Green
+            "227C8F", // Dark Aqua
+            "4D4D4D", // Dark Gray
+            "EA9962"  // Skin
         };
         
+        public enum eColors
+        {
+            White,
+            Black,
+            Red,
+            Green,
+            Blue,
+            Yellow,
+            Brown,
+            Aqua,
+            Orange,
+            LightBrown,
+            LightGray,
+            DarkBlue,
+            DarkGreen,
+            DarkAqua,
+            DarkGray,
+            Skin
+        }
 
         const int STD_OUTPUT_HANDLE = -11;                                        // per WinBase.h
         internal static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);    // per WinBase.h

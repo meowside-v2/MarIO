@@ -17,7 +17,7 @@ namespace Mario.Core
         public byte[,] bitmapTransparent;
         public int width;
         public int height;
-
+        
         public Material(Bitmap img)
         {
             Bitmap sourceBmp = img;
@@ -64,9 +64,9 @@ namespace Mario.Core
             short[] index = new short[width * height];
 
             ConsoleColor[] xx = Coloring();
-
+            
             int count = 0;
-
+            
             foreach (var item in xx)
             {
                 index[count] = (short)xx[count++];
@@ -75,36 +75,35 @@ namespace Mario.Core
             return index;
         }
 
-        public ConsoleColor ClosestConsoleColor(byte r, byte g, byte b)
+        public ConsoleColor ClosestConsoleColor(string hex)
         {
-            ConsoleColor ret = 0;
-            double rr = r, gg = g, bb = b, delta = double.MaxValue;
+            int counter = 0;
 
             foreach (ConsoleColor cc in Enum.GetValues(typeof(ConsoleColor)))
             {
-                var n = Enum.GetName(typeof(ConsoleColor), cc);
-                var c = Color.FromName(n == "DarkYellow" ? "Orange" : n); // bug fix
-                var t = Math.Pow(c.R - rr, 2.0) + Math.Pow(c.G - gg, 2.0) + Math.Pow(c.B - bb, 2.0);
-                if (t == 0.0)
-                    return cc;
-                if (t < delta)
+                if (ColorPalette.color[counter++] == hex)
                 {
-                    delta = t;
-                    ret = cc;
+                    return cc;
                 }
             }
-            return ret;
+
+            return 0;
+        }
+
+        private string GetHexClr(byte R, byte G, byte B)
+        {
+            return string.Format("{0:X2}{1:X2}{2:X2}", R, G, B);
         }
 
         public ConsoleColor[] Coloring()
         {
             ConsoleColor[] colors = new ConsoleColor[width * height];
 
-            for(int row = 0; row < height; row++)
+            for (int row = 0; row < height; row++)
             {
                 for(int column = 0; column < width; column++)
                 {
-                    colors[row * width + column] = ClosestConsoleColor(bitmapColorB[row, column], bitmapColorG[row, column], bitmapColorR[row, column]);
+                    colors[row * width + column] = ClosestConsoleColor(GetHexClr(bitmapColorR[row, column], bitmapColorG[row, column], bitmapColorB[row, column]));
                 }
             }
 

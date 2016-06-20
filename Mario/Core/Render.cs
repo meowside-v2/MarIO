@@ -63,12 +63,14 @@ namespace Mario.Core
                 }
 
                 buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
-                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ConsoleColor.White << 4), render_colors.Length).ToArray();
+                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.White << 4), render_colors.Length).ToArray();
 
                 for(int row = 0; row < Program.map.mesh.height; row++)
                 {
                     for(int column = 0; column < Program.map.mesh.width; column++)
                     {
+
+
                         if(Program.map.mesh.bitmapTransparent[row, column] == 255)
                         {
                             buffer[row * Program.map.mesh.width + column] = Program.map.mesh.bitmapTransparent[row, column];
@@ -108,6 +110,7 @@ namespace Mario.Core
                             {
                                 buffer[Program.player.Y * Render_WIDTH + row * Render_WIDTH + Program.player.X + column] = 219;
                                 render_colors[Program.player.Y * Render_WIDTH + row * Render_WIDTH + Program.player.X + column] = Program.player.mesh.bitmapColor[row * Program.player.mesh.width + column];
+                                
                             }
                         }
                     }

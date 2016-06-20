@@ -11,19 +11,14 @@ namespace Mario.Core
 {
     class DoubleBuffer
     {
-        [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern SafeFileHandle CreateFile(
-        string fileName,
-        [MarshalAs(UnmanagedType.U4)] uint fileAccess,
-        [MarshalAs(UnmanagedType.U4)] uint fileShare,
-        IntPtr securityAttributes,
-        [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
-        [MarshalAs(UnmanagedType.U4)] int flags,
-        IntPtr template);
+        const int STD_OUTPUT_HANDLE = -11;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetStdHandle(int nStdHandle);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool WriteConsoleOutput(
-          SafeFileHandle hConsoleOutput,
+          IntPtr hConsoleOutput,
           CharInfo[] lpBuffer,
           Coord dwBufferSize,
           Coord dwBufferCoord,
@@ -71,7 +66,6 @@ namespace Mario.Core
 
         public void Scr_Buffer(int x, int y, short[] clr, byte[] chr)
         {
-            SafeFileHandle h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
             CharInfo[] buf = new CharInfo[x * y];
             
             for (int row = 0; row < y; row++)
@@ -84,7 +78,7 @@ namespace Mario.Core
             }
 
             SmallRect rect = new SmallRect() { Left = 0, Top = 0, Right = (short)x, Bottom = (short)y };
-            bool b = WriteConsoleOutput(h, buf,
+            bool b = WriteConsoleOutput(GetStdHandle(STD_OUTPUT_HANDLE), buf,
                           new Coord() { X = (short)x, Y = (short)y },
                           new Coord() { X = 0, Y = 0 },
                           ref rect);
