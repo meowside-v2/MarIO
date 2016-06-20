@@ -16,10 +16,12 @@ namespace Mario.Core
         public int X { get; set; }
         public int Y { get; set; }
 
-        private int jumpheight { get; set; }     // Number of Blocks
-        private int jumplenght { get; set; }     // In ms (miliseconds)
-        
-        private double Acceleration_X { get; set; }
+        public int AnimationState { get; set; }
+
+        private int jumpheight = 0;     // Number of Blocks
+        private int jumplenght = 0;     // In ms (miliseconds)
+
+        //private double Acceleration_X = 0;
         
         private bool Jumped = false;
         private bool WKeyIsHeld = false;

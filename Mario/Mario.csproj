@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ColorPalette.cs" />
     <Compile Include="Core\Core_objects.cs" />
     <Compile Include="Core\DoubleBuffer.cs" />
     <Compile Include="Core\Material.cs" />
