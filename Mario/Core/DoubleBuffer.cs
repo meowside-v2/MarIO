@@ -78,10 +78,11 @@ namespace Mario.Core
             }
 
             SmallRect rect = new SmallRect() { Left = 0, Top = 0, Right = (short)x, Bottom = (short)y };
-            bool b = WriteConsoleOutput(GetStdHandle(STD_OUTPUT_HANDLE), buf,
-                          new Coord() { X = (short)x, Y = (short)y },
-                          new Coord() { X = 0, Y = 0 },
-                          ref rect);
+            bool b = WriteConsoleOutput(
+                        GetStdHandle(STD_OUTPUT_HANDLE), buf,
+                        new Coord() { X = (short)x, Y = (short)y },
+                        new Coord() { X = 0, Y = 0 },
+                        ref rect);
         }
     }
 }

@@ -9,16 +9,16 @@ namespace Mario
 {
     class Program
     {
-        public static List<Core_objects> enemies = new List<Core_objects>();
+        public static List<Enemy> enemies = new List<Enemy>();
 
         public static ColorPalette bufferColors = new ColorPalette();
         public static World map = new World();
-        public static Core_objects player = new Core_objects("player");
-        public static Core_objects enemy1 = new Core_objects("turtle");
+        public static Player player = new Player();
+        //public static Enemy enemy1 = new Enemy();
 
         static void Main(string[] args)
         {
-
+            
             Render game = new Render();
 
         }
