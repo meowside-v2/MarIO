@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mario.Core
 {
@@ -25,7 +26,19 @@ namespace Mario.Core
 
         public Player()
         {
-            mesh = new Material((Bitmap)Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\mario_12x16.png"));
+            Image img = null;
+
+            try
+            {
+                img = Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\mario_12x16.png");
+            }
+            catch
+            {
+                MessageBox.Show(Error.ErrorHandle(Error.eError.MarioSpriteException), "Error");
+                Environment.Exit(0);
+            }
+
+            mesh = new Material((Bitmap)img);
 
             name = "Mario";
 

@@ -52,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,7 @@
     <Compile Include="Core\ColorPalette.cs" />
     <Compile Include="Core\Core_objects.cs" />
     <Compile Include="Core\DoubleBuffer.cs" />
+    <Compile Include="Core\Error.cs" />
     <Compile Include="Data\Objects\Enemy.cs" />
     <Compile Include="Core\Material.cs" />
     <Compile Include="Core\Physics.cs" />
@@ -77,7 +79,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Sprites\mario_12x16.bmp" />
     <Content Include="Data\Sprites\mario_12x16.png" />
   </ItemGroup>
   <ItemGroup>

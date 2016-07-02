@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mario.Core
 {
@@ -17,7 +18,19 @@ namespace Mario.Core
 
         public World()
         {
-            mesh = new Material((Bitmap)Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\world_test.png"));
+            Image img = null;
+
+            try
+            {
+                img = Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\world_test.png");
+            }
+            catch
+            {
+                MessageBox.Show("World can't be loaded, please reinstall game!", "Error");
+                Environment.Exit(0);
+            }
+
+            mesh = new Material((Bitmap)img);
         }
     }
 }
