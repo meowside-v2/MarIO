@@ -14,7 +14,7 @@ namespace Mario.Core
             WorldSpriteException
         }
 
-        public static string[] sError =
+        private static string[] sError =
         {
             "Mario sprite can't be loaded",
             "World sprite can't be loaded"

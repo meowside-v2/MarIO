@@ -34,7 +34,7 @@ namespace Mario.Core
             }
             catch
             {
-                MessageBox.Show(Error.ErrorHandle(Error.eError.MarioSpriteException), "Error");
+                MessageBox.Show(Error.ErrorHandle(Error.eError.MarioSpriteException), string.Format("Error 0x{0:X3}", (int)Error.eError.MarioSpriteException), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
 
