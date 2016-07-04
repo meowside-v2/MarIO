@@ -12,8 +12,7 @@ namespace Mario.Core
 {
     class Player : Core_objects
     {
-
-        //private double Acceleration_X = 0;
+        Camera cam = new Camera();
 
         private bool Jumped = false;
         private bool WKeyIsHeld = false;
@@ -23,8 +22,8 @@ namespace Mario.Core
             Jump,
             Fall
         };
-
-        public Player()
+        
+        public void Init(World world, List<Enemy> enemies)
         {
             Image img = null;
 
@@ -48,10 +47,12 @@ namespace Mario.Core
             jumpheight = 30;
             jumplength = 15;
 
-            Thread keychecker = new Thread(KeyPress);
+            cam.Init(this, world, enemies);
+
+            Thread keychecker = new Thread(() => KeyPress(world, enemies));
             keychecker.Start();
 
-            physics.Fall(this);
+            Fall(world, enemies);
         }
 
         [DllImport("user32.dll")]
@@ -64,14 +65,14 @@ namespace Mario.Core
             return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
         }
 
-        private void KeyPress()
+        private void KeyPress(World world, List<Enemy> enemies)
         {
             while (true)
             {
 
                 if (IsKeyPressed(ConsoleKey.W))
                 {
-                    Physics((int)PhysicState.Jump);
+                    Physics((int)PhysicState.Jump, world, enemies);
                     WKeyIsHeld = true;
                 }
                 else
@@ -82,19 +83,19 @@ namespace Mario.Core
 
                 if (IsKeyPressed(ConsoleKey.A))
                 {
-                    if (!collider.CollisionLeft(this)) X--;
-                    if (!collider.CollisionBottom(this) && !Jumped)
+                    if (!collider.CollisionLeft(this, world, enemies)) X--;
+                    if (!collider.CollisionBottom(this, world, enemies) && !Jumped)
                     {
-                        Physics(PhysicState.Fall);
+                        Physics(PhysicState.Fall, world, enemies);
                     }
                 }
 
                 if (IsKeyPressed(ConsoleKey.D))
                 {
-                    if (!collider.CollisionRight(this)) X++;
-                    if (!collider.CollisionBottom(this) && !Jumped)
+                    if (!collider.CollisionRight(this, world, enemies)) X++;
+                    if (!collider.CollisionBottom(this, world, enemies) && !Jumped)
                     {
-                        Physics(PhysicState.Fall);
+                        Physics(PhysicState.Fall, world, enemies);
                     }
                 }
 
@@ -103,7 +104,7 @@ namespace Mario.Core
 
         }
 
-        private void Physics(PhysicState type)
+        private void Physics(PhysicState type, World world, List<Enemy> enemies)
         {
 
             switch (type)
@@ -113,7 +114,7 @@ namespace Mario.Core
                     if (!Jumped)
                     {
                         Jumped = true;
-                        Thread JumpEvent = new Thread(Jump);
+                        Thread JumpEvent = new Thread(() => Jump(world, enemies));
                         JumpEvent.Start();
                     }
 
@@ -122,7 +123,7 @@ namespace Mario.Core
                 case PhysicState.Fall:
 
                     Jumped = true;
-                    Thread FallEvent = new Thread(() => physics.Fall(this));
+                    Thread FallEvent = new Thread(() => Fall(world, enemies));
                     FallEvent.Start();
 
                     break;
@@ -130,7 +131,7 @@ namespace Mario.Core
 
         }
 
-        private void Jump()
+        private void Jump(World world, List<Enemy> enemies)
         {
             int StartPositon = Y;
             int MinJump = 10;
@@ -139,19 +140,19 @@ namespace Mario.Core
             {
                 if (StartPositon - Y == jumpheight / World.Gravity)
                 {
-                    physics.Fall(this);
+                    Fall(world, enemies);
                     Jumped = false;
                     return;
                 }
-                else if (collider.CollisionTop(this))
+                else if (collider.CollisionTop(this, world, enemies))
                 {
-                    physics.Fall(this);
+                    Fall(world, enemies);
                     Jumped = false;
                     return;
                 }
                 else if (!WKeyIsHeld && StartPositon - Y > MinJump)
                 {
-                    physics.Fall(this);
+                    Fall(world, enemies);
                     Jumped = false;
                     return;
                 }
@@ -160,6 +161,18 @@ namespace Mario.Core
 
                 Thread.Sleep(jumplength);
             } while (true);
+        }
+
+        private void Fall(World world, List<Enemy> enemies)
+        {
+            do
+            {
+                Y += 1;
+                
+                Thread.Sleep(jumplength);
+            } while (!collider.CollisionBottom(this, world, enemies));
+
+            Jumped = false;
         }
     }
 }

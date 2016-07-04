@@ -13,7 +13,7 @@ namespace Mario.Core
     class Enemy : Core_objects
     {
         
-        public Enemy()
+        public void Init(World world, List<Enemy> enemies)
         {
             Image img = null;
 
@@ -38,7 +38,7 @@ namespace Mario.Core
             Thread movement = new Thread(MovementEnemy);
             movement.Start();
 
-            physics.Fall(this);
+            //ll(this, world, enemies);
         }
 
         public void MovementEnemy()

@@ -9,18 +9,15 @@ namespace Mario
 {
     class Program
     {
-        public static List<Enemy> enemies = new List<Enemy>();
-
-        public static ColorPalette bufferColors = new ColorPalette();
-        public static World map = new World();
-        public static Player player = new Player();
-        //public static Enemy enemy1 = new Enemy();
-
         static void Main(string[] args)
         {
-            
-            Render game = new Render();
+            World map = new World();
+            List<Enemy> enemies = new List<Enemy>();
+            ColorPalette bufferColors = new ColorPalette();
 
+            Player player = new Player();
+
+            player.Init(map, enemies);
         }
     }
 }

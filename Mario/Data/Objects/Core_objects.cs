@@ -23,6 +23,5 @@ namespace Mario.Core
 
         public Material mesh;
         public Collider collider = new Collider();
-        public Physics physics = new Physics();
     }
 }
