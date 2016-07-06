@@ -23,7 +23,7 @@ namespace Mario.Data.Scenes
         bool EnterPressed = false;
         bool Changed = false;
 
-        List<object> core = new List<object>();
+        xList<object> core = new xList<object>();
 
         public void Start()
         {
@@ -39,7 +39,7 @@ namespace Mario.Data.Scenes
 
             _newBlock.Init(selected);
 
-            core = new List<object>(Refill(Z));
+            core = new xList<object>(Refill(Z));
 
             cam.Init(core);
 
@@ -146,6 +146,7 @@ namespace Mario.Data.Scenes
             while (true)
             {
                 Thread.Sleep(10);
+                
 
                 if (IsKeyPressed(ConsoleKey.W))
                 {
@@ -173,30 +174,33 @@ namespace Mario.Data.Scenes
 
                     if (!EnterPressed)
                     {
+                        Block temp = new Block();
+
+                        temp = (Block)_newBlock.Copy();
+
                         switch (Z)
                         {
                             case 0:
-                                map.background.Add(_newBlock);
+                                map.background.Add(temp);
                                 LayerSort(map.background);
                                 break;
 
                             case 1:
-                                map.middleground.Add(_newBlock);
+                                map.middleground.Add(temp);
                                 LayerSort(map.middleground);
                                 break;
 
                             case 2:
-                                map.foreground.Add(_newBlock);
+                                map.foreground.Add(temp);
                                 LayerSort(map.foreground);
                                 break;
                         }
 
                         EnterPressed = true;
-
-                        _newBlock = new Block();
+                        
                         _newBlock.Init(selected);
 
-                        core = new List<object>(Refill(Z));
+                        core = new xList<object>(Refill(Z));
                     }
                 }
 
@@ -250,7 +254,7 @@ namespace Mario.Data.Scenes
                 {
                     if (Z < 2 && !Changed)
                     {
-                        core = new List<object>(Refill(Z));
+                        core = new xList<object>(Refill(Z));
                         Changed = true;
                     }
                 }
@@ -259,7 +263,7 @@ namespace Mario.Data.Scenes
                 {
                     if (Z > 0 && !Changed)
                     {
-                        core = new List<object>(Refill(Z));
+                        core = new xList<object>(Refill(Z));
                         Changed = true;
                     }
                 }

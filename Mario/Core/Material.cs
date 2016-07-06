@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Core
 {
+
     class Material
     {
         public byte[] graphics;

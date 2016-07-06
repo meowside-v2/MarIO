@@ -14,19 +14,19 @@ namespace Mario.Data.Objects
         public double Gravity { get; set; }
         public string Level { get; set; }
 
-        public List<Block> foreground    = new List<Block>();
-        public List<Block> middleground  = new List<Block>();
-        public List<Block> background    = new List<Block>();
+        public xList<Block> foreground    = new xList<Block>();
+        public xList<Block> middleground  = new xList<Block>();
+        public xList<Block> background    = new xList<Block>();
 
         public int width { get; set; }
         public int height { get; set; }
 
         public World() { }
 
-        public World(int w, int h)
+        public World(int width, int height)
         {
-            width = w;
-            height = h;
+            this.width = width;
+            this.height = height;
         }
 
         public void Init(int lvl)

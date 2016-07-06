@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Mario.Data.Objects
 {
-    class Block
+    
+    class Block : ICore
     {
 
         public int X { get; set; }
@@ -18,7 +19,7 @@ namespace Mario.Data.Objects
         public bool IsBonus { get; set; }
         public bool IsDestroyable { get; set; }
 
-        public Material mesh;
+        public Material mesh { get; set; }
 
         public void Init(int type)
         {
@@ -168,6 +169,16 @@ namespace Mario.Data.Objects
                     mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground2));
                     break;
             }
+        }
+        
+        public object Copy()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public void AddTo(List<object> destination)
+        {
+            destination.Add(this);
         }
     }
 }

@@ -83,8 +83,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\CustomList.cs" />
+    <Compile Include="Core\ICore.cs" />
     <Compile Include="Core\ImageLoader.cs" />
     <Compile Include="Core\ObjectDatabase.cs" />
+    <Compile Include="Core\TextBlock.cs" />
     <Compile Include="Data\Objects\Block.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Collider.cs" />
@@ -95,7 +98,6 @@
     <Compile Include="Data\Objects\Enemy.cs" />
     <Compile Include="Core\Material.cs" />
     <Compile Include="Data\Objects\Player.cs" />
-    <Compile Include="Core\Render.cs" />
     <Compile Include="Data\Objects\World.cs" />
     <Compile Include="Data\Scenes\Game.cs" />
     <Compile Include="Data\Scenes\MainMenu.cs" />
@@ -105,10 +107,49 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Data\Font\font.psd" />
+    <None Include="Data\Sprites\blocks_project.psd" />
     <None Include="Mario_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Font\0.png" />
+    <Content Include="Data\Font\1.png" />
+    <Content Include="Data\Font\2.png" />
+    <Content Include="Data\Font\3.png" />
+    <Content Include="Data\Font\4.png" />
+    <Content Include="Data\Font\5.png" />
+    <Content Include="Data\Font\6.png" />
+    <Content Include="Data\Font\7.png" />
+    <Content Include="Data\Font\8.png" />
+    <Content Include="Data\Font\9.png" />
+    <Content Include="Data\Font\A.png" />
+    <Content Include="Data\Font\B.png" />
+    <Content Include="Data\Font\C.png" />
+    <Content Include="Data\Font\D.png" />
+    <Content Include="Data\Font\E.png" />
+    <Content Include="Data\Font\F.png" />
+    <Content Include="Data\Font\G.png" />
+    <Content Include="Data\Font\H.png" />
+    <Content Include="Data\Font\I.png" />
+    <Content Include="Data\Font\J.png" />
+    <Content Include="Data\Font\K.png" />
+    <Content Include="Data\Font\L.png" />
+    <Content Include="Data\Font\M.png" />
+    <Content Include="Data\Font\N.png" />
+    <Content Include="Data\Font\O.png" />
+    <Content Include="Data\Font\P.png" />
+    <Content Include="Data\Font\Q.png" />
+    <Content Include="Data\Font\R.png" />
+    <Content Include="Data\Font\S.png" />
+    <Content Include="Data\Font\T.png" />
+    <Content Include="Data\Font\U.png" />
+    <Content Include="Data\Font\V.png" />
+    <Content Include="Data\Font\W.png" />
+    <Content Include="Data\Font\X.png" />
+    <Content Include="Data\Font\Y.png" />
+    <Content Include="Data\Font\Z.png" />
+    <Content Include="Data\Sprites\ColorPalette.png" />
     <Content Include="Data\Sprites\Ground\block_01.png" />
     <Content Include="Data\Sprites\Ground\block_02.png" />
     <Content Include="Data\Sprites\Ground\block_03.png" />
