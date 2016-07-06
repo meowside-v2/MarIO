@@ -88,7 +88,8 @@ namespace Mario.Core
             Num7,
             Num8,
             Num9,
-            space
+            space,
+            minus
         };
 
         public static readonly string[] font_path =
@@ -129,7 +130,50 @@ namespace Mario.Core
             "\\Data\\Font\\7.png",
             "\\Data\\Font\\8.png",
             "\\Data\\Font\\9.png",
-            "\\Data\\Font\\space.png"
+            "\\Data\\Font\\space.png",
+            "\\Data\\Font\\minus.png"
+        };
+
+        public static Dictionary<char, Font> font = new Dictionary<char, Font>()
+        {
+            { 'A' , Font.A },
+            { 'B' , Font.B },
+            { 'C' , Font.C },
+            { 'D' , Font.D },
+            { 'E' , Font.E },
+            { 'F' , Font.F },
+            { 'G' , Font.G },
+            { 'H' , Font.H },
+            { 'I' , Font.I },
+            { 'J' , Font.J },
+            { 'K' , Font.K },
+            { 'L' , Font.L },
+            { 'M' , Font.M },
+            { 'N' , Font.N },
+            { 'O' , Font.O },
+            { 'P' , Font.P },
+            { 'Q' , Font.Q },
+            { 'R' , Font.R },
+            { 'S' , Font.S },
+            { 'T' , Font.T },
+            { 'U' , Font.U },
+            { 'V' , Font.V },
+            { 'W' , Font.W },
+            { 'X' , Font.X },
+            { 'Y' , Font.Y },
+            { 'Z' , Font.Z },
+            { '0' , Font.Num0 },
+            { '1' , Font.Num1 },
+            { '2' , Font.Num2 },
+            { '3' , Font.Num3 },
+            { '4' , Font.Num4 },
+            { '5' , Font.Num5 },
+            { '6' , Font.Num6 },
+            { '7' , Font.Num7 },
+            { '8' , Font.Num8 },
+            { '9' , Font.Num9 },
+            { ' ' , Font.space },
+            { '-' , Font.minus }
         };
     }
 }

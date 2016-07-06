@@ -10,13 +10,13 @@ namespace Mario.Core
 {
     class ImageLoader
     {
-        public static Image Load(ObjectDatabase.Object type)
+        public static Image Load(object type, object[] array)
         {
             Image img = null;
 
             try
             {
-                img = Image.FromFile(Environment.CurrentDirectory + ObjectDatabase.path[(int)type]);
+                img = Image.FromFile(Environment.CurrentDirectory + array[(int)type]);
             }
             catch
             {

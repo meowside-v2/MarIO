@@ -9,7 +9,7 @@ using Mario.Core;
 
 namespace Mario.Data.Objects
 {
-    class World
+    class World : ICore
     {
         public double Gravity { get; set; }
         public string Level { get; set; }
@@ -32,6 +32,16 @@ namespace Mario.Data.Objects
         public void Init(int lvl)
         {
 
+        }
+
+        public object Copy()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public void AddTo(List<object> destination)
+        {
+            destination.Add(this);
         }
     }
 }

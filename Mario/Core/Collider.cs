@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Core
 {
-    class Collider
+    class Collider : ICore
     {
         public bool CollisionLeft(Core_objects obj, World map, List<Enemy> enemies)
         {
@@ -71,6 +71,16 @@ namespace Mario.Core
             }
 
             return false;
+        }
+
+        public object Copy()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public void AddTo(List<object> destination)
+        {
+            destination.Add(this);
         }
     }
 }

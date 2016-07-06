@@ -64,17 +64,16 @@ namespace Mario.Core
             public short Bottom;
         }
 
-        public void Scr_Buffer(int x, int y, short[] clr, byte[] chr)
+        public void Scr_Buffer(int x, int y, int size, short[] clr, byte[] chr)
         {
-            CharInfo[] buf = new CharInfo[x * y];
+            CharInfo[] buf = new CharInfo[size];
             
-            for (int row = 0; row < y; row++)
+            for (int index = 0; index < size; index++)
             {
-                for (int column = 0; column < x; column++)
-                {
-                    buf[row * x + column].Char.AsciiChar = chr[row * x + column];
-                    buf[row * x + column].Attributes = clr[row * x + column];
-                }
+                
+                buf[index].Char.AsciiChar = chr[index];
+                buf[index].Attributes = clr[index];
+                
             }
 
             SmallRect rect = new SmallRect() { Left = 0, Top = 0, Right = (short)x, Bottom = (short)y };

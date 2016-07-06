@@ -31,7 +31,7 @@ namespace Mario.Data.Objects
                     IsBonus = true;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockGround1));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround1, ObjectDatabase.path));
                     break;
 
                 case 1:         // Ground - Ground
@@ -40,7 +40,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockGround2));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround2, ObjectDatabase.path));
                     break;
 
                 case 2:         // Ground - Brick 1
@@ -49,7 +49,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockGround3));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround3, ObjectDatabase.path));
                     break;
 
                 case 3:         // Ground - Brick 2
@@ -58,7 +58,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = true;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockGround4));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround4, ObjectDatabase.path));
                     break;
 
                 case 4:         // UnderGround - Bonus
@@ -67,7 +67,7 @@ namespace Mario.Data.Objects
                     IsBonus = true;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround1));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround1, ObjectDatabase.path));
                     break;
 
                 case 5:         // UnderGround - ground
@@ -76,7 +76,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround2));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround2, ObjectDatabase.path));
                     break;
 
                 case 6:         // UnderGround - Brick 1
@@ -85,7 +85,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround3));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround3, ObjectDatabase.path));
                     break;
 
                 case 7:         // UnderGround - Brick 2
@@ -94,7 +94,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround4));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround4, ObjectDatabase.path));
                     break;
 
                 case 8:         // UnderGround - Brick 2
@@ -103,7 +103,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky1));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky1, ObjectDatabase.path));
                     break;
 
                 case 9:         // UnderGround - Brick 2
@@ -112,7 +112,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky2));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky2, ObjectDatabase.path));
                     break;
 
                 case 10:         // UnderGround - Brick 2
@@ -121,7 +121,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky3));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky3, ObjectDatabase.path));
                     break;
 
                 case 11:         // UnderGround - Brick 2
@@ -130,7 +130,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky4));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky4, ObjectDatabase.path));
                     break;
 
                 case 12:         // UnderGround - Brick 2
@@ -139,7 +139,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky5));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky5, ObjectDatabase.path));
                     break;
 
                 case 13:         // UnderGround - Brick 2
@@ -148,7 +148,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Sky6));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky6, ObjectDatabase.path));
                     break;
 
                 case 14:         // UnderGround - Brick 2
@@ -157,7 +157,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground1));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground1, ObjectDatabase.path));
                     break;
 
                 case 15:         // UnderGround - Brick 2
@@ -166,7 +166,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground2));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground2, ObjectDatabase.path));
                     break;
             }
         }

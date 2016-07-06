@@ -136,12 +136,14 @@
     <Content Include="Data\Font\K.png" />
     <Content Include="Data\Font\L.png" />
     <Content Include="Data\Font\M.png" />
+    <Content Include="Data\Font\minus.png" />
     <Content Include="Data\Font\N.png" />
     <Content Include="Data\Font\O.png" />
     <Content Include="Data\Font\P.png" />
     <Content Include="Data\Font\Q.png" />
     <Content Include="Data\Font\R.png" />
     <Content Include="Data\Font\S.png" />
+    <Content Include="Data\Font\space.png" />
     <Content Include="Data\Font\T.png" />
     <Content Include="Data\Font\U.png" />
     <Content Include="Data\Font\V.png" />

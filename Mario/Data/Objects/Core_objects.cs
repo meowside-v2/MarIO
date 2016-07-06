@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Data.Objects
 {
-    class Core_objects
+    class Core_objects : ICore
     {
         public string name { get; set; }
         public int X { get; set; }
@@ -24,5 +24,15 @@ namespace Mario.Data.Objects
 
         public Material mesh;
         public Collider collider = new Collider();
+
+        public object Copy()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public void AddTo(List<object> destination)
+        {
+            destination.Add(this);
+        }
     }
 }

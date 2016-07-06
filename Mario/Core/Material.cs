@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Mario.Core
 {
 
-    class Material
+    class Material : ICore
     {
         public byte[] graphics;
         public short[] bitmapColor;
@@ -19,9 +19,9 @@ namespace Mario.Core
         public int width;
         public int height;
         
-        public Material(Bitmap img)
+        public Material(Image img)
         {
-            Bitmap sourceBmp = img;
+            Bitmap sourceBmp = (Bitmap)img;
             bitmapColorR = new byte[sourceBmp.Height, sourceBmp.Width];
             bitmapColorG = new byte[sourceBmp.Height, sourceBmp.Width];
             bitmapColorB = new byte[sourceBmp.Height, sourceBmp.Width];
@@ -43,7 +43,7 @@ namespace Mario.Core
             bitmapColor = ConsoleEnum();
         }
 
-        public byte[] Sprite()
+        private byte[] Sprite()
         {
             byte[] sprite = new byte[width * height];
 
@@ -60,7 +60,7 @@ namespace Mario.Core
             return sprite;
         }
 
-        public short[] ConsoleEnum()
+        private short[] ConsoleEnum()
         {
             short[] index = new short[width * height];
 
@@ -76,7 +76,7 @@ namespace Mario.Core
             return index;
         }
 
-        public ConsoleColor ClosestConsoleColor(string hex)
+        private ConsoleColor ClosestConsoleColor(string hex)
         {
             int counter = 0;
 
@@ -96,7 +96,7 @@ namespace Mario.Core
             return string.Format("{0:X2}{1:X2}{2:X2}", R, G, B);
         }
 
-        public ConsoleColor[] Coloring()
+        private ConsoleColor[] Coloring()
         {
             ConsoleColor[] colors = new ConsoleColor[width * height];
 
@@ -109,6 +109,16 @@ namespace Mario.Core
             }
 
             return colors;
+        }
+
+        public object Copy()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public void AddTo(List<object> destination)
+        {
+            destination.Add(this);
         }
     }
 }

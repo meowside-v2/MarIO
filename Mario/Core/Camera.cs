@@ -16,13 +16,19 @@ namespace Mario.Core
         public int Xoffset { get; set; }
         public int Yoffset { get; set; }
 
-        private int Render_WIDTH = Console.LargestWindowWidth;
+        private int RENDER_WIDTH = Console.LargestWindowWidth;
         private int RENDER_HEIGHT = Console.LargestWindowHeight;
 
         private const int FRAME_RATE = 30;    // Frames per Second
 
         private byte[] temp_buffer;
         private short[] temp_render_colors;
+
+        private byte[] buffer;
+        private short[] render_colors;
+
+        private byte[] frame;
+        private short[] frame_colors;
 
         private int Xindex = 0;
 
@@ -35,9 +41,15 @@ namespace Mario.Core
             Console.Title = "MarIO";
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
+            
+            buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+            render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
 
-            temp_buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
-            temp_render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
+            temp_buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+            temp_render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+
+            frame = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+            frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
 
             Thread Buff = new Thread(() => Buffering(world_objects));
             Thread Ren = new Thread(Rendering);
@@ -48,16 +60,13 @@ namespace Mario.Core
 
         private void Buffering(xList<object> world_objects)
         {
-
-            byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
-            short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
-
+            
             bool Sized = false;
 
             while (true)
             {
 
-                if (Console.WindowHeight != RENDER_HEIGHT || Console.WindowWidth != Render_WIDTH)
+                if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
                 {
                     do
                     {
@@ -65,8 +74,8 @@ namespace Mario.Core
                         {
                             Sized = true;
 
-                            Console.SetWindowSize(Render_WIDTH, RENDER_HEIGHT);
-                            Console.SetBufferSize(Render_WIDTH, RENDER_HEIGHT);
+                            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+                            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 
                         }
                         catch (ArgumentOutOfRangeException)
@@ -82,21 +91,64 @@ namespace Mario.Core
                         }
                     } while (!Sized);
 
+                    RENDER_HEIGHT = Console.LargestWindowHeight;
+                    RENDER_WIDTH = Console.LargestWindowWidth;
+
+                    buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+                    render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+
+                    temp_buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+                    temp_render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+
+                    frame = new byte[RENDER_HEIGHT * RENDER_WIDTH];
+                    frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
                 }
 
                 buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
                 render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
-                /*xList<object> temp = new xList<object>();
+                xList<object> core = new xList<object>();
 
+                foreach(var item in world_objects)
+                {
+                    ICore temp = item as ICore;
+                    core.Add(temp.Copy());
+                }
 
-                temp = (xList<object>)world_objects.Copy();*/
-
-                foreach (var item in world_objects)
+                foreach (var item in core)
                 {
                     if (item == null)
                     {
                         break;
+                    }
+
+                    else if (item is TextBlock)
+                    {
+                        TextBlock ui_text = item as TextBlock;
+                        int currentPosX = 0;
+
+                        foreach (var letter in ui_text.text)
+                        {
+                            if (letter == null) break;
+
+                            for (int row = 0; row < letter.height; row++)
+                            {
+                                for (int column = 0; column < letter.width; column++)
+                                {
+                                    if (ui_text.X + currentPosX + column >= 0 && ui_text.X + currentPosX + column < RENDER_WIDTH && ui_text.Y + row < RENDER_HEIGHT && ui_text.Y + row >= 0)
+                                    {
+                                        if (letter.bitmapTransparent[row, column] == 255)
+                                        {
+                                            buffer[(ui_text.Y + row) * RENDER_WIDTH + ui_text.X + currentPosX + column] = 219;
+                                            render_colors[(ui_text.Y + row) * RENDER_WIDTH + ui_text.X + currentPosX + column] = letter.bitmapColor[row * letter.width + column];
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            currentPosX += letter.width + 1;
+                        }
                     }
 
                     else if (item is xList<Block>)
@@ -105,12 +157,12 @@ namespace Mario.Core
                         bool newIndex = false;
                         int index = 0;
 
-                        foreach (var block in layer.Skip(Xindex).ToList())
+                        foreach (var block in layer.Skip(Xindex))
                         {
                             if (block.mesh == null) break;
 
                             if (!newIndex)
-                                if (block.X + block.mesh.width > Xoffset && block.X < Xoffset + Render_WIDTH)
+                                if (block.X + block.mesh.width > Xoffset && block.X < Xoffset + RENDER_WIDTH)
                                 {
                                     Xindex = index;
                                     newIndex = true;
@@ -120,12 +172,12 @@ namespace Mario.Core
                             {
                                 for (int column = 0; column < block.mesh.width; column++)
                                 {
-                                    if (block.X + column >= 0 && block.X + column < Render_WIDTH && block.Y + row < RENDER_HEIGHT && block.Y + row >= 0)
+                                    if (block.X + column >= 0 && block.X + column < RENDER_WIDTH && block.Y + row < RENDER_HEIGHT && block.Y + row >= 0)
                                     {
                                         if (block.mesh.bitmapTransparent[row, column] == 255)
                                         {
-                                            buffer[block.Y * Render_WIDTH + row * Render_WIDTH + block.X + column] = 219;
-                                            render_colors[block.Y * Render_WIDTH + row * Render_WIDTH + block.X + column] = block.mesh.bitmapColor[row * block.mesh.width + column];
+                                            buffer[block.Y * RENDER_WIDTH + row * RENDER_WIDTH + block.X + column] = 219;
+                                            render_colors[block.Y * RENDER_WIDTH + row * RENDER_WIDTH + block.X + column] = block.mesh.bitmapColor[row * block.mesh.width + column];
 
                                         }
                                     }
@@ -142,12 +194,12 @@ namespace Mario.Core
                         {
                             for (int column = 0; column < player.mesh.width; column++)
                             {
-                                if (player.X + column >= 0 && player.X + column < Render_WIDTH && player.Y + row < RENDER_HEIGHT && player.Y + row >= 0)
+                                if (player.X + column >= 0 && player.X + column < RENDER_WIDTH && player.Y + row < RENDER_HEIGHT && player.Y + row >= 0)
                                 {
                                     if (player.mesh.bitmapTransparent[row, column] == 255)
                                     {
-                                        buffer[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = 219;
-                                        render_colors[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = player.mesh.bitmapColor[row * player.mesh.width + column];
+                                        buffer[player.Y * RENDER_WIDTH + row * RENDER_WIDTH + player.X + column] = 219;
+                                        render_colors[player.Y * RENDER_WIDTH + row * RENDER_WIDTH + player.X + column] = player.mesh.bitmapColor[row * player.mesh.width + column];
 
                                     }
                                 }
@@ -161,18 +213,18 @@ namespace Mario.Core
 
                         foreach (var item2 in nearby.ToList())
                         {
-                            if (item2.X + Render_WIDTH - 1 >= 0 && item2.X < Render_WIDTH && item2.Y + RENDER_HEIGHT - 1 >= 0 && item2.Y < RENDER_HEIGHT)
+                            if (item2.X + RENDER_WIDTH - 1 >= 0 && item2.X < RENDER_WIDTH && item2.Y + RENDER_HEIGHT - 1 >= 0 && item2.Y < RENDER_HEIGHT)
                             {
                                 for (int row = 0; row < item2.mesh.height; row++)
                                 {
                                     for (int column = 0; column < item2.mesh.width; column++)
                                     {
-                                        if (item2.X + column >= 0 && item2.X + column < Render_WIDTH && item2.Y + row < RENDER_HEIGHT && item2.Y + row >= 0)
+                                        if (item2.X + column >= 0 && item2.X + column < RENDER_WIDTH && item2.Y + row < RENDER_HEIGHT && item2.Y + row >= 0)
                                         {
                                             if (item2.mesh.bitmapTransparent[row, column] == 255)
                                             {
-                                                buffer[item2.Y * Render_WIDTH + row * Render_WIDTH + item2.X + column] = 219;
-                                                render_colors[item2.Y * Render_WIDTH + row * Render_WIDTH + item2.X + column] = item2.mesh.bitmapColor[row * item2.mesh.width + column];
+                                                buffer[item2.Y * RENDER_WIDTH + row * RENDER_WIDTH + item2.X + column] = 219;
+                                                render_colors[item2.Y * RENDER_WIDTH + row * RENDER_WIDTH + item2.X + column] = item2.mesh.bitmapColor[row * item2.mesh.width + column];
                                             }
                                         }
                                     }
@@ -189,12 +241,12 @@ namespace Mario.Core
                         {
                             for (int column = 0; column < block.mesh.width; column++)
                             {
-                                if (block.X + column >= 0 && block.X + column < Render_WIDTH && block.Y + row < RENDER_HEIGHT && block.Y + row >= 0)
+                                if (block.X + column >= 0 && block.X + column < RENDER_WIDTH && block.Y + row < RENDER_HEIGHT && block.Y + row >= 0)
                                 {
                                     if (block.mesh.bitmapTransparent[row, column] == 255)
                                     {
-                                        buffer[block.Y * Render_WIDTH + row * Render_WIDTH + block.X + column] = 219;
-                                        render_colors[block.Y * Render_WIDTH + row * Render_WIDTH + block.X + column] = block.mesh.bitmapColor[row * block.mesh.width + column];
+                                        buffer[block.Y * RENDER_WIDTH + row * RENDER_WIDTH + block.X + column] = 219;
+                                        render_colors[block.Y * RENDER_WIDTH + row * RENDER_WIDTH + block.X + column] = block.mesh.bitmapColor[row * block.mesh.width + column];
 
                                     }
                                 }
@@ -214,16 +266,13 @@ namespace Mario.Core
             Stopwatch delay = new Stopwatch();
             DoubleBuffer screen = new DoubleBuffer();
             delay.Start();
-
-            byte[] buffer = new byte[RENDER_HEIGHT * Render_WIDTH];
-            short[] render_colors = new short[RENDER_HEIGHT * Render_WIDTH];
-
+            
             while (true)
             {
-                Array.Copy(temp_buffer, buffer, buffer.Length);
-                Array.Copy(temp_render_colors, render_colors, render_colors.Length);
+                Array.Copy(temp_buffer, frame, buffer.Length);
+                Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
 
-                screen.Scr_Buffer(Render_WIDTH, RENDER_HEIGHT, render_colors, buffer);
+                screen.Scr_Buffer(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
                 Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
 
                 delay.Restart();

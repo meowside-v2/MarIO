@@ -15,6 +15,10 @@ namespace Mario.Data.Scenes
         World map;
         Block _newBlock = new Block();
 
+        TextBlock posX = new TextBlock(1, 1);
+        TextBlock posY = new TextBlock(1, 7);
+        TextBlock posZ = new TextBlock(1, 13);
+
         Camera cam = new Camera();
         
         private int Z = 1;
@@ -40,6 +44,14 @@ namespace Mario.Data.Scenes
             _newBlock.Init(selected);
 
             core = new xList<object>(Refill(Z));
+
+            posX.Text("X " + _newBlock.X.ToString());
+            posY.Text("Y " + _newBlock.Y.ToString());
+            posZ.Text("Z " + Z.ToString());
+
+            core.Add(posX);
+            core.Add(posY);
+            core.Add(posZ);
 
             cam.Init(core);
 
@@ -151,22 +163,26 @@ namespace Mario.Data.Scenes
                 if (IsKeyPressed(ConsoleKey.W))
                 {
                     _newBlock.Y--;
+                    posX.Text("Y " + _newBlock.Y.ToString());
                 }
 
 
                 if (IsKeyPressed(ConsoleKey.A))
                 {
                     _newBlock.X--;
+                    posX.Text("X " + _newBlock.X.ToString());
                 }
 
                 if (IsKeyPressed(ConsoleKey.D))
                 {
                     _newBlock.X++;
+                    posX.Text("X " + _newBlock.X.ToString());
                 }
 
                 if (IsKeyPressed(ConsoleKey.S))
                 {
                     _newBlock.Y++;
+                    posX.Text("Y " + _newBlock.Y.ToString());
                 }
 
                 if (IsKeyPressed(ConsoleKey.Enter))
