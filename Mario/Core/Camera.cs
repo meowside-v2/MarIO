@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mario.Data.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,14 @@ namespace Mario.Core
 
         Render screen = new Render();
 
-        public void Init(Player core, World world, List<Enemy> enemies)
+        public void Init(List<object> objects)
         {
-            screen.Init(core, world, enemies);
+            Xoffset = 0;
+            Yoffset = 0;
+
+            objects.Add(this);
+
+            screen.Init(objects);
         }
     }
 }

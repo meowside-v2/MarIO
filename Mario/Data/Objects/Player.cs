@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mario.Core;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Mario.Core
+namespace Mario.Data.Objects
 {
     class Player : Core_objects
     {
@@ -25,19 +26,8 @@ namespace Mario.Core
         
         public void Init(World world, List<Enemy> enemies)
         {
-            Image img = null;
-
-            try
-            {
-                img = Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\mario_12x16.png");
-            }
-            catch
-            {
-                MessageBox.Show(Error.ErrorHandle(Error.eError.MarioSpriteException), string.Format("Error 0x{0:X3}", (int)Error.eError.MarioSpriteException), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(0);
-            }
-
-            mesh = new Material((Bitmap)img);
+            
+            mesh = new Material((Bitmap)ImageLoader.Load(ObjectDatabase.Object.Mario));
 
             name = "Mario";
 
@@ -47,7 +37,7 @@ namespace Mario.Core
             jumpheight = 30;
             jumplength = 15;
 
-            cam.Init(this, world, enemies);
+            //cam.Init(this, world, enemies);
 
             Thread keychecker = new Thread(() => KeyPress(world, enemies));
             keychecker.Start();
@@ -138,7 +128,7 @@ namespace Mario.Core
 
             do
             {
-                if (StartPositon - Y == jumpheight / World.Gravity)
+                if (StartPositon - Y == jumpheight / world.Gravity)
                 {
                     Fall(world, enemies);
                     Jumped = false;

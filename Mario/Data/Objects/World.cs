@@ -5,32 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mario.Core;
 
-namespace Mario.Core
+namespace Mario.Data.Objects
 {
     class World
     {
-        public static double Gravity = 1f;
-        
+        public double Gravity { get; set; }
         public string Level { get; set; }
 
-        public Material mesh;
+        public List<Block> foreground    = new List<Block>();
+        public List<Block> middleground  = new List<Block>();
+        public List<Block> background    = new List<Block>();
 
-        public World()
+        public int width { get; set; }
+        public int height { get; set; }
+
+        public World() { }
+
+        public World(int w, int h)
         {
-            Image img = null;
+            width = w;
+            height = h;
+        }
 
-            try
-            {
-                img = Image.FromFile(Environment.CurrentDirectory + "\\Data\\Sprites\\world_test.png");
-            }
-            catch
-            {
-                MessageBox.Show("World can't be loaded, please reinstall game!", "Error");
-                Environment.Exit(0);
-            }
+        public void Init(int lvl)
+        {
 
-            mesh = new Material((Bitmap)img);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace Mario.Core
             "World sprite can't be loaded"
         };
 
-        public static string ErrorHandle(eError type)
+        public static string ErrorHandle(int type)
         {
-            return sError[(int)type] + ", please reinstall game";
+            return sError[type] + ", please reinstall game";
         }
     }
 }

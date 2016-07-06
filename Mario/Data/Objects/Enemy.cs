@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mario.Core;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -8,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Mario.Core
+namespace Mario.Data.Objects
 {
     class Enemy : Core_objects
     {
