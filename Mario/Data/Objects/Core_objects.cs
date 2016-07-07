@@ -34,5 +34,19 @@ namespace Mario.Data.Objects
         {
             destination.Add(this);
         }
+
+        public object DeepCopy()
+        {
+            Core_objects retValue = (Core_objects)this.MemberwiseClone();
+
+            retValue.mesh = (Material)this.mesh.DeepCopy();
+
+            return retValue;
+        }
+
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer, int? x, int? y)
+        {
+            mesh.Render(destination, destinationColor, frameWidth, frameHeight, layer, this.X, this.Y);
+        }
     }
 }

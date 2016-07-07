@@ -10,7 +10,6 @@ namespace Mario.Core
 
     class Material : ICore
     {
-        public byte[] graphics;
         public short[] bitmapColor;
         public byte[,] bitmapColorR;
         public byte[,] bitmapColorG;
@@ -39,27 +38,9 @@ namespace Mario.Core
                     bitmapColorB[i, j] = c.B;
                 }
             
-            graphics = Sprite();
             bitmapColor = ConsoleEnum();
         }
-
-        private byte[] Sprite()
-        {
-            byte[] sprite = new byte[width * height];
-
-            for (int row = 0; row < height; row++)
-            {
-                for (int column = 0; column < width; column++)
-                {
-                    sprite[column + row * width] = 32;
-                    if (bitmapTransparent[row, column] != 0)
-                        sprite[column + row * width] = 219;
-                }
-            }
-
-            return sprite;
-        }
-
+        
         private short[] ConsoleEnum()
         {
             short[] index = new short[width * height];
@@ -119,6 +100,30 @@ namespace Mario.Core
         public void AddTo(List<object> destination)
         {
             destination.Add(this);
+        }
+
+        public object DeepCopy()
+        {
+            return (Material) this.MemberwiseClone();
+        }
+
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        {
+            for(int row = 0; row < height; row++)
+            {
+                for (int column = 0; column < width; column++)
+                {
+                    
+                    if(x + column >= 0 && x + column < frameWidth && y + row < frameHeight && y + row >= 0)
+                    {
+                        if(bitmapTransparent[row, column] != 0)
+                        {
+                            destination[((int)y + row) * frameWidth + (int)x + column] = 219;
+                            destinationColor[((int)y + row) * frameWidth + (int)x + column] = ((int) layer == 0 ? (short)(bitmapColor[row * width + column] << 4) : bitmapColor[row * width + column]);
+                        }
+                    }
+                }
+            }
         }
     }
 }

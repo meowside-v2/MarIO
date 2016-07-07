@@ -28,5 +28,31 @@ namespace Mario.Core
         {
             destination.Add(this);
         }
+
+        public object DeepCopy()
+        {
+            xList<T> retValue = new xList<T>();
+            
+            for(int index = 0; index < this.Count(); index++)
+            {
+                if (index >= this.Count()) break;
+
+                ICore temp = this[index] as ICore;
+                retValue.Add((T)temp.DeepCopy());
+            }
+
+            return (xList<T>) retValue;
+        }
+
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        {
+            for(int index = 0; index < this.Count(); index++)
+            {
+                if (index >= this.Count()) break;
+
+                ICore temp = this[index] as ICore;
+                temp.Render(destination, destinationColor, frameWidth, frameWidth, layer);
+            }
+        }
     }
 }

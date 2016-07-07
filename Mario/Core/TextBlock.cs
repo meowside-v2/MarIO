@@ -33,12 +33,34 @@ namespace Mario.Core
 
         public object Copy()
         {
-            return this.MemberwiseClone();
+            return (TextBlock) this.MemberwiseClone();
         }
 
         public void AddTo(List<object> destination)
         {
             destination.Add(this);
+        }
+
+        public object DeepCopy()
+        {
+            TextBlock retValue = (TextBlock)this.MemberwiseClone();
+
+            retValue.text = (xList<Material>)text.DeepCopy();
+
+            return retValue;
+        }
+
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer, int? x, int? y)
+        {
+            int Xoffset = 0;
+
+            for(int index = 0; index < text.Count(); index++)
+            {
+                if (index >= text.Count()) break;
+
+                text[index].Render(destination, destinationColor, frameWidth, frameHeight, layer, this.X + Xoffset, this.Y);
+                Xoffset += text[index].width + 1;
+            }
         }
     }
 }

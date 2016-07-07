@@ -27,7 +27,7 @@ namespace Mario.Data.Scenes
         bool EnterPressed = false;
         bool Changed = false;
 
-        xList<object> core = new xList<object>();
+        FrameBaseHiararchy core = new FrameBaseHiararchy();
 
         public void Start()
         {
@@ -42,16 +42,20 @@ namespace Mario.Data.Scenes
             map = new World(w, h);
 
             _newBlock.Init(selected);
-
-            core = new xList<object>(Refill(Z));
-
+            
             posX.Text("X " + _newBlock.X.ToString());
             posY.Text("Y " + _newBlock.Y.ToString());
             posZ.Text("Z " + Z.ToString());
 
-            core.Add(posX);
-            core.Add(posY);
-            core.Add(posZ);
+            core.background.Add(map.background);
+            core.middleground.Add(map.middleground);
+            core.foreground.Add(map.foreground);
+
+            core.middleground.Add(_newBlock);
+
+            core.UI.Add(posX);
+            core.UI.Add(posY);
+            core.UI.Add(posZ);
 
             cam.Init(core);
 
@@ -101,43 +105,6 @@ namespace Mario.Data.Scenes
             }
         }
 
-        private List<object> Refill(int Z)
-        {
-            List<object> ret = new List<object>();
-
-            switch (Z)
-            {
-                case 0:
-                    
-                    ret.Add(map.background);
-                    ret.Add(_newBlock);
-                    ret.Add(map.middleground);
-                    ret.Add(map.foreground);
-
-                    break;
-
-                case 1:
-                    
-                    ret.Add(map.background);
-                    ret.Add(map.middleground);
-                    ret.Add(_newBlock);
-                    ret.Add(map.foreground);
-
-                    break;
-
-                case 2:
-                    
-                    ret.Add(map.background);
-                    ret.Add(map.middleground);
-                    ret.Add(map.foreground);
-                    ret.Add(_newBlock);
-
-                    break;
-            }
-
-            return ret;
-        }
-
         //
         //  Controls
         //
@@ -157,13 +124,13 @@ namespace Mario.Data.Scenes
             
             while (true)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(50);
                 
 
                 if (IsKeyPressed(ConsoleKey.W))
                 {
                     _newBlock.Y--;
-                    posX.Text("Y " + _newBlock.Y.ToString());
+                    posY.Text("Y " + _newBlock.Y.ToString());
                 }
 
 
@@ -182,7 +149,7 @@ namespace Mario.Data.Scenes
                 if (IsKeyPressed(ConsoleKey.S))
                 {
                     _newBlock.Y++;
-                    posX.Text("Y " + _newBlock.Y.ToString());
+                    posY.Text("Y " + _newBlock.Y.ToString());
                 }
 
                 if (IsKeyPressed(ConsoleKey.Enter))
@@ -192,7 +159,7 @@ namespace Mario.Data.Scenes
                     {
                         Block temp = new Block();
 
-                        temp = (Block)_newBlock.Copy();
+                        temp = (Block)_newBlock.DeepCopy();
 
                         switch (Z)
                         {
@@ -215,8 +182,6 @@ namespace Mario.Data.Scenes
                         EnterPressed = true;
                         
                         _newBlock.Init(selected);
-
-                        core = new xList<object>(Refill(Z));
                     }
                 }
 
@@ -270,7 +235,7 @@ namespace Mario.Data.Scenes
                 {
                     if (Z < 2 && !Changed)
                     {
-                        core = new xList<object>(Refill(Z));
+                        posZ.Text("Z " + Z.ToString());
                         Changed = true;
                     }
                 }
@@ -279,7 +244,7 @@ namespace Mario.Data.Scenes
                 {
                     if (Z > 0 && !Changed)
                     {
-                        core = new xList<object>(Refill(Z));
+                        posZ.Text("Z " + Z.ToString());
                         Changed = true;
                     }
                 }

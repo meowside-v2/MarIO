@@ -9,17 +9,12 @@ using System.Threading.Tasks;
 namespace Mario.Data.Objects
 {
     
-    class Block : ICore
+    class Block : Core_objects, ICore
     {
-
-        public int X { get; set; }
-        public int Y { get; set; }
         
         public bool IsSecret { get; set; }
         public bool IsBonus { get; set; }
         public bool IsDestroyable { get; set; }
-
-        public Material mesh { get; set; }
 
         public void Init(int type)
         {
@@ -169,16 +164,6 @@ namespace Mario.Data.Objects
                     mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground2, ObjectDatabase.path));
                     break;
             }
-        }
-        
-        public object Copy()
-        {
-            return this.MemberwiseClone();
-        }
-
-        public void AddTo(List<object> destination)
-        {
-            destination.Add(this);
         }
     }
 }

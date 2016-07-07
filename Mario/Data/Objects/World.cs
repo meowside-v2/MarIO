@@ -43,5 +43,23 @@ namespace Mario.Data.Objects
         {
             destination.Add(this);
         }
+
+        public object DeepCopy()
+        {
+            World retValue = (World)this.MemberwiseClone();
+
+            retValue.background = (xList<Block>)this.background.DeepCopy();
+            retValue.middleground = (xList<Block>)this.middleground.DeepCopy();
+            retValue.foreground = (xList<Block>)this.foreground.DeepCopy();
+
+            return retValue;
+        }
+
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        {
+            background.Render(destination, destinationColor, frameWidth, frameHeight, 0);
+            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
+            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
+        }
     }
 }

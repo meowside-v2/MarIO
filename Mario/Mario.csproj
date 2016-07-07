@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\CustomList.cs" />
+    <Compile Include="Core\FrameBaseHiararchy.cs" />
     <Compile Include="Core\ICore.cs" />
     <Compile Include="Core\ImageLoader.cs" />
     <Compile Include="Core\ObjectDatabase.cs" />

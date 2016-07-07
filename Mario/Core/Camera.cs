@@ -35,7 +35,7 @@ namespace Mario.Core
         
         
 
-        public void Init(xList<object> world_objects)
+        public void Init(FrameBaseHiararchy world_objects)
         {
             Console.CursorVisible = false;
             Console.Title = "MarIO";
@@ -58,7 +58,7 @@ namespace Mario.Core
             
         }
 
-        private void Buffering(xList<object> world_objects)
+        private void Buffering(FrameBaseHiararchy world_objects)
         {
             
             bool Sized = false;
@@ -107,15 +107,103 @@ namespace Mario.Core
                 buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
                 render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
-                xList<object> core = new xList<object>();
+                FrameBaseHiararchy core = new FrameBaseHiararchy();
+                core = (FrameBaseHiararchy) world_objects.DeepCopy();
+                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT);
 
-                foreach(var item in world_objects)
+                Array.Copy(buffer, temp_buffer, buffer.Length);
+                Array.Copy(render_colors, temp_render_colors, render_colors.Length);
+
+            }
+        }
+
+        private void Rendering()
+        {
+            Stopwatch delay = new Stopwatch();
+            DoubleBuffer screen = new DoubleBuffer();
+            delay.Start();
+            
+            while (true)
+            {
+                Array.Copy(temp_buffer, frame, buffer.Length);
+                Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
+
+                screen.Scr_Buffer(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
+                Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
+
+                delay.Restart();
+            }
+        }
+
+        private void Vsync(int TargetFrameRate, int ImageRenderDelay)
+        {
+            int targetDelay = 1000 / TargetFrameRate;
+
+            if (ImageRenderDelay < targetDelay)
+            {
+                Thread.Sleep(targetDelay - ImageRenderDelay);
+            }
+        }
+    }
+}
+
+//
+//  Buffer backup
+//
+
+/*
+            for(int row = 0; row < map.mesh.height; row++)
+            {
+                for(int column = 0; column < map.mesh.width; column++)
                 {
-                    ICore temp = item as ICore;
-                    core.Add(temp.Copy());
+                    if(map.mesh.bitmapTransparent[row, column] == 255)
+                    {
+                        buffer[row * map.mesh.width + column] = map.mesh.bitmapTransparent[row, column];
+                        render_colors[row * map.mesh.width + column] = map.mesh.bitmapColor[row * map.mesh.width + column];
+                    }
                 }
+            }
 
-                foreach (var item in core)
+            foreach (var item in nearby)
+            {
+                if (item.X + Render_WIDTH - 1 >= 0 && item.X < Render_WIDTH && item.Y + RENDER_HEIGHT - 1 >= 0 && item.Y < RENDER_HEIGHT)
+                {
+                    for (int row = 0; row < item.mesh.height; row++)
+                    {
+                        for (int column = 0; column < item.mesh.width; column++)
+                        {
+                            if (item.X + column >= 0 && item.X + column < Render_WIDTH && item.Y + row < RENDER_HEIGHT && item.Y + row >= 0)
+                            {
+                                if (item.mesh.bitmapTransparent[row, column] == 255)
+                                {
+                                    buffer[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = 219;
+                                    render_colors[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = item.mesh.bitmapColor[row * item.mesh.width + column];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int row = 0; row < player.mesh.height; row++)
+            {
+                for( int column = 0; column < player.mesh.width; column++)
+                {
+                    if (player.X + column >= 0 && player.X + column < Render_WIDTH && player.Y + row < RENDER_HEIGHT && player.Y + row >= 0)
+                    {
+                        if (player.mesh.bitmapTransparent[row, column] == 255)
+                        {
+                            buffer[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = 219;
+                            render_colors[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = player.mesh.bitmapColor[row * player.mesh.width + column];
+
+                        }
+                    }
+                }
+            }
+*/
+
+
+/*foreach (var item in core)
                 {
                     if (item == null)
                     {
@@ -253,95 +341,4 @@ namespace Mario.Core
                             }
                         }
                     }
-                }
-
-                Array.Copy(buffer, temp_buffer, buffer.Length);
-                Array.Copy(render_colors, temp_render_colors, render_colors.Length);
-
-            }
-        }
-
-        private void Rendering()
-        {
-            Stopwatch delay = new Stopwatch();
-            DoubleBuffer screen = new DoubleBuffer();
-            delay.Start();
-            
-            while (true)
-            {
-                Array.Copy(temp_buffer, frame, buffer.Length);
-                Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
-
-                screen.Scr_Buffer(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
-                Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
-
-                delay.Restart();
-            }
-        }
-
-        private void Vsync(int TargetFrameRate, int ImageRenderDelay)
-        {
-            int targetDelay = 1000 / TargetFrameRate;
-
-            if (ImageRenderDelay < targetDelay)
-            {
-                Thread.Sleep(targetDelay - ImageRenderDelay);
-            }
-        }
-    }
-}
-
-//
-//  Buffer backup
-//
-
-/*
-            for(int row = 0; row < map.mesh.height; row++)
-            {
-                for(int column = 0; column < map.mesh.width; column++)
-                {
-                    if(map.mesh.bitmapTransparent[row, column] == 255)
-                    {
-                        buffer[row * map.mesh.width + column] = map.mesh.bitmapTransparent[row, column];
-                        render_colors[row * map.mesh.width + column] = map.mesh.bitmapColor[row * map.mesh.width + column];
-                    }
-                }
-            }
-
-            foreach (var item in nearby)
-            {
-                if (item.X + Render_WIDTH - 1 >= 0 && item.X < Render_WIDTH && item.Y + RENDER_HEIGHT - 1 >= 0 && item.Y < RENDER_HEIGHT)
-                {
-                    for (int row = 0; row < item.mesh.height; row++)
-                    {
-                        for (int column = 0; column < item.mesh.width; column++)
-                        {
-                            if (item.X + column >= 0 && item.X + column < Render_WIDTH && item.Y + row < RENDER_HEIGHT && item.Y + row >= 0)
-                            {
-                                if (item.mesh.bitmapTransparent[row, column] == 255)
-                                {
-                                    buffer[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = 219;
-                                    render_colors[item.Y * Render_WIDTH + row * Render_WIDTH + item.X + column] = item.mesh.bitmapColor[row * item.mesh.width + column];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            for(int row = 0; row < player.mesh.height; row++)
-            {
-                for( int column = 0; column < player.mesh.width; column++)
-                {
-                    if (player.X + column >= 0 && player.X + column < Render_WIDTH && player.Y + row < RENDER_HEIGHT && player.Y + row >= 0)
-                    {
-                        if (player.mesh.bitmapTransparent[row, column] == 255)
-                        {
-                            buffer[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = 219;
-                            render_colors[player.Y * Render_WIDTH + row * Render_WIDTH + player.X + column] = player.mesh.bitmapColor[row * player.mesh.width + column];
-
-                        }
-                    }
-                }
-            }
-*/
+                }*/
