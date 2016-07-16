@@ -41,7 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,12 +83,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ICoordinated.cs" />
     <Compile Include="Core\CustomList.cs" />
     <Compile Include="Core\FrameBaseHiararchy.cs" />
     <Compile Include="Core\ICore.cs" />
     <Compile Include="Core\ImageLoader.cs" />
     <Compile Include="Core\ObjectDatabase.cs" />
     <Compile Include="Core\TextBlock.cs" />
+    <Compile Include="Core\WindowMaximize.cs" />
+    <Compile Include="Core\WorldLoader.cs" />
     <Compile Include="Data\Objects\Block.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Collider.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="Core\Error.cs" />
     <Compile Include="Data\Objects\Enemy.cs" />
     <Compile Include="Core\Material.cs" />
+    <Compile Include="Data\Objects\Letter.cs" />
     <Compile Include="Data\Objects\Player.cs" />
     <Compile Include="Data\Objects\World.cs" />
     <Compile Include="Data\Scenes\Game.cs" />
@@ -163,6 +167,7 @@
     <Content Include="Data\Sprites\Ground\sky_04.png" />
     <Content Include="Data\Sprites\Ground\sky_05.png" />
     <Content Include="Data\Sprites\Ground\sky_06.png" />
+    <Content Include="Data\Sprites\Ground\sky_07.png" />
     <Content Include="Data\Sprites\mario_12x16.png" />
     <Content Include="Data\Sprites\Underground\background_01.png" />
     <Content Include="Data\Sprites\Underground\background_02.png" />
@@ -186,92 +191,92 @@
   <ItemGroup>
     <PublishFile Include="Data\Sprites\Ground\block_01.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Ground\block_02.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Ground\block_03.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Ground\block_04.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\mario_12x16.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Underground\block_01.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Underground\block_02.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Underground\block_03.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\Sprites\Underground\block_04.png">
       <Visible>False</Visible>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>DataFile</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

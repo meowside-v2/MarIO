@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Data.Objects
 {
-    class Core_objects : ICore
+    class Core_objects : ICore, ICoordinated
     {
         public string name { get; set; }
         public int X { get; set; }
@@ -46,7 +46,7 @@ namespace Mario.Data.Objects
 
         public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer, int? x, int? y)
         {
-            mesh.Render(destination, destinationColor, frameWidth, frameHeight, layer, this.X, this.Y);
+            mesh.Render(destination, destinationColor, frameWidth, frameHeight, layer, this.X - x, this.Y - y);
         }
     }
 }

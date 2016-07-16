@@ -8,9 +8,9 @@ namespace Mario.Core
 {
     interface ICore
     {
+        
         object Copy();
         object DeepCopy();
-        void AddTo(List<object> destination);
-        void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int ? layer = null, int? x = null, int? y = null);
+        void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null);
     }
 }

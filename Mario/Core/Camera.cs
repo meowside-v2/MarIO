@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 
 namespace Mario.Core
 {
@@ -16,10 +17,10 @@ namespace Mario.Core
         public int Xoffset { get; set; }
         public int Yoffset { get; set; }
 
-        private int RENDER_WIDTH = Console.LargestWindowWidth;
-        private int RENDER_HEIGHT = Console.LargestWindowHeight;
+        public int RENDER_WIDTH = Console.LargestWindowWidth;
+        public int RENDER_HEIGHT = Console.LargestWindowHeight;
 
-        private const int FRAME_RATE = 30;    // Frames per Second
+        private const int FRAME_RATE = 60;    // Frames per Second
 
         private byte[] temp_buffer;
         private short[] temp_render_colors;
@@ -32,16 +33,18 @@ namespace Mario.Core
 
         private int Xindex = 0;
 
-        
-        
+        FrameBaseHiararchy core = new FrameBaseHiararchy();
 
         public void Init(FrameBaseHiararchy world_objects)
         {
             Console.CursorVisible = false;
-            Console.Title = "MarIO";
+            // Console.Title = "MarIO";
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
-            
+
+            Xoffset = 0;
+            Yoffset = 0;
+
             buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
             render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
 
@@ -68,6 +71,8 @@ namespace Mario.Core
 
                 if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
                 {
+                    WindowMaximize.Maximize();
+
                     do
                     {
                         try
@@ -85,7 +90,7 @@ namespace Mario.Core
                             Console.SetCursorPosition(0, 0);
                             Console.BackgroundColor = (ConsoleColor)ColorPalette.eColors.Black;
                             Console.ForegroundColor = (ConsoleColor)ColorPalette.eColors.White;
-                            Console.WriteLine("Decrease your font size, set font to Raster font and press enter");
+                            MessageBox.Show("Set font to Lucida, size to 5pt and to BOLD, press Enter", "Decrese font size", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             Console.ReadKey(false);
 
                         }
@@ -107,9 +112,9 @@ namespace Mario.Core
                 buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
                 render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
-                FrameBaseHiararchy core = new FrameBaseHiararchy();
+                
                 core = (FrameBaseHiararchy) world_objects.DeepCopy();
-                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT);
+                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT, null, Xoffset, Yoffset);
 
                 Array.Copy(buffer, temp_buffer, buffer.Length);
                 Array.Copy(render_colors, temp_render_colors, render_colors.Length);

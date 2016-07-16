@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mario.Data.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,12 +34,14 @@ namespace Mario.Core
         {
             xList<T> retValue = new xList<T>();
             
-            for(int index = 0; index < this.Count(); index++)
+            for(int index = 0; index < this.Count; index++)
             {
                 if (index >= this.Count()) break;
-
-                ICore temp = this[index] as ICore;
-                retValue.Add((T)temp.DeepCopy());
+                
+                if (this[index] != null)
+                {
+                    retValue.Add((T)(this[index] as ICore).DeepCopy());
+                }
             }
 
             return (xList<T>) retValue;
@@ -46,12 +49,12 @@ namespace Mario.Core
 
         public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
         {
-            for(int index = 0; index < this.Count(); index++)
+            for(int index = 0; index < this.Count; index++)
             {
-                if (index >= this.Count()) break;
-
-                ICore temp = this[index] as ICore;
-                temp.Render(destination, destinationColor, frameWidth, frameWidth, layer);
+                if (!(index >= this.Count))
+                    (this[index] as ICore).Render(destination, destinationColor, frameWidth, frameHeight, layer, x, y);
+                    
+                else break;
             }
         }
     }

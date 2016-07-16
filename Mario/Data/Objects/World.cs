@@ -18,15 +18,19 @@ namespace Mario.Data.Objects
         public xList<Block> middleground  = new xList<Block>();
         public xList<Block> background    = new xList<Block>();
 
+        public int PlayerSpawnX { get; set; }
+        public int PlayerSpawnY { get; set; }
+
         public int width { get; set; }
         public int height { get; set; }
 
         public World() { }
 
-        public World(int width, int height)
+        public World(int width, int height, string name)
         {
             this.width = width;
             this.height = height;
+            this.Level = name;
         }
 
         public void Init(int lvl)
@@ -57,9 +61,9 @@ namespace Mario.Data.Objects
 
         public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
         {
-            background.Render(destination, destinationColor, frameWidth, frameHeight, 0);
-            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
-            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
+            background.Render(destination, destinationColor, frameWidth, frameHeight, 0, x, y);
+            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
         }
     }
 }

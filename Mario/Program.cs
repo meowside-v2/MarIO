@@ -13,6 +13,8 @@ namespace Mario
     {
         static void Main(string[] args)
         {
+            WindowMaximize.Maximize();
+
             WorldEditor worldCreate = new WorldEditor();
             worldCreate.Start();
         }

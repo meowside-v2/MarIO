@@ -11,7 +11,8 @@ namespace Mario.Core
         public xList<object> background    = new xList<object>();
         public xList<object> middleground  = new xList<object>();
         public xList<object> foreground    = new xList<object>();
-        public xList<TextBlock> UI = new xList<TextBlock>();
+        public xList<object> exclusive     = new xList<object>();
+        public xList<object> UI            = new xList<object>();
 
         public object Copy()
         {
@@ -30,17 +31,19 @@ namespace Mario.Core
             retValue.background = (xList<object>)this.background.DeepCopy();
             retValue.middleground = (xList<object>)this.middleground.DeepCopy();
             retValue.foreground = (xList<object>)this.foreground.DeepCopy();
-            retValue.UI = (xList<TextBlock>)this.UI.DeepCopy();
+            retValue.exclusive = (xList<object>)this.exclusive.DeepCopy();
+            retValue.UI = (xList<object>)this.UI.DeepCopy();
 
             return retValue;
         }
 
         public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int ? layer = null, int? x = null, int? y = null)
         {
-            background.Render(destination, destinationColor, frameWidth, frameHeight, 0);
-            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
-            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1);
-            UI.Render(destination, destinationColor, frameWidth, frameHeight, 1);
+            UI.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            exclusive.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            background.Render(destination, destinationColor, frameWidth, frameHeight, 0, x, y);
         }
     }
 }
