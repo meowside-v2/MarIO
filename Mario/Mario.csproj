@@ -157,6 +157,7 @@
     <Content Include="Data\Font\X.png" />
     <Content Include="Data\Font\Y.png" />
     <Content Include="Data\Font\Z.png" />
+    <Content Include="Data\Sprites\border.png" />
     <Content Include="Data\Sprites\ColorPalette.png" />
     <Content Include="Data\Sprites\Ground\block_01.png" />
     <Content Include="Data\Sprites\Ground\block_02.png" />
@@ -170,6 +171,11 @@
     <Content Include="Data\Sprites\Ground\sky_06.png" />
     <Content Include="Data\Sprites\Ground\sky_07.png" />
     <Content Include="Data\Sprites\mario_12x16.png" />
+    <Content Include="Data\Sprites\Pipes\pipe_01.png" />
+    <Content Include="Data\Sprites\Pipes\pipe_02.png" />
+    <Content Include="Data\Sprites\Pipes\pipe_03.png" />
+    <Content Include="Data\Sprites\Pipes\pipe_04.png" />
+    <Content Include="Data\Sprites\Pipes\pipe_05.png" />
     <Content Include="Data\Sprites\Underground\background_01.png" />
     <Content Include="Data\Sprites\Underground\background_02.png" />
     <Content Include="Data\Sprites\Underground\block_01.png" />
@@ -281,6 +287,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
