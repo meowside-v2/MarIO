@@ -28,7 +28,7 @@ namespace Mario.Core
 
             for (int c = 0; c < text.Length; c++)
             {
-                this.text.Add(new Letter(ImageLoader.Load(ObjectDatabase.font[text[c]], ObjectDatabase.font_path)));
+                this.text.Add(new Letter(ImageLoader.Load(ObjectDatabase.font[Char.ToUpper(text[c])], ObjectDatabase.font_path)));
             }
         }
 

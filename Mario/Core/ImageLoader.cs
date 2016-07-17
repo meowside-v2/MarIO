@@ -21,7 +21,7 @@ namespace Mario.Core
             catch
             {
                 MessageBox.Show(Error.ErrorHandle((int)type), string.Format("Error 0x{0:X3}", (int)type, MessageBoxButtons.OK, MessageBoxIcon.Error));
-                Environment.Exit(0);
+                Environment.Exit((int)type);
             }
 
             return img;

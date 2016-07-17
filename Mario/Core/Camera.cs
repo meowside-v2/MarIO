@@ -20,7 +20,8 @@ namespace Mario.Core
         public int RENDER_WIDTH = Console.LargestWindowWidth;
         public int RENDER_HEIGHT = Console.LargestWindowHeight;
 
-        private const int FRAME_RATE = 60;    // Frames per Second
+        private const int MAX_FRAME_RATE = 60;    // Frames per Second
+        private bool _Vsync = true;
 
         private byte[] temp_buffer;
         private short[] temp_render_colors;
@@ -30,20 +31,27 @@ namespace Mario.Core
 
         private byte[] frame;
         private short[] frame_colors;
-
-        private int Xindex = 0;
-
+        
         FrameBaseHiararchy core = new FrameBaseHiararchy();
 
-        public void Init(FrameBaseHiararchy world_objects)
+        TextBlock fpsMeter = new TextBlock();
+
+        public void Init(FrameBaseHiararchy world_objects, int Xoffset = 0, int Yoffset = 0)
         {
+            this.Xoffset = Xoffset;
+            this.Yoffset = Yoffset;
+
+            fpsMeter.X = 1;
+            fpsMeter.Y = RENDER_HEIGHT - 6;
+
+            fpsMeter.Text("000");
+
+            world_objects.UI.Add(fpsMeter);
+
             Console.CursorVisible = false;
             // Console.Title = "MarIO";
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
-
-            Xoffset = 0;
-            Yoffset = 0;
 
             buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
             render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
@@ -53,21 +61,24 @@ namespace Mario.Core
 
             frame = new byte[RENDER_HEIGHT * RENDER_WIDTH];
             frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
-
-            Thread Buff = new Thread(() => Buffering(world_objects));
-            Thread Ren = new Thread(Rendering);
-            Buff.Start();
-            Ren.Start();
             
+            Task Buff = new Task(() => Buffering(world_objects));
+            Buff.Start();
+
+            Task Ren = new Task(() => Rendering());
+            Ren.Start();
         }
 
         private void Buffering(FrameBaseHiararchy world_objects)
         {
-            
+            Stopwatch delayBuffer = new Stopwatch();
             bool Sized = false;
+
+            delayBuffer.Start();
 
             while (true)
             {
+                delayBuffer.Restart();
 
                 if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
                 {
@@ -109,7 +120,7 @@ namespace Mario.Core
                     frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
                 }
 
-                buffer = Enumerable.Repeat(Convert.ToByte(32), buffer.Length).ToArray();
+                buffer = Enumerable.Repeat(Convert.ToByte(' '), buffer.Length).ToArray();
                 render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
                 
@@ -118,25 +129,27 @@ namespace Mario.Core
 
                 Array.Copy(buffer, temp_buffer, buffer.Length);
                 Array.Copy(render_colors, temp_render_colors, render_colors.Length);
-
+                
+                if(_Vsync) Vsync(MAX_FRAME_RATE / 3, (int)new TimeSpan(delayBuffer.ElapsedTicks).TotalMilliseconds);
+                
+                fpsMeter.Text(string.Format("{0}", (int)(1000 / (float)(new TimeSpan(delayBuffer.ElapsedTicks)).TotalMilliseconds)));
             }
         }
 
         private void Rendering()
         {
-            Stopwatch delay = new Stopwatch();
+            Stopwatch delayRender = new Stopwatch();
             DoubleBuffer screen = new DoubleBuffer();
-            delay.Start();
+            delayRender.Start();
             
             while (true)
             {
+                delayRender.Restart();
                 Array.Copy(temp_buffer, frame, buffer.Length);
                 Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
 
                 screen.Scr_Buffer(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
-                Vsync(FRAME_RATE, (int)delay.ElapsedMilliseconds);
-
-                delay.Restart();
+                if (_Vsync) Vsync(MAX_FRAME_RATE, (int)new TimeSpan(delayRender.ElapsedTicks).TotalMilliseconds);
             }
         }
 

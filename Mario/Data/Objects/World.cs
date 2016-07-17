@@ -43,11 +43,6 @@ namespace Mario.Data.Objects
             return this.MemberwiseClone();
         }
 
-        public void AddTo(List<object> destination)
-        {
-            destination.Add(this);
-        }
-
         public object DeepCopy()
         {
             World retValue = (World)this.MemberwiseClone();

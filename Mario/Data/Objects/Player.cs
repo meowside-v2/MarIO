@@ -27,7 +27,7 @@ namespace Mario.Data.Objects
         public void Init(World world, List<Enemy> enemies)
         {
             
-            mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Mario, ObjectDatabase.path));
+            mesh = new Material(ImageLoader.Load(ObjectDatabase.Live.Mario, ObjectDatabase.path_live));
 
             name = "Mario";
 

@@ -109,7 +109,7 @@ namespace Mario.Core
 
         public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
         {
-            if (x + width < 0 || x > frameWidth) return;
+            if (x + width < 0 || x > frameWidth || y + height < 0 || y > frameHeight) return;
 
             for (int row = 0; row < height; row++)
             {
@@ -117,7 +117,7 @@ namespace Mario.Core
                 {
                     if(x + column >= 0 && x + column < frameWidth && y + row < frameHeight && y + row >= 0)
                     {
-                        if(bitmapTransparent[row, column] != 0)
+                        if(bitmapTransparent[row, column] >= 200)
                         {
                             if(destination[((int)y + row) * frameWidth + (int)x + column] != 219)
                             {

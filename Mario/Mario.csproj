@@ -92,6 +92,7 @@
     <Compile Include="Core\TextBlock.cs" />
     <Compile Include="Core\WindowMaximize.cs" />
     <Compile Include="Core\WorldLoader.cs" />
+    <Compile Include="Core\xRectangle.cs" />
     <Compile Include="Data\Objects\Block.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Collider.cs" />

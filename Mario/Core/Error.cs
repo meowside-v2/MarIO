@@ -32,7 +32,8 @@ namespace Mario.Core
             PipeBlock2Exception,
             PipeBlock3Exception,
             PipeBlock4Exception,
-            PipeBlock5Exception
+            PipeBlock5Exception,
+            BorderException
         }
 
         private static string[] sError =
@@ -59,7 +60,8 @@ namespace Mario.Core
             "Pipes\\pipe_02 sprite can't be loaded",
             "Pipes\\pipe_03 sprite can't be loaded",
             "Pipes\\pipe_04 sprite can't be loaded",
-            "Pipes\\pipe_05 sprite can't be loaded"
+            "Pipes\\pipe_05 sprite can't be loaded",
+            "Border sprite can't be loaded"
         };
 
         public static string ErrorHandle(int type)

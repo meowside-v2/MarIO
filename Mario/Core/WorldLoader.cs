@@ -29,6 +29,7 @@ namespace Mario.Core
 
             try
             {
+                world.Level = br.ReadString();
                 world.width = br.ReadInt32();
                 world.height = br.ReadInt32();
 

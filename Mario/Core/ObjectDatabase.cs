@@ -8,9 +8,18 @@ namespace Mario.Core
 {
     class ObjectDatabase
     {
-        public enum Object
+        public enum Live
         {
-            Mario,
+            Mario
+        };
+
+        public static readonly string[] path_live =
+        {
+            "\\Data\\Sprites\\mario_12x16.png"
+        };
+
+        public enum Blocks
+        {
             BlockGround1,
             BlockGround2,
             BlockGround3,
@@ -33,12 +42,11 @@ namespace Mario.Core
             Pipe3,
             Pipe4,
             Pipe5,
-            NumberOfTypes
+            Border
         };
 
-        public static readonly string[] path =
+        public static readonly string[] path_block =
         {
-            "\\Data\\Sprites\\mario_12x16.png",
             "\\Data\\Sprites\\Ground\\block_01.png",
             "\\Data\\Sprites\\Ground\\block_02.png",
             "\\Data\\Sprites\\Ground\\block_03.png",
@@ -60,7 +68,8 @@ namespace Mario.Core
             "\\Data\\Sprites\\Pipes\\pipe_02.png",
             "\\Data\\Sprites\\Pipes\\pipe_03.png",
             "\\Data\\Sprites\\Pipes\\pipe_04.png",
-            "\\Data\\Sprites\\Pipes\\pipe_05.png"
+            "\\Data\\Sprites\\Pipes\\pipe_05.png",
+            "\\Data\\Sprites\\border.png"
         };
 
         public enum Font
@@ -189,26 +198,5 @@ namespace Mario.Core
             { ' ' , Font.space },
             { '-' , Font.minus }
         };
-
-        /*public static xList<Material> MaterialHolder = new xList<Material>();
-
-        public static void LoadReferences()
-        {
-            int counter = 0;
-
-            foreach (string item in path)
-            {
-                Material temp = new Material(ImageLoader.Load(counter++, path));
-                MaterialHolder.Add(temp);
-            }
-
-            counter = 0;
-
-            foreach (string item in font_path)
-            {
-                Material temp = new Material(ImageLoader.Load(counter++, font_path));
-                MaterialHolder.Add(temp);
-            }
-        }*/
     }
 }

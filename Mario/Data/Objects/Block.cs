@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mario.Data.Objects
 {
@@ -35,7 +36,7 @@ namespace Mario.Data.Objects
                     IsBonus = true;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround1, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockGround1, ObjectDatabase.path_block));
                     break;
 
                 case 1:         // Ground - Ground
@@ -44,7 +45,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround2, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockGround2, ObjectDatabase.path_block));
                     break;
 
                 case 2:         // Ground - Brick 1
@@ -53,7 +54,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround3, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockGround3, ObjectDatabase.path_block));
                     break;
 
                 case 3:         // Ground - Brick 2
@@ -62,7 +63,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = true;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockGround4, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockGround4, ObjectDatabase.path_block));
                     break;
 
                 case 4:         // Ground - Sky 1
@@ -71,7 +72,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky1, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky1, ObjectDatabase.path_block));
                     break;
 
                 case 5:         // Ground - Sky 2
@@ -80,7 +81,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky2, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky2, ObjectDatabase.path_block));
                     break;
 
                 case 6:         // Ground - Sky 3
@@ -89,7 +90,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky3, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky3, ObjectDatabase.path_block));
                     break;
 
                 case 7:         // Ground - Sky 4
@@ -98,7 +99,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky4, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky4, ObjectDatabase.path_block));
                     break;
 
                 case 8:         // Ground - Sky 5
@@ -107,7 +108,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky5, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky5, ObjectDatabase.path_block));
                     break;
 
                 case 9:         // Ground - Sky 6
@@ -116,7 +117,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky6, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky6, ObjectDatabase.path_block));
                     break;
 
                 case 10:         // Ground - Sky 7
@@ -125,7 +126,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Sky7, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Sky7, ObjectDatabase.path_block));
                     break;
 
                 case 11:         // UnderGround - Bonus
@@ -134,7 +135,7 @@ namespace Mario.Data.Objects
                     IsBonus = true;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround1, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockUnderGround1, ObjectDatabase.path_block));
                     break;
 
                 case 12:         // UnderGround - ground
@@ -143,7 +144,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround2, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockUnderGround2, ObjectDatabase.path_block));
                     break;
 
                 case 13:         // UnderGround - Brick 1
@@ -152,7 +153,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround3, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockUnderGround3, ObjectDatabase.path_block));
                     break;
 
                 case 14:         // UnderGround - Brick 2
@@ -161,7 +162,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.BlockUnderGround4, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.BlockUnderGround4, ObjectDatabase.path_block));
                     break;
 
                 
@@ -172,7 +173,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground1, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.UnderGroundBackground1, ObjectDatabase.path_block));
                     break;
 
                 case 16:         // UnderGround - Brick 2
@@ -181,7 +182,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.UnderGroundBackground2, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.UnderGroundBackground2, ObjectDatabase.path_block));
                     break;
 
                 case 17:         // Pipe 1
@@ -190,7 +191,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Pipe1, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Pipe1, ObjectDatabase.path_block));
                     break;
 
                 case 18:         // Pipe 2
@@ -199,7 +200,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Pipe2, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Pipe2, ObjectDatabase.path_block));
                     break;
 
                 case 19:         // Pipe 3
@@ -208,7 +209,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Pipe3, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Pipe3, ObjectDatabase.path_block));
                     break;
 
                 case 20:         // Pipe 4
@@ -217,7 +218,7 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Pipe4, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Pipe4, ObjectDatabase.path_block));
                     break;
 
                 case 21:         // Pipe 5
@@ -226,7 +227,21 @@ namespace Mario.Data.Objects
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Object.Pipe5, ObjectDatabase.path));
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Pipe5, ObjectDatabase.path_block));
+                    break;
+
+                case 22:         // Border
+
+                    IsSecret = false;
+                    IsBonus = false;
+                    IsDestroyable = false;
+
+                    mesh = new Material(ImageLoader.Load(ObjectDatabase.Blocks.Border, ObjectDatabase.path_block));
+                    break;
+
+                default:
+                    MessageBox.Show("No such block in database", "Out of Range", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
                     break;
             }
         }

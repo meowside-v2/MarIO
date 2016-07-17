@@ -113,9 +113,13 @@ namespace Mario.Data.Scenes
             core.UI.Add(posY);
             core.UI.Add(posZ);
 
-            core.exclusive.Add(_newBlock);
+            xRectangle border = new xRectangle(-8, -8, map.width, map.height);
 
-            cam.Init(core);
+            core.exclusive.Add(border);
+
+            core.exclusive.Add(_newBlock);
+            
+            cam.Init(core, -(cam.RENDER_WIDTH / 2 - 8), -(cam.RENDER_HEIGHT / 2 - 8));
 
             Thread keychecker = new Thread(() => KeyPress());
             keychecker.Start();
@@ -170,13 +174,15 @@ namespace Mario.Data.Scenes
         {
             int Xoffset = 0;
             int Yoffset = 0;
+            int type = _newBlock.Type;
 
             while(true)
             {
-                layer.Add(new Block(Xoffset, Yoffset, _newBlock.Type));
+                BlockFinder(map.background, (int)Xoffset, (int)Yoffset);
+                layer.Add(new Block(Xoffset, Yoffset, type));
                 Yoffset += _newBlock.mesh.height;
 
-                if (Xoffset + _newBlock.mesh.width > map.width && Yoffset + _newBlock.mesh.height > map.height)
+                if (Xoffset + _newBlock.mesh.width >= map.width && Yoffset + _newBlock.mesh.height > map.height)
                 {
                     return;
                 }
@@ -206,6 +212,7 @@ namespace Mario.Data.Scenes
 
             try
             {
+                bw.Write(w.Level);
                 bw.Write(w.width);
                 bw.Write(w.height);
 
@@ -275,8 +282,13 @@ namespace Mario.Data.Scenes
 
                 if (IsKeyPressed(ConsoleKey.W))
                 {
-                    _newBlock.Y -= 16;
-                    posY.Text("Y " + _newBlock.Y.ToString());
+                    if(_newBlock.Y > 0)
+                    {
+                        _newBlock.Y -= 16;
+                        posY.Text("Y " + _newBlock.Y.ToString());
+
+                        cam.Yoffset -= 16;
+                    }
                 }
 
 
@@ -286,32 +298,31 @@ namespace Mario.Data.Scenes
                     {
                         _newBlock.X -= 16;
                         posX.Text("X " + _newBlock.X.ToString());
-
-                        if (_newBlock.X < cam.Xoffset && _newBlock.X >= 0)
-                        {
-                            cam.Xoffset -= _newBlock.mesh.width;
-                        }
+                        
+                        cam.Xoffset -= 16;
                     }
                 }
 
                 if (IsKeyPressed(ConsoleKey.D))
                 {
-                    if(_newBlock.X < map.width)
+                    if(_newBlock.X + _newBlock.mesh.width < map.width)
                     {
                         _newBlock.X += 16;
                         posX.Text("X " + _newBlock.X.ToString());
-
-                        if (_newBlock.X + _newBlock.mesh.width - cam.Xoffset > cam.RENDER_WIDTH && _newBlock.X <= map.width)
-                        {
-                            cam.Xoffset += _newBlock.mesh.width;
-                        }
+                        
+                        cam.Xoffset += 16;
                     }
                 }
 
                 if (IsKeyPressed(ConsoleKey.S))
                 {
-                    _newBlock.Y += 16;
-                    posY.Text("Y " + _newBlock.Y.ToString());
+                    if(_newBlock.Y + _newBlock.mesh.height < map.height)
+                    {
+                        _newBlock.Y += 16;
+                        posY.Text("Y " + _newBlock.Y.ToString());
+
+                        cam.Yoffset += 16;
+                    }
                 }
 
                 if (IsKeyPressed(ConsoleKey.Enter))
