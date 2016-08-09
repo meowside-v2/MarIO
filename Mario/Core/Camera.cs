@@ -20,7 +20,10 @@ namespace Mario.Core
         public int RENDER_WIDTH = Console.LargestWindowWidth;
         public int RENDER_HEIGHT = Console.LargestWindowHeight;
 
-        private const int MAX_FRAME_RATE = 60;    // Frames per Second
+        private const int MAX_FRAME_RATE = 1000;    // Frames per Second
+        private const short sampleSize = 100;
+        private int lastTime = 0;
+        private int numRenders = 0;
         private bool _Vsync = true;
 
         private byte[] temp_buffer;
@@ -44,12 +47,12 @@ namespace Mario.Core
             fpsMeter.X = 1;
             fpsMeter.Y = RENDER_HEIGHT - 6;
 
-            fpsMeter.Text("000");
+            fpsMeter.Text("");
 
             world_objects.UI.Add(fpsMeter);
 
             Console.CursorVisible = false;
-            // Console.Title = "MarIO";
+            Console.Title = "MarIO";
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
@@ -71,14 +74,11 @@ namespace Mario.Core
 
         private void Buffering(FrameBaseHiararchy world_objects)
         {
-            Stopwatch delayBuffer = new Stopwatch();
             bool Sized = false;
-
-            delayBuffer.Start();
-
+            
             while (true)
             {
-                delayBuffer.Restart();
+                int beginRender = Environment.TickCount;
 
                 if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
                 {
@@ -97,13 +97,8 @@ namespace Mario.Core
                         catch (ArgumentOutOfRangeException)
                         {
                             Sized = false;
-
-                            Console.SetCursorPosition(0, 0);
-                            Console.BackgroundColor = (ConsoleColor)ColorPalette.eColors.Black;
-                            Console.ForegroundColor = (ConsoleColor)ColorPalette.eColors.White;
                             MessageBox.Show("Set font to Lucida, size to 5pt and to BOLD, press Enter", "Decrese font size", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             Console.ReadKey(false);
-
                         }
                     } while (!Sized);
 
@@ -129,37 +124,60 @@ namespace Mario.Core
 
                 Array.Copy(buffer, temp_buffer, buffer.Length);
                 Array.Copy(render_colors, temp_render_colors, render_colors.Length);
-                
-                if(_Vsync) Vsync(MAX_FRAME_RATE / 3, (int)new TimeSpan(delayBuffer.ElapsedTicks).TotalMilliseconds);
-                
-                fpsMeter.Text(string.Format("{0}", (int)(1000 / (float)(new TimeSpan(delayBuffer.ElapsedTicks)).TotalMilliseconds)));
+
+                int endRender = Environment.TickCount - beginRender;
+
+                if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, true);
+
+                if(numRenders == 0)
+                {
+                    lastTime = Environment.TickCount;
+                }
+
+                numRenders++;
             }
         }
 
         private void Rendering()
         {
-            Stopwatch delayRender = new Stopwatch();
-            DoubleBuffer screen = new DoubleBuffer();
-            delayRender.Start();
-            
             while (true)
             {
-                delayRender.Restart();
+                int beginRender = Environment.TickCount;
+
                 Array.Copy(temp_buffer, frame, buffer.Length);
                 Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
 
-                screen.Scr_Buffer(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
-                if (_Vsync) Vsync(MAX_FRAME_RATE, (int)new TimeSpan(delayRender.ElapsedTicks).TotalMilliseconds);
+                DirectBuffer.Out(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
+
+                int endRender = Environment.TickCount - beginRender;
+
+                if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, false);
             }
         }
 
-        private void Vsync(int TargetFrameRate, int ImageRenderDelay)
+        private void Vsync(int TargetFrameRate, int imageRenderDelay, bool renderFPS)
         {
             int targetDelay = 1000 / TargetFrameRate;
 
-            if (ImageRenderDelay < targetDelay)
+            if (imageRenderDelay < targetDelay)
             {
-                Thread.Sleep(targetDelay - ImageRenderDelay);
+                Thread.Sleep(targetDelay - imageRenderDelay);
+            }
+
+            if (renderFPS)
+            {
+                if (numRenders == sampleSize)
+                {
+                    int temp = Environment.TickCount - lastTime;
+
+                    if (temp > 0)
+                    {
+                        fpsMeter.Text(string.Format("{0}", sampleSize * 1000 / temp));
+                        Debug.WriteLine(string.Format("{0}", sampleSize * 1000 / temp));
+                    }
+
+                    numRenders = 0;
+                }
             }
         }
     }

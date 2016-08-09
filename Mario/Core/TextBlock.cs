@@ -1,4 +1,5 @@
-﻿using Mario.Data.Objects;
+﻿using Mario.Core;
+using Mario.Data.Objects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,14 +23,22 @@ namespace Mario.Core
             this.Y = Y;
         }
 
-        public void Text(string text)
+        public async void Text(string text)
         {
-            this.text.Clear();
+            this.text = await Task.Run(() =>
+                        {
 
-            for (int c = 0; c < text.Length; c++)
-            {
-                this.text.Add(new Letter(ImageLoader.Load(ObjectDatabase.font[Char.ToUpper(text[c])], ObjectDatabase.font_path)));
-            }
+                            xList<Letter> textNew = new xList<Letter>();
+
+                            for (int c = 0; c < text.Length; c++)
+                            {
+                                textNew.Add(new Letter(ImageLoader.Load(ObjectDatabase.font[Char.ToUpper(text[c])], ObjectDatabase.font_path)));
+                            }
+
+                            return textNew;
+
+                        }
+                        );
         }
 
         public object Copy()

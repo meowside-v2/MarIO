@@ -98,7 +98,7 @@
     <Compile Include="Core\Collider.cs" />
     <Compile Include="Core\ColorPalette.cs" />
     <Compile Include="Data\Objects\Core_objects.cs" />
-    <Compile Include="Core\DoubleBuffer.cs" />
+    <Compile Include="Core\DirectBuffer.cs" />
     <Compile Include="Core\Error.cs" />
     <Compile Include="Data\Objects\Enemy.cs" />
     <Compile Include="Core\Material.cs" />

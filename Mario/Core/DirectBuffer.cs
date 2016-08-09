@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Core
 {
-    class DoubleBuffer
+    class DirectBuffer
     {
         const int STD_OUTPUT_HANDLE = -11;
 
@@ -64,7 +64,7 @@ namespace Mario.Core
             public short Bottom;
         }
 
-        public void Scr_Buffer(int x, int y, int size, short[] clr, byte[] chr)
+        public static void Out(int x, int y, int size, short[] clr, byte[] chr)
         {
             CharInfo[] buf = new CharInfo[size];
             

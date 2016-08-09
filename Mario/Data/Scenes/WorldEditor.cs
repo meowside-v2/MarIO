@@ -17,6 +17,8 @@ namespace Mario.Data.Scenes
         World map;
         Block _newBlock = new Block();
 
+        xList<xList<Block>> undo = new xList<xList<Block>>();
+
         TextBlock posX = new TextBlock(1, 1);
         TextBlock posY = new TextBlock(1, 7);
         TextBlock posZ = new TextBlock(1, 13);
@@ -178,7 +180,7 @@ namespace Mario.Data.Scenes
 
             while(true)
             {
-                BlockFinder(map.background, (int)Xoffset, (int)Yoffset);
+                BlockFinder(layer, (int)Xoffset, (int)Yoffset);
                 layer.Add(new Block(Xoffset, Yoffset, type));
                 Yoffset += _newBlock.mesh.height;
 
@@ -330,6 +332,10 @@ namespace Mario.Data.Scenes
 
                     if (!EnterPressed)
                     {
+                        undo.Add((xList<Block>)map.background.DeepCopy());
+                        undo.Add((xList<Block>)map.middleground.DeepCopy());
+                        undo.Add((xList<Block>)map.foreground.DeepCopy());
+
                         Block temp = new Block();
 
                         temp = (Block)_newBlock.DeepCopy();
@@ -368,6 +374,10 @@ namespace Mario.Data.Scenes
 
                 if (IsKeyPressed(ConsoleKey.Delete) || IsKeyPressed(ConsoleKey.Backspace))
                 {
+                    undo.Add((xList<Block>)map.background.DeepCopy());
+                    undo.Add((xList<Block>)map.middleground.DeepCopy());
+                    undo.Add((xList<Block>)map.foreground.DeepCopy());
+
                     switch (Z)
                     {
                         case 0:
@@ -426,6 +436,10 @@ namespace Mario.Data.Scenes
 
                 else if (IsKeyPressed(ConsoleKey.F))
                 {
+                    undo.Add((xList<Block>)map.background.DeepCopy());
+                    undo.Add((xList<Block>)map.middleground.DeepCopy());
+                    undo.Add((xList<Block>)map.foreground.DeepCopy());
+
                     switch (Z)
                     {
                         case 0:
@@ -448,6 +462,24 @@ namespace Mario.Data.Scenes
                     temp = (World)map.DeepCopy();
 
                     Save(temp);
+                }
+
+                else if (IsKeyPressed(ConsoleKey.Z))
+                {
+                    if(undo.Count > 0)
+                    {
+                        map.background = (xList<Block>)undo[undo.Count - 1].DeepCopy();
+                        map.middleground = (xList<Block>)undo[undo.Count - 2].DeepCopy();
+                        map.foreground = (xList<Block>)undo[undo.Count - 3].DeepCopy();
+
+                        undo.Remove(undo[undo.Count - 1]);
+                        undo.Remove(undo[undo.Count - 1]);
+                        undo.Remove(undo[undo.Count - 1]);
+
+                        core.background[core.background.Count - 1] = map.background;
+                        core.middleground[core.background.Count - 1] = map.middleground;
+                        core.foreground[core.background.Count - 1] = map.foreground;
+                    }
                 }
 
                 else Changed = false;
