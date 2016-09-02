@@ -15,6 +15,7 @@ namespace Mario.Core
         public byte[,] bitmapColorG;
         public byte[,] bitmapColorB;
         public byte[,] bitmapTransparent;
+
         public int width;
         public int height;
         
@@ -107,7 +108,7 @@ namespace Mario.Core
             return (Material) this.MemberwiseClone();
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
         {
             if (x + width < 0 || x > frameWidth || y + height < 0 || y > frameHeight) return;
 
@@ -121,8 +122,8 @@ namespace Mario.Core
                         {
                             if(destination[((int)y + row) * frameWidth + (int)x + column] != 219)
                             {
-                                if(layer == 1)destination[((int)y + row) * frameWidth + (int)x + column] = 219;
-                                destinationColor[((int)y + row) * frameWidth + (int)x + column] = ((int)layer == 0 ? (short)(bitmapColor[row * width + column] << 4) : bitmapColor[row * width + column]);
+                                destination[((int)y + row) * frameWidth + (int)x + column] = 219;
+                                destinationColor[((int)y + row) * frameWidth + (int)x + column] = bitmapColor[row * width + column];
                             }
                         }
                     }

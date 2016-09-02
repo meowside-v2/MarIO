@@ -15,6 +15,9 @@ namespace Mario
         {
             WindowMaximize.Maximize();
 
+            ObjectDatabase.CreateLetterReferences();
+            ObjectDatabase.CreateBlockSpriteReferences();
+
             WorldEditor worldCreate = new WorldEditor();
             worldCreate.Start();
         }

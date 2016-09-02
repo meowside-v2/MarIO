@@ -35,11 +35,11 @@ namespace Mario.Core
         private byte[] frame;
         private short[] frame_colors;
         
-        FrameBaseHiararchy core = new FrameBaseHiararchy();
+        BaseHiararchy core = new BaseHiararchy();
 
         TextBlock fpsMeter = new TextBlock();
 
-        public void Init(FrameBaseHiararchy world_objects, int Xoffset = 0, int Yoffset = 0)
+        public void Init(BaseHiararchy world_objects, int Xoffset = 0, int Yoffset = 0)
         {
             this.Xoffset = Xoffset;
             this.Yoffset = Yoffset;
@@ -72,7 +72,7 @@ namespace Mario.Core
             Ren.Start();
         }
 
-        private void Buffering(FrameBaseHiararchy world_objects)
+        private void Buffering(BaseHiararchy world_objects)
         {
             bool Sized = false;
             
@@ -119,8 +119,8 @@ namespace Mario.Core
                 render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
 
                 
-                core = (FrameBaseHiararchy) world_objects.DeepCopy();
-                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT, null, Xoffset, Yoffset);
+                core = (BaseHiararchy) world_objects.DeepCopy();
+                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT, Xoffset, Yoffset);
 
                 Array.Copy(buffer, temp_buffer, buffer.Length);
                 Array.Copy(render_colors, temp_render_colors, render_colors.Length);

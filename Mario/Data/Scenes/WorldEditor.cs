@@ -31,7 +31,7 @@ namespace Mario.Data.Scenes
         bool EnterPressed = false;
         bool Changed = false;
 
-        FrameBaseHiararchy core = new FrameBaseHiararchy();
+        BaseHiararchy core = new BaseHiararchy();
 
         public void Start()
         {
@@ -106,10 +106,10 @@ namespace Mario.Data.Scenes
             posX.Text("X " + _newBlock.X.ToString());
             posY.Text("Y " + _newBlock.Y.ToString());
             posZ.Text("Z " + Z.ToString());
-
-            core.background.Add(map.background);
-            core.middleground.Add(map.middleground);
-            core.foreground.Add(map.foreground);
+            
+            //core.background = map.background;
+            //core.middleground.Add(map.middleground);
+            //core.foreground.Add(map.foreground);
             
             core.UI.Add(posX);
             core.UI.Add(posY);
@@ -204,7 +204,7 @@ namespace Mario.Data.Scenes
 
             try
             {
-                bw = new BinaryWriter(new FileStream("Data\\Worlds\\" + map.Level + ".World", FileMode.Create));
+                bw = new BinaryWriter(new FileStream("Data\\Worlds\\" + map.Level + ".WORLD", FileMode.Create));
             }
             catch (IOException e)
             {

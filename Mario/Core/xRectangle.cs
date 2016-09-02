@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mario.Core
 {
-    class xRectangle : ICore
+    class xRectangle : ICore, ICoordinated, I2Dimensional
     {
         xList<Block> border = new xList<Block>();
 
@@ -15,9 +15,7 @@ namespace Mario.Core
         public int Y { get; set; }
         public int width { get; set; }
         public int height { get; set; }
-
-        //public xRectangle() { }
-
+        
         public xRectangle(int x, int y, int width, int height)
         {
             this.X = x;
@@ -55,9 +53,9 @@ namespace Mario.Core
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
         {
-            this.border.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            this.border.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
         }
 
     }

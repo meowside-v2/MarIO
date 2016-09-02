@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +15,10 @@ namespace Mario.Core
             Mario
         };
 
-        public static readonly string[] path_live =
+        /*public static readonly string[] path_live =
         {
             "\\Data\\Sprites\\mario_12x16.png"
-        };
+        };*/
 
         public enum Blocks
         {
@@ -45,7 +47,28 @@ namespace Mario.Core
             Border
         };
 
-        public static readonly string[] path_block =
+        public static List<Material> blockMesh = new List<Material>();
+
+        public static void CreateBlockSpriteReferences()
+        {
+            using (BinaryReader br = new BinaryReader(new FileStream(Environment.CurrentDirectory + @"\MarioBlockSpriteFile.MEX", FileMode.Open)))
+            {
+                int lenght = br.ReadInt32();
+
+                for (int index = 0; index < lenght; index++)
+                {
+                    int temp = br.ReadInt32();
+                    byte[] byteArray = br.ReadBytes(temp);
+
+                    using (MemoryStream ms = new MemoryStream(byteArray))
+                    {
+                        blockMesh.Add(new Material(Image.FromStream(ms)));
+                    }
+                }
+            }
+        }
+
+        /*public static readonly string[] path_block =
         {
             "\\Data\\Sprites\\Ground\\block_01.png",
             "\\Data\\Sprites\\Ground\\block_02.png",
@@ -70,10 +93,20 @@ namespace Mario.Core
             "\\Data\\Sprites\\Pipes\\pipe_04.png",
             "\\Data\\Sprites\\Pipes\\pipe_05.png",
             "\\Data\\Sprites\\border.png"
-        };
+        };*/
 
         public enum Font
         {
+            Num0,
+            Num1,
+            Num2,
+            Num3,
+            Num4,
+            Num5,
+            Num6,
+            Num7,
+            Num8,
+            Num9,
             A,
             B,
             C,
@@ -100,22 +133,12 @@ namespace Mario.Core
             X,
             Y,
             Z,
-            Num0,
-            Num1,
-            Num2,
-            Num3,
-            Num4,
-            Num5,
-            Num6,
-            Num7,
-            Num8,
-            Num9,
-            space,
             minus,
+            space,
             NumberOfTypes
         };
 
-        public static readonly string[] font_path =
+        /*public static readonly string[] font_path =
         {
             "\\Data\\Font\\A.png",
             "\\Data\\Font\\B.png",
@@ -155,10 +178,20 @@ namespace Mario.Core
             "\\Data\\Font\\9.png",
             "\\Data\\Font\\space.png",
             "\\Data\\Font\\minus.png"
-        };
+        };*/
 
         public static Dictionary<char, Font> font = new Dictionary<char, Font>()
         {
+            { '0' , Font.Num0 },
+            { '1' , Font.Num1 },
+            { '2' , Font.Num2 },
+            { '3' , Font.Num3 },
+            { '4' , Font.Num4 },
+            { '5' , Font.Num5 },
+            { '6' , Font.Num6 },
+            { '7' , Font.Num7 },
+            { '8' , Font.Num8 },
+            { '9' , Font.Num9 },
             { 'A' , Font.A },
             { 'B' , Font.B },
             { 'C' , Font.C },
@@ -185,18 +218,29 @@ namespace Mario.Core
             { 'X' , Font.X },
             { 'Y' , Font.Y },
             { 'Z' , Font.Z },
-            { '0' , Font.Num0 },
-            { '1' , Font.Num1 },
-            { '2' , Font.Num2 },
-            { '3' , Font.Num3 },
-            { '4' , Font.Num4 },
-            { '5' , Font.Num5 },
-            { '6' , Font.Num6 },
-            { '7' , Font.Num7 },
-            { '8' , Font.Num8 },
-            { '9' , Font.Num9 },
-            { ' ' , Font.space },
-            { '-' , Font.minus }
+            { '-' , Font.minus },
+            { ' ' , Font.space }
         };
+
+        public static List<Material> letterMesh = new List<Material>();
+
+        public static void CreateLetterReferences()
+        {
+            using (BinaryReader br = new BinaryReader(new FileStream(Environment.CurrentDirectory + @"\MarioFontFile.MEX", FileMode.Open)))
+            {
+                int lenght = br.ReadInt32();
+
+                for(int index = 0; index < lenght; index++)
+                {
+                    int temp = br.ReadInt32();
+                    byte[] byteArray = br.ReadBytes(temp);
+
+                    using (MemoryStream ms = new MemoryStream(byteArray))
+                    {
+                        letterMesh.Add(new Material(Image.FromStream(ms)));
+                    }
+                }
+            }
+        }
     }
 }

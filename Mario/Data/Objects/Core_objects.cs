@@ -11,18 +11,20 @@ using System.Threading.Tasks;
 
 namespace Mario.Data.Objects
 {
-    class Core_objects : ICore, ICoordinated
+    class Core_objects : ICore, ICoordinated, I2Dimensional, IGraphics
     {
         public string name { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
 
         public int AnimationState { get; set; }
 
         public int jumpheight = 0;     // Number of Blocks
         public int jumplength = 0;     // In ms (miliseconds)
 
-        public Material mesh;
+        public Material mesh { get; set; }
         public Collider collider = new Collider();
 
         public object Copy()
@@ -44,9 +46,9 @@ namespace Mario.Data.Objects
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer, int? x, int? y)
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x, int? y)
         {
-            mesh.Render(destination, destinationColor, frameWidth, frameHeight, layer, this.X - x, this.Y - y);
+            mesh.Render(destination, destinationColor, frameWidth, frameHeight, this.X - x, this.Y - y);
         }
     }
 }

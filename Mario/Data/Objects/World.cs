@@ -54,11 +54,11 @@ namespace Mario.Data.Objects
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer = null, int? x = null, int? y = null)
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
         {
-            background.Render(destination, destinationColor, frameWidth, frameHeight, 0, x, y);
-            middleground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
-            foreground.Render(destination, destinationColor, frameWidth, frameHeight, 1, x, y);
+            foreground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            middleground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            background.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
         }
     }
 }

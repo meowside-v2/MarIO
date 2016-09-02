@@ -32,7 +32,7 @@ namespace Mario.Core
 
                             for (int c = 0; c < text.Length; c++)
                             {
-                                textNew.Add(new Letter(ImageLoader.Load(ObjectDatabase.font[Char.ToUpper(text[c])], ObjectDatabase.font_path)));
+                                textNew.Add(new Letter(ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(text[c])]]));
                             }
 
                             return textNew;
@@ -60,7 +60,7 @@ namespace Mario.Core
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? layer, int? x, int? y)
+        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x, int? y)
         {
             int Xoffset = 0;
 
@@ -71,7 +71,7 @@ namespace Mario.Core
                 text[index].X = this.X + Xoffset;
                 text[index].Y = this.Y;
 
-                text[index].Render(destination, destinationColor, frameWidth, frameHeight, layer, 0, 0);
+                text[index].Render(destination, destinationColor, frameWidth, frameHeight, 0, 0);
                 Xoffset += text[index].mesh.width + 1;
             }
         }
