@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,6 @@ namespace Mario.Core
     {
         object Copy();
         object DeepCopy();
-        void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null);
+        Color Render(int x, int y);
     }
 }

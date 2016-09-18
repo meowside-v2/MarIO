@@ -37,7 +37,7 @@ namespace Mario.Core
 
         public static void Maximize()
         {
-            //SetConsoleDisplayMode(hConsole, 1, out xy);
+            SetConsoleDisplayMode(hConsole, 1, out xy);
         }
 
         /*[DllImport("user32.dll")]

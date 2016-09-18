@@ -47,7 +47,7 @@ namespace Mario.Core
             return (xList<T>) retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
+        public void Render(int x, int y)
         {
             for(int index = 0; index < this.Count; index++)
             {
@@ -58,7 +58,7 @@ namespace Mario.Core
 
                 else
                 {
-                    (this[index] as ICore).Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+                    //(this[index] as ICore).Render(destination, destinationColor, frameWidth, frameHeight, x, y);
                 }
             }
         }

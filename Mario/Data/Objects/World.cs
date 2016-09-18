@@ -14,9 +14,7 @@ namespace Mario.Data.Objects
         public double Gravity { get; set; }
         public string Level { get; set; }
 
-        public xList<Block> foreground    = new xList<Block>();
-        public xList<Block> middleground  = new xList<Block>();
-        public xList<Block> background    = new xList<Block>();
+        public xList<Block> model = new xList<Block>();
 
         public int PlayerSpawnX { get; set; }
         public int PlayerSpawnY { get; set; }
@@ -47,18 +45,16 @@ namespace Mario.Data.Objects
         {
             World retValue = (World)this.MemberwiseClone();
 
-            retValue.background = (xList<Block>)this.background.DeepCopy();
-            retValue.middleground = (xList<Block>)this.middleground.DeepCopy();
-            retValue.foreground = (xList<Block>)this.foreground.DeepCopy();
+            retValue.model = (xList<Block>)this.model.DeepCopy();
 
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
+        public void Render(int x, int y)
         {
-            foreground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
-            middleground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
-            background.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            //foreground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            //middleground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            //background.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
         }
     }
 }

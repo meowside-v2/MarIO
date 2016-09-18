@@ -16,6 +16,7 @@ namespace Mario.Data.Objects
         public string name { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public int Z { get; set; }
         public int width { get; set; }
         public int height { get; set; }
 
@@ -46,9 +47,9 @@ namespace Mario.Data.Objects
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x, int? y)
+        public void Render(int x, int y)
         {
-            mesh.Render(destination, destinationColor, frameWidth, frameHeight, this.X - x, this.Y - y);
+            //mesh.Render(destination, destinationColor, frameWidth, frameHeight, this.X - x, this.Y - y);
         }
     }
 }

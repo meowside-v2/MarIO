@@ -117,11 +117,11 @@ namespace Mario.Data.Scenes
 
             xRectangle border = new xRectangle(-8, -8, map.width, map.height);
 
-            core.exclusive.Add(border);
+            //core.exclusive.Add(border);
 
-            core.exclusive.Add(_newBlock);
+            //core.exclusive.Add(_newBlock);
             
-            cam.Init(core, -(cam.RENDER_WIDTH / 2 - 8), -(cam.RENDER_HEIGHT / 2 - 8));
+            cam.Init(core, -(Camera.RENDER_WIDTH / 2 - 8), -(Camera.RENDER_HEIGHT / 2 - 8));
 
             Thread keychecker = new Thread(() => KeyPress());
             keychecker.Start();
@@ -158,18 +158,11 @@ namespace Mario.Data.Scenes
             }
         }
 
-        private void BlockFinder(List<Block> layer, int X, int Y)
+        private void BlockFinder(List<Block> layer, int X, int Y, int Z)
         {
-            for(int i = 0; i < layer.Count; i++)
-            {
-                if (layer[i].X == X && layer[i].Y == Y)
-                {
-                    layer.Remove(layer[i]);
-                    return;
-                }
+            Block temp = (Block)layer.Find(b => b.X == X && b.Y == Y && b.Z == Z);
 
-                if (layer[i].X > X && layer[i].Y > Y) return;
-            }
+            if (temp != null) layer.Remove(temp);
         }
 
         private void Fill(List<Block> layer)
@@ -180,7 +173,7 @@ namespace Mario.Data.Scenes
 
             while(true)
             {
-                BlockFinder(layer, (int)Xoffset, (int)Yoffset);
+                BlockFinder(layer, (int)Xoffset, (int)Yoffset, Z);
                 layer.Add(new Block(Xoffset, Yoffset, type));
                 Yoffset += _newBlock.mesh.height;
 
@@ -194,7 +187,6 @@ namespace Mario.Data.Scenes
                     Yoffset = 0;
                     Xoffset += _newBlock.mesh.width;
                 }
-
             }
         }
 
@@ -221,30 +213,13 @@ namespace Mario.Data.Scenes
                 bw.Write(w.PlayerSpawnX);
                 bw.Write(w.PlayerSpawnY);
 
-                bw.Write(w.foreground.Count);
+                bw.Write(w.model.Count);
 
-                foreach (Block item in w.foreground)
+                foreach (Block item in w.model)
                 {
                     bw.Write((int)item.X);
                     bw.Write((int)item.Y);
-                    bw.Write(item.Type);
-                }
-
-                bw.Write(w.middleground.Count);
-
-                foreach (Block item in w.middleground)
-                {
-                    bw.Write((int)item.X);
-                    bw.Write((int)item.Y);
-                    bw.Write(item.Type);
-                }
-
-                bw.Write(w.background.Count);
-
-                foreach (Block item in w.background)
-                {
-                    bw.Write((int)item.X);
-                    bw.Write((int)item.Y);
+                    bw.Write((int)item.Z);
                     bw.Write(item.Type);
                 }
             }
@@ -332,34 +307,15 @@ namespace Mario.Data.Scenes
 
                     if (!EnterPressed)
                     {
-                        undo.Add((xList<Block>)map.background.DeepCopy());
-                        undo.Add((xList<Block>)map.middleground.DeepCopy());
-                        undo.Add((xList<Block>)map.foreground.DeepCopy());
+                        undo.Add((xList<Block>)map.model.DeepCopy());
 
                         Block temp = new Block();
 
                         temp = (Block)_newBlock.DeepCopy();
-
-                        switch (Z)
-                        {
-                            case 0:
-                                BlockFinder(map.background, (int)_newBlock.X, (int)_newBlock.Y);
-                                map.background.Add(temp);
-                                LayerSort(map.background);
-                                break;
-
-                            case 1:
-                                BlockFinder(map.middleground, (int)_newBlock.X, (int)_newBlock.Y);
-                                map.middleground.Add(temp);
-                                LayerSort(map.middleground);
-                                break;
-
-                            case 2:
-                                BlockFinder(map.foreground, (int)_newBlock.X, (int)_newBlock.Y);
-                                map.foreground.Add(temp);
-                                LayerSort(map.foreground);
-                                break;
-                        }
+                        
+                        BlockFinder(map.model, (int)_newBlock.X, (int)_newBlock.Y, (int)_newBlock.Z);
+                        map.model.Add(temp);
+                        LayerSort(map.model);
 
                         EnterPressed = true;
                         
@@ -374,24 +330,9 @@ namespace Mario.Data.Scenes
 
                 if (IsKeyPressed(ConsoleKey.Delete) || IsKeyPressed(ConsoleKey.Backspace))
                 {
-                    undo.Add((xList<Block>)map.background.DeepCopy());
-                    undo.Add((xList<Block>)map.middleground.DeepCopy());
-                    undo.Add((xList<Block>)map.foreground.DeepCopy());
-
-                    switch (Z)
-                    {
-                        case 0:
-                            BlockFinder(map.background, (int)_newBlock.X, (int)_newBlock.Y);
-                            break;
-
-                        case 1:
-                            BlockFinder(map.middleground, (int)_newBlock.X, (int)_newBlock.Y);
-                            break;
-
-                        case 2:
-                            BlockFinder(map.foreground, (int)_newBlock.X, (int)_newBlock.Y);
-                            break;
-                    }
+                    undo.Add((xList<Block>)map.model.DeepCopy());
+                    
+                    BlockFinder(map.model, (int)_newBlock.X, (int)_newBlock.Y, (int)_newBlock.Z);
                 }
 
                 if (IsKeyPressed(ConsoleKey.Q))
@@ -436,24 +377,9 @@ namespace Mario.Data.Scenes
 
                 else if (IsKeyPressed(ConsoleKey.F))
                 {
-                    undo.Add((xList<Block>)map.background.DeepCopy());
-                    undo.Add((xList<Block>)map.middleground.DeepCopy());
-                    undo.Add((xList<Block>)map.foreground.DeepCopy());
-
-                    switch (Z)
-                    {
-                        case 0:
-                            Fill(map.background);
-                            break;
-
-                        case 1:
-                            Fill(map.middleground);
-                            break;
-
-                        case 2:
-                            Fill(map.foreground);
-                            break;
-                    }
+                    undo.Add((xList<Block>)map.model.DeepCopy());
+                    
+                    Fill(map.model);
                 }
 
                 else if (IsKeyPressed(ConsoleKey.End))
@@ -468,17 +394,9 @@ namespace Mario.Data.Scenes
                 {
                     if(undo.Count > 0)
                     {
-                        map.background = (xList<Block>)undo[undo.Count - 1].DeepCopy();
-                        map.middleground = (xList<Block>)undo[undo.Count - 2].DeepCopy();
-                        map.foreground = (xList<Block>)undo[undo.Count - 3].DeepCopy();
-
+                        map.model = (xList<Block>)undo[undo.Count - 1].DeepCopy();
+                        
                         undo.Remove(undo[undo.Count - 1]);
-                        undo.Remove(undo[undo.Count - 1]);
-                        undo.Remove(undo[undo.Count - 1]);
-
-                        core.background[core.background.Count - 1] = map.background;
-                        core.middleground[core.background.Count - 1] = map.middleground;
-                        core.foreground[core.background.Count - 1] = map.foreground;
                     }
                 }
 

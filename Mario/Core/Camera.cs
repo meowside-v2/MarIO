@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,8 +19,8 @@ namespace Mario.Core
         public int Xoffset { get; set; }
         public int Yoffset { get; set; }
 
-        public int RENDER_WIDTH = Console.LargestWindowWidth;
-        public int RENDER_HEIGHT = Console.LargestWindowHeight;
+        public static int RENDER_WIDTH = Console.LargestWindowWidth;
+        public static int RENDER_HEIGHT = Console.LargestWindowHeight;
 
         private const int MAX_FRAME_RATE = 1000;    // Frames per Second
         private const short sampleSize = 100;
@@ -26,24 +28,62 @@ namespace Mario.Core
         private int numRenders = 0;
         private bool _Vsync = true;
 
-        private byte[] temp_buffer;
-        private short[] temp_render_colors;
+        private short _sectors = 0;
 
-        private byte[] buffer;
-        private short[] render_colors;
+        private short sectorsRendered
+        {
+            get
+            {
+                return _sectors;
+            }
 
-        private byte[] frame;
-        private short[] frame_colors;
-        
-        BaseHiararchy core = new BaseHiararchy();
+            set
+            {
+                this._sectors = value;
+            }
+        }
 
-        TextBlock fpsMeter = new TextBlock();
+        private bool bufferingDone
+        {
+            get
+            {
+                if (sectorsRendered == 3)
+                {
+                    sectorsRendered = 0;
+                    return true;
+                }
+
+                return false;
+            }
+
+            set
+            {
+
+            }
+        }
+
+        private xList<SectorPreferences> sectorsToRender = new xList<SectorPreferences>();
+
+        private Task[] sectorRenderTask;
+
+        private BaseHiararchy core = new BaseHiararchy();
+        private BaseHiararchy world_objects;
+
+        private TextBlock fpsMeter = new TextBlock();
+
+        private CancellationTokenSource ct = new CancellationTokenSource();
+
+        private Bitmap tempFrame;
 
         public void Init(BaseHiararchy world_objects, int Xoffset = 0, int Yoffset = 0)
         {
+            tempFrame = (Bitmap)Settings.SetNewResolution(Settings.availableMaxResolution);
+
             this.Xoffset = Xoffset;
             this.Yoffset = Yoffset;
 
+            this.world_objects = world_objects;
+            
             fpsMeter.X = 1;
             fpsMeter.Y = RENDER_HEIGHT - 6;
 
@@ -56,85 +96,89 @@ namespace Mario.Core
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
-            buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-            render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+            sectorsToRender = SplitScreenIntoSectors(RENDER_HEIGHT, RENDER_WIDTH);
 
-            temp_buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-            temp_render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+            sectorRenderTask = new Task[sectorsToRender.Count];
 
-            frame = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-            frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
-            
-            Task Buff = new Task(() => Buffering(world_objects));
-            Buff.Start();
+            System.Windows.Forms.Timer WindowMaximizer = new System.Windows.Forms.Timer();
+            WindowMaximizer.Interval = 10;
+            WindowMaximizer.Tick += WindowSizeChecker;
+            WindowMaximizer.Start();
 
-            Task Ren = new Task(() => Rendering());
-            Ren.Start();
+            Task Buff = Task.Factory.StartNew(() => Buffering(world_objects));
+            Task Rend = Task.Factory.StartNew(() => Rendering());
+        }
+
+        private xList<SectorPreferences> SplitScreenIntoSectors(int _rednderHeight, int _rednderWidth)
+        {
+            xList<SectorPreferences> retList = new xList<SectorPreferences>();
+
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+            //----------------------------------------------------------------//
+
+            return retList;
+        }
+
+        private void WindowSizeChecker(object sender, EventArgs e)
+        {
+            bool Sized = false;
+
+            if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
+            {
+                WindowMaximize.Maximize();
+            }
         }
 
         private void Buffering(BaseHiararchy world_objects)
         {
-            bool Sized = false;
-            
+            Bitmap renderedFrame = (Bitmap)Settings.SetNewResolution(Settings.availableMaxResolution);
+
             while (true)
             {
                 int beginRender = Environment.TickCount;
 
-                if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
+                core = (BaseHiararchy)world_objects.DeepCopy();
+
+                int count = 0;
+                
+                foreach (SectorPreferences sector in sectorsToRender)
                 {
-                    WindowMaximize.Maximize();
-
-                    do
-                    {
-                        try
-                        {
-                            Sized = true;
-
-                            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-                            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            Sized = false;
-                            MessageBox.Show("Set font to Lucida, size to 5pt and to BOLD, press Enter", "Decrese font size", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            Console.ReadKey(false);
-                        }
-                    } while (!Sized);
-
-                    RENDER_HEIGHT = Console.LargestWindowHeight;
-                    RENDER_WIDTH = Console.LargestWindowWidth;
-
-                    buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-                    render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
-
-                    temp_buffer = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-                    temp_render_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
-
-                    frame = new byte[RENDER_HEIGHT * RENDER_WIDTH];
-                    frame_colors = new short[RENDER_HEIGHT * RENDER_WIDTH];
+                    sectorRenderTask[count++] = Task.Factory.StartNew(() => SectorRender(sector));
                 }
 
-                buffer = Enumerable.Repeat(Convert.ToByte(' '), buffer.Length).ToArray();
-                render_colors = Enumerable.Repeat(Convert.ToInt16((short)ColorPalette.eColors.Black << 4), render_colors.Length).ToArray();
-
-                
-                core = (BaseHiararchy) world_objects.DeepCopy();
-                core.Render(buffer, render_colors, RENDER_WIDTH, RENDER_HEIGHT, Xoffset, Yoffset);
-
-                Array.Copy(buffer, temp_buffer, buffer.Length);
-                Array.Copy(render_colors, temp_render_colors, render_colors.Length);
+                Task.WaitAll(sectorRenderTask);
 
                 int endRender = Environment.TickCount - beginRender;
 
                 if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, true);
 
-                if(numRenders == 0)
+                if (numRenders == 0)
                 {
                     lastTime = Environment.TickCount;
                 }
 
                 numRenders++;
+
+                tempFrame = (Bitmap) renderedFrame.Clone();
+
+                if (ct.IsCancellationRequested) return;
+            }
+        }
+
+        private void SectorRender(SectorPreferences sec, Bitmap imageToRender)
+        {
+            for(int row = sec.startPointY; row <= sec.endPointY; row++)
+            {
+                for(int column = sec.startPointX; column <= sec.endPointX; column++)
+                {
+                    imageToRender.SetPixel(column, row, core.Render(column, row));
+                }
             }
         }
 
@@ -144,16 +188,44 @@ namespace Mario.Core
             {
                 int beginRender = Environment.TickCount;
 
-                Array.Copy(temp_buffer, frame, buffer.Length);
-                Array.Copy(temp_render_colors, frame_colors, render_colors.Length);
+                Point location = new Point(0, 0);
+                Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
 
-                DirectBuffer.Out(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
+                using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
+                {
+                    using (Image outFrame = (Image)tempFrame.Clone())
+                    {
+                        Size fontSize = GetConsoleFontSize();
+
+                        // translating the character positions to pixels
+                        Rectangle imageRect = new Rectangle(
+                            location.X * fontSize.Width,
+                            location.Y * fontSize.Height,
+                            imageSize.Width * fontSize.Width,
+                            imageSize.Height * fontSize.Height);
+
+                        g.DrawImage(outFrame, imageRect);
+                    }
+                }
 
                 int endRender = Environment.TickCount - beginRender;
 
-                if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, false);
+                Vsync(MAX_FRAME_RATE, endRender, false);
+
+                if (ct.IsCancellationRequested) return;
             }
         }
+
+        /*private void Rendering()
+        {
+            int beginRender = Environment.TickCount;
+                
+            DirectBuffer.Out(RENDER_WIDTH, RENDER_HEIGHT, RENDER_WIDTH * RENDER_HEIGHT, frame_colors, frame);
+
+            int endRender = Environment.TickCount - beginRender;
+
+            if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, false);
+        }*/
 
         private void Vsync(int TargetFrameRate, int imageRenderDelay, bool renderFPS)
         {
@@ -180,6 +252,149 @@ namespace Mario.Core
                 }
             }
         }
+
+        private static Size GetConsoleFontSize()
+        {
+            // getting the console out buffer handle
+            IntPtr outHandle = CreateFile("CONOUT$",
+                                           GENERIC_READ | GENERIC_WRITE,
+                                           FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                           IntPtr.Zero,
+                                           OPEN_EXISTING,
+                                           0,
+                                           IntPtr.Zero);
+
+            int errorCode = Marshal.GetLastWin32Error();
+            if (outHandle.ToInt32() == INVALID_HANDLE_VALUE)
+            {
+                throw new IOException("Unable to open CONOUT$", errorCode);
+            }
+
+            ConsoleFontInfo cfi = new ConsoleFontInfo();
+
+            if (!GetCurrentConsoleFont(outHandle, false, cfi))
+            {
+                throw new InvalidOperationException("Unable to get font information.");
+            }
+
+            return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetConsoleWindow();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr CreateFile(
+            string lpFileName,
+            int dwDesiredAccess,
+            int dwShareMode,
+            IntPtr lpSecurityAttributes,
+            int dwCreationDisposition,
+            int dwFlagsAndAttributes,
+            IntPtr hTemplateFile);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetCurrentConsoleFont(
+            IntPtr hConsoleOutput,
+            bool bMaximumWindow,
+            [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal class ConsoleFontInfo
+        {
+            internal int nFont;
+            internal Coord dwFontSize;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct Coord
+        {
+            [FieldOffset(0)]
+            internal short X;
+            [FieldOffset(2)]
+            internal short Y;
+        }
+
+        private const int GENERIC_READ = unchecked((int)0x80000000);
+        private const int GENERIC_WRITE = 0x40000000;
+        private const int FILE_SHARE_READ = 1;
+        private const int FILE_SHARE_WRITE = 2;
+        private const int INVALID_HANDLE_VALUE = -1;
+        private const int OPEN_EXISTING = 3;
+        
+
+        /*private xList<RenderedSectorPreferences> SplitScreenIntoSectors(int dimensionOne, int dimensionTwo)
+        {
+            xList<RenderedSectorPreferences> returnList = new xList<RenderedSectorPreferences>();
+
+            RenderedSectorPreferences secOne = new RenderedSectorPreferences();
+            RenderedSectorPreferences secTwo = new RenderedSectorPreferences();
+            RenderedSectorPreferences secThree = new RenderedSectorPreferences();
+            RenderedSectorPreferences secFour = new RenderedSectorPreferences();
+
+            secOne.startPointX = 0;
+            secOne.startPointY = 0;
+
+            secOne.endPointX = dimensionTwo / 2;
+            secOne.endPointY = dimensionOne / 2;
+
+            returnList.Add(secOne);
+
+            secTwo.startPointX = 0;
+            secTwo.startPointY = secOne.endPointY + 1;
+
+            secTwo.endPointX = secOne.endPointX;
+            secTwo.endPointY = dimensionOne - 1;
+
+            returnList.Add(secTwo);
+
+            secThree.startPointX = secOne.endPointX + 1;
+            secThree.startPointY = 0;
+
+            secThree.endPointX = dimensionTwo - 1;
+            secThree.endPointY = secOne.endPointY;
+
+            returnList.Add(secThree);
+
+            secFour.startPointX = secThree.startPointX;
+            secFour.startPointY = secTwo.startPointY;
+
+            secFour.endPointX = dimensionTwo - 1;
+            secFour.endPointY = dimensionOne - 1;
+
+            returnList.Add(secFour);
+
+            Debug.WriteLine(string.Format("Height {0}  Width {1}",
+                                            dimensionOne,
+                                            dimensionTwo));
+
+            Debug.WriteLine(string.Format("X1 {0}  Y1 {1}  X2 {2}  Y2 {3}",
+                                            secOne.startPointX,
+                                            secOne.startPointY,
+                                            secOne.endPointX,
+                                            secOne.endPointY));
+
+            Debug.WriteLine(string.Format("X1 {0}  Y1 {1}  X2 {2}  Y2 {3}",
+                                            secTwo.startPointX,
+                                            secTwo.startPointY,
+                                            secTwo.endPointX,
+                                            secTwo.endPointY));
+
+            Debug.WriteLine(string.Format("X1 {0}  Y1 {1}  X2 {2}  Y2 {3}",
+                                            secThree.startPointX,
+                                            secThree.startPointY,
+                                            secThree.endPointX,
+                                            secThree.endPointY));
+
+            Debug.WriteLine(string.Format("X1 {0}  Y1 {1}  X2 {2}  Y2 {3}",
+                                            secFour.startPointX,
+                                            secFour.startPointY,
+                                            secFour.endPointX,
+                                            secFour.endPointY));
+
+
+            return returnList;
+        }*/
     }
 }
 

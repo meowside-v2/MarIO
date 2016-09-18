@@ -41,7 +41,7 @@ namespace Mario.Core
                 for(int i = 0; i < counter; i++)
                 {
                     Block temp = new Block(br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
-                    world.foreground.Add(temp);
+                    world.model.Add(temp);
                 }
 
                 counter = br.ReadInt32();
@@ -49,7 +49,7 @@ namespace Mario.Core
                 for (int i = 0; i < counter; i++)
                 {
                     Block temp = new Block(br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
-                    world.middleground.Add(temp);
+                    world.model.Add(temp);
                 }
 
                 counter = br.ReadInt32();
@@ -57,7 +57,7 @@ namespace Mario.Core
                 for (int i = 0; i < counter; i++)
                 {
                     Block temp = new Block(br.ReadInt32(), br.ReadInt32(), br.ReadInt32());
-                    world.background.Add(temp);
+                    world.model.Add(temp);
                 }
             }
             catch (IOException e)

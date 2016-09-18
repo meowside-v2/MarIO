@@ -13,6 +13,7 @@ namespace Mario.Core
 
         public int X { get; set; }
         public int Y { get; set; }
+        public int Z { get; set; }
         public int width { get; set; }
         public int height { get; set; }
         
@@ -53,9 +54,9 @@ namespace Mario.Core
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x = null, int? y = null)
+        public void Render(int x, int y)
         {
-            this.border.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+            //this.border.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
         }
 
     }

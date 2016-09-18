@@ -14,7 +14,7 @@ namespace Mario.Core
         public xList<Letter> text = new xList<Letter>();
         public int X { get; set; }
         public int Y { get; set; }
-
+        public int Z { get; set; }
         public TextBlock() { }
 
         public TextBlock(int X, int Y)
@@ -60,7 +60,7 @@ namespace Mario.Core
             return retValue;
         }
 
-        public void Render(byte[] destination, short[] destinationColor, int frameWidth, int frameHeight, int? x, int? y)
+        public void Render(int x, int y)
         {
             int Xoffset = 0;
 
@@ -71,7 +71,7 @@ namespace Mario.Core
                 text[index].X = this.X + Xoffset;
                 text[index].Y = this.Y;
 
-                text[index].Render(destination, destinationColor, frameWidth, frameHeight, 0, 0);
+                //text[index].Render(destination, destinationColor, frameWidth, frameHeight, 0, 0);
                 Xoffset += text[index].mesh.width + 1;
             }
         }

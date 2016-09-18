@@ -40,7 +40,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -83,23 +83,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\I2Dimensional.cs" />
-    <Compile Include="Core\ICoordinated.cs" />
-    <Compile Include="Core\IGraphics.cs" />
+    <Compile Include="Core\Interfaces\I2Dimensional.cs" />
+    <Compile Include="Core\Interfaces\ICoordinated.cs" />
+    <Compile Include="Core\Interfaces\IGraphics.cs" />
+    <Compile Include="Core\SectorPreferences.cs" />
+    <Compile Include="Core\Settings.cs" />
     <Compile Include="Core\xList.cs" />
     <Compile Include="Core\BaseHiararchy.cs" />
-    <Compile Include="Core\ICore.cs" />
+    <Compile Include="Core\Interfaces\ICore.cs" />
     <Compile Include="Core\ObjectDatabase.cs" />
     <Compile Include="Core\TextBlock.cs" />
-    <Compile Include="Core\WindowMaximize.cs" />
-    <Compile Include="Core\WorldLoader.cs" />
+    <Compile Include="Core\System\WindowMaximize.cs" />
+    <Compile Include="Core\System\WorldLoader.cs" />
     <Compile Include="Core\xRectangle.cs" />
     <Compile Include="Data\Objects\Block.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Collider.cs" />
-    <Compile Include="Core\ColorPalette.cs" />
+    <Compile Include="Core\System\ColorPalette.cs" />
     <Compile Include="Data\Objects\Core_objects.cs" />
-    <Compile Include="Core\DirectBuffer.cs" />
+    <Compile Include="Core\System\DirectBuffer.cs" />
     <Compile Include="Core\Error.cs" />
     <Compile Include="Data\Objects\Enemy.cs" />
     <Compile Include="Core\Material.cs" />

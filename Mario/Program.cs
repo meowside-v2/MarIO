@@ -15,6 +15,8 @@ namespace Mario
         {
             WindowMaximize.Maximize();
 
+            Settings.GetMaxScreenResolution();
+            
             ObjectDatabase.CreateLetterReferences();
             ObjectDatabase.CreateBlockSpriteReferences();
 
