@@ -11,7 +11,7 @@ namespace Mario.Core
     class WindowMaximize
     {
         [StructLayout(LayoutKind.Sequential)]
-        public struct COORD
+        private struct COORD
         {
 
             public short X;
@@ -24,9 +24,9 @@ namespace Mario.Core
 
         }
         [DllImport("kernel32.dll")]
-        public static extern IntPtr GetStdHandle(int handle);
+        private static extern IntPtr GetStdHandle(int handle);
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetConsoleDisplayMode(
+        private static extern bool SetConsoleDisplayMode(
             IntPtr ConsoleOutput
             , uint Flags
             , out COORD NewScreenBufferDimensions
@@ -35,9 +35,21 @@ namespace Mario.Core
         private static IntPtr hConsole = GetStdHandle(-11);
         private static COORD xy = new COORD(1000, 1000);
 
-        public static void Maximize()
+        private static System.Windows.Forms.Timer WindowMaximizer = new System.Windows.Forms.Timer();
+        
+        public static void WindowInit()
         {
-            SetConsoleDisplayMode(hConsole, 1, out xy);
+            WindowMaximizer.Interval = 10;
+            WindowMaximizer.Tick += WindowSizeChecker;
+            WindowMaximizer.Start();
+        }
+
+        private static void WindowSizeChecker(object sender, EventArgs e)
+        {
+            if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
+            {
+                SetConsoleDisplayMode(hConsole, 1, out xy);
+            }
         }
 
         /*[DllImport("user32.dll")]

@@ -51,5 +51,10 @@ namespace Mario.Data.Objects
         {
             //mesh.Render(destination, destinationColor, frameWidth, frameHeight, this.X - x, this.Y - y);
         }
+
+        Color ICore.Render(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace Mario.Core
         private int numRenders = 0;
         private bool _Vsync = true;
 
-        private short _sectors = 0;
+        /*private short _sectors = 0;
 
         private short sectorsRendered
         {
@@ -60,7 +60,7 @@ namespace Mario.Core
             {
 
             }
-        }
+        }*/
 
         private xList<SectorPreferences> sectorsToRender = new xList<SectorPreferences>();
 
@@ -77,7 +77,7 @@ namespace Mario.Core
 
         public void Init(BaseHiararchy world_objects, int Xoffset = 0, int Yoffset = 0)
         {
-            tempFrame = (Bitmap)Settings.SetNewResolution(Settings.availableMaxResolution);
+            tempFrame = (Bitmap) Settings.SetNewResolution(Settings.availableMaxResolution);
 
             this.Xoffset = Xoffset;
             this.Yoffset = Yoffset;
@@ -100,10 +100,7 @@ namespace Mario.Core
 
             sectorRenderTask = new Task[sectorsToRender.Count];
 
-            System.Windows.Forms.Timer WindowMaximizer = new System.Windows.Forms.Timer();
-            WindowMaximizer.Interval = 10;
-            WindowMaximizer.Tick += WindowSizeChecker;
-            WindowMaximizer.Start();
+            
 
             Task Buff = Task.Factory.StartNew(() => Buffering(world_objects));
             Task Rend = Task.Factory.StartNew(() => Rendering());
@@ -124,16 +121,7 @@ namespace Mario.Core
 
             return retList;
         }
-
-        private void WindowSizeChecker(object sender, EventArgs e)
-        {
-            bool Sized = false;
-
-            if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
-            {
-                WindowMaximize.Maximize();
-            }
-        }
+        
 
         private void Buffering(BaseHiararchy world_objects)
         {
@@ -149,7 +137,7 @@ namespace Mario.Core
                 
                 foreach (SectorPreferences sector in sectorsToRender)
                 {
-                    sectorRenderTask[count++] = Task.Factory.StartNew(() => SectorRender(sector));
+                    //sectorRenderTask[count++] = Task.Factory.StartNew(() => SectorRender(sector));
                 }
 
                 Task.WaitAll(sectorRenderTask);

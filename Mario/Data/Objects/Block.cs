@@ -16,11 +16,14 @@ namespace Mario.Data.Objects
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
+
         public int width { get; set; }
         public int height { get; set; }
+
         public bool IsSecret { get; set; }
         public bool IsBonus { get; set; }
         public bool IsDestroyable { get; set; }
+
         public int Type { get; set; }
 
         public Material mesh { get; set; }
@@ -279,6 +282,11 @@ namespace Mario.Data.Objects
         public void Render(int x, int y)
         {
             //mesh.Render(destination, destinationColor, frameWidth, frameHeight, this.X - x, this.Y - y);
+        }
+
+        Color ICore.Render(int x, int y)
+        {
+            throw new NotImplementedException();
         }
     }
 }

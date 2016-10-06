@@ -126,5 +126,10 @@ namespace Mario.Core
                 }
             }
         }
+
+        Color ICore.Render(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

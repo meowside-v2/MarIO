@@ -13,7 +13,7 @@ namespace Mario
     {
         static void Main(string[] args)
         {
-            WindowMaximize.Maximize();
+            WindowMaximize.WindowInit();
 
             Settings.GetMaxScreenResolution();
             

@@ -42,7 +42,7 @@ namespace Mario.Core
 
         public Color Render(int x, int y)
         {
-            
+            return Color.AliceBlue;
         }
     }
 }

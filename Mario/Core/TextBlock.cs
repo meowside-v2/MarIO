@@ -75,5 +75,10 @@ namespace Mario.Core
                 Xoffset += text[index].mesh.width + 1;
             }
         }
+
+        Color ICore.Render(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

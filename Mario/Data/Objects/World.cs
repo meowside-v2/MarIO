@@ -50,11 +50,13 @@ namespace Mario.Data.Objects
             return retValue;
         }
 
-        public void Render(int x, int y)
+        public Color Render(int x, int y)
         {
             //foreground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
             //middleground.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
             //background.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
+
+            return Color.FromArgb(0x00, 0x00, 0x00, 0x00);
         }
     }
 }

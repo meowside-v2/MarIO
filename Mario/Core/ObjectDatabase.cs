@@ -230,7 +230,7 @@ namespace Mario.Core
             {
                 int lenght = br.ReadInt32();
 
-                for(int index = 0; index < lenght; index++)
+                for (int index = 0; index < lenght; index++)
                 {
                     int temp = br.ReadInt32();
                     byte[] byteArray = br.ReadBytes(temp);

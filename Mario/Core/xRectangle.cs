@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Mario.Core
 {
@@ -59,5 +60,9 @@ namespace Mario.Core
             //this.border.Render(destination, destinationColor, frameWidth, frameHeight, x, y);
         }
 
+        Color ICore.Render(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
