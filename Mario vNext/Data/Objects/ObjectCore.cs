@@ -45,9 +45,9 @@ namespace Mario_vNext.Data.Objects
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(x - X, y - Y, imageBuffer);
+            model.Render(X - x, Y - y, imageBuffer, imageBufferKey);
         }
     }
 }

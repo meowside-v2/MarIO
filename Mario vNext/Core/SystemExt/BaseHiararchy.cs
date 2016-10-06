@@ -24,12 +24,12 @@ namespace Mario_vNext.Core.SystemExt
             return retValue;
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-                GUI.Render(0, 0, imageBuffer);
-                borderReference.Render(x, y, imageBuffer);
-                exclusiveReference.Render(x, y, imageBuffer);
-                worldReference.Render(x, y, imageBuffer);
+                GUI.Render(0, 0, imageBuffer, imageBufferKey);
+                if(borderReference != null) borderReference.Render(x, y, imageBuffer, imageBufferKey);
+                exclusiveReference.Render(x, y, imageBuffer, imageBufferKey);
+                if(worldReference != null) worldReference.Render(x, y, imageBuffer, imageBufferKey);
         }
     }
 }

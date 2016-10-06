@@ -30,9 +30,9 @@ namespace Mario_vNext.Core.SystemExt
             return (xList<T>)retValue;
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            var temp = this.Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
+            var temp = this.ToList().Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
 
             while (true)
             {
@@ -41,29 +41,17 @@ namespace Mario_vNext.Core.SystemExt
                 int tempHeight = temp.Max(item => ((I3Dimensional)item).Z);
                 var toRender = temp.Where(item => ((I3Dimensional)item).Z == tempHeight).Select(item => item).ToList();
 
-                List<Task> awaitTaskList = new List<Task>();
+                //List<Task> awaitTaskList = new List<Task>();
 
                 foreach (ICore item in toRender)
                 {
-                    awaitTaskList.Add(Task.Factory.StartNew(() => item.Render(x, y, imageBuffer)));
+                    item.Render(x, y, imageBuffer, imageBufferKey);
+                    //awaitTaskList.Add(Task.Factory.StartNew(() => item.Render(x, y, imageBuffer)));
                 }
 
-                Task.WaitAll(awaitTaskList.ToArray());
+                //Task.WaitAll(awaitTaskList.ToArray());
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
-
-                /*T tmp;
-
-                if (temp.Count == 0) return null;
-                else if (temp.Count == 1) tmp = temp[0];
-                else tmp = temp.Aggregate((t1, t2) => FindBiggerZ(t1 as I3Dimensional, t2 as I3Dimensional) ? t1 : t2);
-
-                Color? tmpColor = (tmp as ICore).RenderPixel(x, y);
-
-                temp.Remove(tmp);
-
-                if (tmpColor != null) return tmpColor;*/
-                //a.RemoveAll(ic => b.FirstOrDefault(ic2 => ReferenceEquals(ic, ic2)) != null);
             }
         }
 

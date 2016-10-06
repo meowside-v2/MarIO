@@ -9,7 +9,7 @@ namespace Mario_vNext.Data.Objects
         public double Gravity { get; set; }
         public string Level { get; set; }
 
-        public xList<Block> model = new xList<Block>();
+        public xList<I3Dimensional> model = new xList<I3Dimensional>();
 
         public Player player = new Player();
 
@@ -29,14 +29,23 @@ namespace Mario_vNext.Data.Objects
             this.Level = name;
         }
 
+        public void Init()
+        {
+            /*----- LOAD WORLD -----*/
+
+            /*----------------------*/
+
+            model.Add(player);
+        }
+
         public object DeepCopy()
         {
             return MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(x, y, imageBuffer);
+            model.Render(x, y, imageBuffer, imageBufferKey);
         }
     }
 }

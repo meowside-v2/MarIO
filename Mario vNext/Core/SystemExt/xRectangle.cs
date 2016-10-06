@@ -45,9 +45,9 @@ namespace Mario_vNext.Core.SystemExt
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            border.Render(x, y, imageBuffer);
+            border.Render(x, y, imageBuffer, imageBufferKey);
         }
     }
 }

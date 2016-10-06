@@ -1,5 +1,6 @@
 ﻿using Mario_vNext.Core;
 using Mario_vNext.Core.Components;
+using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
@@ -21,7 +22,7 @@ namespace Mario_vNext.Data.Scenes
 
         Camera cam = new Camera();
 
-        xList<xList<Block>> undo = new xList<xList<Block>>();
+        xList<xList<I3Dimensional>> undo = new xList<xList<I3Dimensional>>();
 
         TextBlock posX = new TextBlock(1, 1, "GUI");
         TextBlock posY = new TextBlock(1, 7, "GUI");
@@ -34,20 +35,31 @@ namespace Mario_vNext.Data.Scenes
 
         public void Start()
         {
-            Console.WriteLine("1) NEW");
-            Console.WriteLine("2) LOAD");
+            bool _done = false;
 
-            switch (int.Parse(Console.ReadLine()))
+            do
             {
-                case 1:
-                    New();
-                    break;
+                Console.Clear();
+                Console.WriteLine("1) NEW");
+                Console.WriteLine("2) LOAD");
 
-                case 2:
-                    Load();
-                    break;
-            }
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        New();
+                        _done = !_done;
+                        break;
 
+                    case "2":
+                        Load();
+                        _done = !_done;
+                        break;
+
+                    default:
+                        continue;
+                }
+            } while (!_done);
+            
             Init();
         }
 
@@ -131,7 +143,7 @@ namespace Mario_vNext.Data.Scenes
             cam.Init(-(Shared.RenderWidth / 2 - 8), -(Shared.RenderHeight / 2 - 8), core);
         }
         
-        private Block BlockFinder(xList<Block> model, int x, int y, int z)
+        private I3Dimensional BlockFinder(xList<I3Dimensional> model, int x, int y, int z)
         {
             return model.Where(item => item.X == x && item.Y == y && item.Z == z).FirstOrDefault();
         }
@@ -182,7 +194,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockPlace()
         {
-            undo.Add((xList<Block>)map.model.DeepCopy());
+            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
 
             Block temp = new Block();
 
@@ -196,7 +208,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockDelete()
         {
-            undo.Add((xList<Block>)map.model.DeepCopy());
+            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
 
             map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
         }
@@ -239,13 +251,13 @@ namespace Mario_vNext.Data.Scenes
 
         private void Fill()
         {
-            undo.Add((xList<Block>)map.model.DeepCopy());
+            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
 
             int Xoffset = 0;
             int Yoffset = 0;
             ObjectDatabase.Blocks type = newBlock.Type;
 
-            xList<Block> temp = new xList<Block>();
+            xList<I3Dimensional> temp = new xList<I3Dimensional>();
 
             while (true)
             {
@@ -299,7 +311,7 @@ namespace Mario_vNext.Data.Scenes
 
                 foreach (var item in temp.model)
                 {
-                    bw.Write((int)item.Type);
+                    bw.Write((int)((item as Block).Type));
                     bw.Write(item.X);
                     bw.Write(item.Y);
                     bw.Write(item.Z);

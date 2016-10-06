@@ -24,10 +24,9 @@ namespace Mario_vNext.Core.Components
         
         private TextBlock fpsMeter = new TextBlock();
 
-        private byte[] _tempBuffer = new byte[4 * Shared.RenderHeight * Shared.RenderWidth]; 
+        private byte[] _tempBuffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth]; 
 
         private BaseHiararchy referenceToWorld;
-        private BaseHiararchy temp_objects;
 
         public void Init(int Xoffset, int Yoffset, BaseHiararchy objectsToRender)
         {
@@ -40,6 +39,7 @@ namespace Mario_vNext.Core.Components
             fpsMeter.Y = Shared.RenderHeight - 6;
 
             //fpsMeter.text = "";
+            referenceToWorld.GUI.Add(fpsMeter);
             
             Thread Buff = new Thread(() => Buffering());
             Buff.Start();
@@ -49,23 +49,24 @@ namespace Mario_vNext.Core.Components
 
         private void Rendering()
         {
-            while (true)
+            using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
             {
-                int beginRender = Environment.TickCount;
-
-                Point location = new Point(0, 0);
-                Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
-
-                unsafe
+                while (true)
                 {
-                    fixed (byte *ptr = _tempBuffer)
+                    int beginRender = Environment.TickCount;
+
+                    Point location = new Point(0, 0);
+                    Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
+
+                    unsafe
                     {
-                        using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
+                        fixed (byte* ptr = _tempBuffer)
                         {
+
                             using (Bitmap outFrame = new Bitmap(Shared.RenderWidth,
                                                                 Shared.RenderHeight,
                                                                 3 * Shared.RenderWidth,
-                                                                System.Drawing.Imaging.PixelFormat.Format32bppArgb,
+                                                                System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                                 new IntPtr(ptr)))
                             {
                                 Size fontSize = GetConsoleFontSize();
@@ -79,26 +80,28 @@ namespace Mario_vNext.Core.Components
                             }
                         }
                     }
+
+
+                    int endRender = Environment.TickCount - beginRender;
+
+                    Vsync(MAX_FRAME_RATE, endRender, false);
                 }
-                
-
-                int endRender = Environment.TickCount - beginRender;
-
-                Vsync(MAX_FRAME_RATE, endRender, false);
             }
         }
 
         private void Buffering()
         {
-            byte[] _buffer = new byte[4 * Shared.RenderHeight * Shared.RenderWidth];
-            
+            byte[] _buffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth];
+            bool[] _rendered = new bool[Shared.RenderHeight * Shared.RenderWidth];
+
             while (true)
             {
                 int beginRender = Environment.TickCount;
-                
-                temp_objects = (BaseHiararchy) referenceToWorld.DeepCopy();
 
-                temp_objects.Render(Xoffset, Yoffset, _buffer);
+                Array.Clear(_buffer, 0, _buffer.Length);
+                Array.Clear(_rendered, 0, _rendered.Length);
+
+                referenceToWorld.Render(Xoffset, Yoffset, _buffer, _rendered);
 
                 Buffer.BlockCopy(_buffer, 0, _tempBuffer, 0, _buffer.Count());
 

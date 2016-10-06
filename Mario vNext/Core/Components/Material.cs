@@ -50,20 +50,38 @@ namespace Mario_vNext.Core.Components
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
             for(int row = 0; row < this.height; row++)
             {
                 for(int column = 0; column < this.width; column++)
                 {
-                    int offset = ((4 * (y + row)) * Shared.RenderWidth) + (4 * (x + column));
+                    if (IsOnScreen(x, y, row, column))
+                    {
+                        int offset = ((3 * (y + row)) * Shared.RenderWidth) + (3 * (x + column));
+                        int keyOffset = (y + row) * Shared.RenderWidth + x + column;
 
-                    imageBuffer[offset] = colorMap[column, width].B;
-                    imageBuffer[offset + 1] = colorMap[column, width].G;
-                    imageBuffer[offset + 2] = colorMap[column, width].R;
-                    imageBuffer[offset + 3] = colorMap[column, width].A;
+                        if (!imageBufferKey[keyOffset])
+                        {
+                            Color temp = colorMap[column, row];
+
+                            if(temp.A != 0)
+                            {
+                                imageBuffer[offset] = temp.B;
+                                imageBuffer[offset + 1] = temp.G;
+                                imageBuffer[offset + 2] = temp.R;
+
+                                imageBufferKey[keyOffset] = true;
+                            }
+                        }
+                    }
                 }
             }
+        }
+
+        private bool IsOnScreen(int x, int y, int row, int column)
+        {
+            return x + column >= 0 && x + column < Shared.RenderWidth && y + row >= 0 && y + row < Shared.RenderHeight;
         }
     }
 }

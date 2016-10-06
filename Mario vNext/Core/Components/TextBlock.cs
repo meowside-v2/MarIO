@@ -130,11 +130,11 @@ namespace Mario_vNext.Core.Components
             return retVal;
         }
 
-        public void Render(int x, int y, byte[] imageBuffer)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
             foreach(Letter item in _text.FindAll(obj => Finder(obj as I3Dimensional, x, y)))
             {
-                item.Render(x, y, imageBuffer);
+                item.Render(x, y, imageBuffer, imageBufferKey);
             }
         }
 
