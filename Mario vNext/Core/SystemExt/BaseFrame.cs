@@ -5,7 +5,7 @@ using Mario_vNext.Data.Objects;
 
 namespace Mario_vNext.Core.SystemExt
 {
-    class BaseHiararchy
+    class BaseFrame
     {
         public World worldReference;
         public xRectangle borderReference;
@@ -14,7 +14,7 @@ namespace Mario_vNext.Core.SystemExt
 
         public object DeepCopy()
         {
-            BaseHiararchy retValue = (BaseHiararchy)this.MemberwiseClone();
+            BaseFrame retValue = (BaseFrame)this.MemberwiseClone();
 
             retValue.exclusiveReference = (xList<I3Dimensional>) this.exclusiveReference.DeepCopy();
             retValue.GUI = (xList<TextBlock>) this.GUI.DeepCopy();

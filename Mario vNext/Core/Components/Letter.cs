@@ -51,7 +51,7 @@ namespace Mario_vNext.Core.Componenets
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(X - x, Y - y, imageBuffer, imageBufferKey);
+            model.Render(X + x, Y + y, imageBuffer, imageBufferKey);
         }
     }
 }

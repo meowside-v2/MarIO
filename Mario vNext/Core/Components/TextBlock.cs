@@ -16,6 +16,78 @@ namespace Mario_vNext.Core.Components
         public int Y { get; set; }
         public int Z { get; set; }
 
+        private int vertOffset { get; set; }
+        private int horiOffset { get; set; }
+
+        public enum HorizontalAlignment
+        {
+            Left,
+            Center,
+            Right
+        };
+
+        public enum VerticalAlignment
+        {
+            Top,
+            Center,
+            Bottom
+        };
+
+        private HorizontalAlignment _HA;
+        private VerticalAlignment _VA;
+
+        public HorizontalAlignment HAlignment
+        {
+            set
+            {
+                _HA = value;
+
+                switch (value)
+                {
+                    case HorizontalAlignment.Left:
+                        horiOffset = 0;
+                        break;
+
+                    case HorizontalAlignment.Center:
+                        horiOffset = (Shared.RenderWidth - this.width) / 2;
+                        break;
+
+                    case HorizontalAlignment.Right:
+                        horiOffset = Shared.RenderWidth - this.width;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public VerticalAlignment VAlignment
+        {
+            set
+            {
+                _VA = value;
+
+                switch (value)
+                {
+                    case VerticalAlignment.Top:
+                        vertOffset = 0;
+                        break;
+
+                    case VerticalAlignment.Center:
+                        vertOffset = (Shared.RenderHeight - this.height) / 2;
+                        break;
+
+                    case VerticalAlignment.Bottom:
+                        vertOffset = Shared.RenderHeight - this.height;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
         public TextBlock() { }
 
         public TextBlock(int x, int y, int z)
@@ -52,6 +124,9 @@ namespace Mario_vNext.Core.Components
                 _stringText = value;
 
                 Task.Factory.StartNew(() => Text(value));
+
+                VAlignment = _VA;
+                HAlignment = _HA;
             }
 
             get
@@ -99,9 +174,9 @@ namespace Mario_vNext.Core.Components
 
                 else
                 {
-                    retValue.Add(new Letter(this.X + Xoffset,
+                    retValue.Add(new Letter(Xoffset,
                                         this.Y,
-                                        0,
+                                        this.Z,
                                         ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
 
                     Xoffset += ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
@@ -122,11 +197,6 @@ namespace Mario_vNext.Core.Components
                 retVal._text.Add((Letter) letter.DeepCopy());
             }
 
-            /*for (int i = 0; i < this._text.Count; i++)
-            {
-                if(i < this._text.Count) retVal._text.Add( (Letter) this._text[i].DeepCopy());
-            }*/
-
             return retVal;
         }
 
@@ -134,13 +204,13 @@ namespace Mario_vNext.Core.Components
         {
             foreach(Letter item in _text.FindAll(obj => Finder(obj as I3Dimensional, x, y)))
             {
-                item.Render(x, y, imageBuffer, imageBufferKey);
+                item.Render(this.X - x + horiOffset, y + vertOffset, imageBuffer, imageBufferKey);
             }
         }
 
         private bool Finder(I3Dimensional obj, int x, int y)
         {
-            return (obj.X <= x && obj.X + obj.width > x && obj.Y <= y && obj.Y + obj.height > y);
+            return obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight;
         }
     }
 }

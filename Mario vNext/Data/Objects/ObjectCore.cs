@@ -15,14 +15,14 @@ namespace Mario_vNext.Data.Objects
         {
             get
             {
-                return model.width;
+                return (model == null ? 0 : model.width);
             }
         }
         public int height
         {
             get
             {
-                return model.height;
+                return (model == null ? 0 : model.height);
             }
         }
         public int depth

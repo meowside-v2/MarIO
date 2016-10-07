@@ -28,10 +28,11 @@ namespace Mario_vNext.Data.Scenes
         TextBlock posY = new TextBlock(1, 7, "GUI");
         TextBlock posZ = new TextBlock(1, 13, "GUI");
 
-        BaseHiararchy core = new BaseHiararchy();
+        BaseFrame core = new BaseFrame();
 
         private int Z = 1;
         private int selected = 0;
+        private int undoMaxCapacity = 50;
 
         public void Start()
         {
@@ -108,7 +109,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void Init()
         {
-            keyboard = new Keyboard(tokenSource);
+            keyboard = new Keyboard();
 
             keyboard.onWKey = this.BlockMoveUp;
             keyboard.onSKey = this.BlockMoveDown;
@@ -122,6 +123,8 @@ namespace Mario_vNext.Data.Scenes
             keyboard.onBackSpaceKey = this.BlockDelete;
             keyboard.onPageUpKey = this.LayerUp;
             keyboard.onPageDownKey = this.LayerDown;
+            keyboard.onEnterKey = this.BlockPlace;
+            keyboard.onInsertKey = this.Save;
 
             newBlock = new Block((ObjectDatabase.Blocks)selected, 0, 0, Z);
 
@@ -195,6 +198,7 @@ namespace Mario_vNext.Data.Scenes
         private void BlockPlace()
         {
             undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             Block temp = new Block();
 
@@ -209,6 +213,7 @@ namespace Mario_vNext.Data.Scenes
         private void BlockDelete()
         {
             undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
         }
@@ -252,6 +257,7 @@ namespace Mario_vNext.Data.Scenes
         private void Fill()
         {
             undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             int Xoffset = 0;
             int Yoffset = 0;
@@ -330,7 +336,7 @@ namespace Mario_vNext.Data.Scenes
         {
             if (undo.Count > 0)
             {
-                map = (World)undo[undo.Count - 1].DeepCopy();
+                map.model = (xList<I3Dimensional>) undo[undo.Count - 1].DeepCopy();
 
                 undo.Remove(undo[undo.Count - 1]);
             }

@@ -26,9 +26,9 @@ namespace Mario_vNext.Core.Components
 
         private byte[] _tempBuffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth]; 
 
-        private BaseHiararchy referenceToWorld;
+        private BaseFrame referenceToWorld;
 
-        public void Init(int Xoffset, int Yoffset, BaseHiararchy objectsToRender)
+        public void Init(int Xoffset, int Yoffset, BaseFrame objectsToRender)
         {
             referenceToWorld = objectsToRender;
 
@@ -36,7 +36,8 @@ namespace Mario_vNext.Core.Components
             this.Yoffset = Yoffset;
 
             fpsMeter.X = 1;
-            fpsMeter.Y = Shared.RenderHeight - 6;
+            fpsMeter.Y = -1;
+            fpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
 
             //fpsMeter.text = "";
             referenceToWorld.GUI.Add(fpsMeter);

@@ -72,7 +72,7 @@
     <Compile Include="Core\Interfaces\IGraphics.cs" />
     <Compile Include="Core\Components\Letter.cs" />
     <Compile Include="Core\Shared.cs" />
-    <Compile Include="Core\SystemExt\BaseHiararchy.cs" />
+    <Compile Include="Core\SystemExt\BaseFrame.cs" />
     <Compile Include="Core\SystemExt\Keyboard.cs" />
     <Compile Include="Core\SystemExt\ObjectDatabase.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Data\WorldEditMenu.WORLD" />
     <None Include="Data\Font\font.psd" />
     <None Include="Data\Sprites\blocks_project.psd" />
   </ItemGroup>

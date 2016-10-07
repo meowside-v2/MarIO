@@ -17,13 +17,19 @@ namespace Mario_vNext.Core.SystemExt
             return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
         }
         
-        public Keyboard(CancellationTokenSource reference)
+        public Keyboard()
         {
-            tokenReference = reference;
-            Task.Factory.StartNew(() => CheckForKeys());
+            checker = new Timer(CheckForKeys, null, 0, 75);
+            //Task.Factory.StartNew(() => CheckForKeys());
         }
 
-        CancellationTokenSource tokenReference;
+        public void Abort()
+        {
+            if(checker != null)
+                checker.Dispose();
+        }
+
+        Timer checker;
 
         public Action onEnterKey { get; set; }
         public Action onWKey { get; set; }
@@ -43,97 +49,96 @@ namespace Mario_vNext.Core.SystemExt
         public Action onPageUpKey { get; set; }
         public Action onPageDownKey { get; set; }
 
-        private void CheckForKeys()
+        private void CheckForKeys(object state)
+        {
+
+            if (this.IsKeyPressed(ConsoleKey.W))
+            {
+                onWKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.S))
+            {
+                onSKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.A))
+            {
+                onAKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.D))
+            {
+                onDKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Q))
+            {
+                onQKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.E))
+            {
+                onEKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.F))
+            {
+                onFKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Spacebar))
+            {
+                onSpaceKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Backspace))
+            {
+                onBackSpaceKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Enter))
+            {
+                onEnterKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Insert))
+            {
+                onInsertKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Delete))
+            {
+                onDeleteKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Escape))
+            {
+                onEscKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.Z))
+            {
+                onZKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.PageUp))
+            {
+                onPageUpKey?.Invoke();
+            }
+
+            if (this.IsKeyPressed(ConsoleKey.PageDown))
+            {
+                onPageDownKey?.Invoke();
+            }
+        }
+
+        /*private void CheckForKeys()
         {
             while (true)
             {
-                if (tokenReference.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                Thread.Sleep(50);
-
-                if (this.IsKeyPressed(ConsoleKey.W))
-                {
-                    onWKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.S))
-                {
-                    onSKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.A))
-                {
-                    onAKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.D))
-                {
-                    onDKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Q))
-                {
-                    onQKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.E))
-                {
-                    onEKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.F))
-                {
-                    onFKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Spacebar))
-                {
-                    onSpaceKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Backspace))
-                {
-                    onBackSpaceKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Enter))
-                {
-                    onEnterKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Insert))
-                {
-                    onInsertKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Delete))
-                {
-                    onDeleteKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Escape))
-                {
-                    onEscKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Z))
-                {
-                    onZKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.PageUp))
-                {
-                    onPageUpKey?.Invoke();
-                }
-
-                if (this.IsKeyPressed(ConsoleKey.Z))
-                {
-                    onPageDownKey?.Invoke();
-                }
+                
             }
-        }
+        }*/
     }
 }
