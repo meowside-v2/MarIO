@@ -1,4 +1,5 @@
-﻿using Mario_vNext.Core.Interfaces;
+﻿using Mario_vNext.Core.Exceptions;
+using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
 using System.Drawing;
@@ -14,7 +15,7 @@ namespace Mario_vNext.Data.Objects
 
         public xList<I3Dimensional> model = new xList<I3Dimensional>();
 
-        public Player player = new Player();
+        public Player player;
 
         public int PlayerSpawnX { get; set; }
         public int PlayerSpawnY { get; set; }
@@ -32,18 +33,84 @@ namespace Mario_vNext.Data.Objects
             this.Level = name;
         }
 
-        public void Init()
+        public enum Mode
         {
-            /*----- LOAD WORLD -----*/
-            
-            /*----------------------*/
+            Game,
+            Edit
+        }
 
-            model.Add(player);
+        public void Init(string path, Mode mode)
+        {
+            BinaryReader br;
+
+            try
+            {
+                br = new BinaryReader(new FileStream(path, FileMode.Open));
+            }
+            catch (IOException e)
+            {
+                throw new WorldInitFailedException(e.Message + "Selected world wasn't found");
+            }
+
+            try
+            {
+                this.Level = br.ReadString();
+                this.Width = br.ReadInt32();
+                this.Height = br.ReadInt32();
+                this.Gravity = br.ReadDouble();
+                
+                this.PlayerSpawnX = br.ReadInt32();
+                this.PlayerSpawnY = br.ReadInt32();
+                this.PlayerSpawnZ = br.ReadInt32();
+
+                int temp_ModelCount = br.ReadInt32();
+
+                this.model.Clear();
+
+                for(int count = 0; count < temp_ModelCount; count++)
+                {
+                    model.Add(new Block((ObjectDatabase.Blocks)br.ReadInt32(),
+                                         br.ReadInt32(),
+                                         br.ReadInt32(),
+                                         br.ReadInt32()));
+                }
+
+                switch (mode)
+                {
+                    case Mode.Game:
+                        player = new Player();
+                        player.Init(PlayerSpawnX, PlayerSpawnY, PlayerSpawnZ);
+                        model.Add(player);
+                        break;
+
+                    case Mode.Edit:
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new WorldInitFailedException(e.Message + "World loading failed");
+            }
+
+            br.Close();
         }
 
         public object DeepCopy()
         {
-            return MemberwiseClone();
+            World temp = (World) MemberwiseClone();
+            temp.model = new xList<I3Dimensional>();
+
+            for (int i = 0; i < this.model.Count; i++)
+            {
+                Block temp_Block = (Block)this.model[i];
+
+                temp.model.Add(new Block(temp_Block.Type, temp_Block.X, temp_Block.Y, temp_Block.Z));
+            }
+
+            return temp;
         }
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)

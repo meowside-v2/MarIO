@@ -1,5 +1,6 @@
 ﻿using Mario_vNext.Core;
 using Mario_vNext.Core.Components;
+using Mario_vNext.Core.Exceptions;
 using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
@@ -15,11 +16,9 @@ namespace Mario_vNext.Data.Scenes
     {
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-        Keyboard keyboard;
-
+        Keyboard keyboard = new Keyboard();
         World map = new World();
         Block newBlock = new Block();
-
         Camera cam = new Camera();
 
         xList<xList<I3Dimensional>> undo = new xList<xList<I3Dimensional>>();
@@ -27,10 +26,7 @@ namespace Mario_vNext.Data.Scenes
         TextBlock posX = new TextBlock(1, 1, "GUI");
         TextBlock posY = new TextBlock(1, 7, "GUI");
         TextBlock posZ = new TextBlock(1, 13, "GUI");
-
-        BaseFrame core = new BaseFrame();
-
-        private int Z = 1;
+        
         private int selected = 0;
         private int undoMaxCapacity = 50;
 
@@ -66,15 +62,37 @@ namespace Mario_vNext.Data.Scenes
 
         private void New()
         {
-            Console.Write("Width (number of blocks):  ");
-            int w = int.Parse(Console.ReadLine());
+            bool _done = false;
 
-            Console.Write("Height (number of blocks):  ");
-            int h = int.Parse(Console.ReadLine());
+            int w = 0;
+            int h = 0;
+            string n = "";
 
-            Console.Write("World Name:  ");
-            string n = Console.ReadLine();
+            do
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("1) NEW");
+                    Console.WriteLine("2) LOAD");
 
+                    Console.Write("Width (number of blocks):  ");
+                    w = int.Parse(Console.ReadLine());
+
+                    Console.Write("Height (number of blocks):  ");
+                    h = int.Parse(Console.ReadLine());
+
+                    Console.Write("World Name:  ");
+                    n = Console.ReadLine();
+
+                    _done = true;
+                }
+                catch
+                {
+                    _done = false;
+                }
+            } while (!_done);
+            
             map = new World(w * 16, h * 16, n);
         }
 
@@ -93,9 +111,16 @@ namespace Mario_vNext.Data.Scenes
                     Console.WriteLine(string.Format("{0}) {1}", count++, s));
                 }
 
-                int select = int.Parse(Console.ReadLine());
-
-                //map = WorldLoader.Load(files[select]);
+                try
+                {
+                    int select = int.Parse(Console.ReadLine());
+                    map.Init(files[select], World.Mode.Edit);
+                }
+                catch (WorldInitFailedException e)
+                {
+                    MessageBox.Show(e.Message);
+                    Environment.Exit(-1);
+                }
             }
 
             else
@@ -109,8 +134,6 @@ namespace Mario_vNext.Data.Scenes
 
         private void Init()
         {
-            keyboard = new Keyboard();
-
             keyboard.onWKey = this.BlockMoveUp;
             keyboard.onSKey = this.BlockMoveDown;
             keyboard.onAKey = this.BlockMoveLeft;
@@ -126,24 +149,26 @@ namespace Mario_vNext.Data.Scenes
             keyboard.onEnterKey = this.BlockPlace;
             keyboard.onInsertKey = this.Save;
 
-            newBlock = new Block((ObjectDatabase.Blocks)selected, 0, 0, Z);
+            keyboard.Start();
+
+            newBlock = new Block((ObjectDatabase.Blocks)selected, 0, 0, 0);
 
             posX.text = string.Format("X {0}", newBlock.X);
             posY.text = string.Format("Y {0}", newBlock.Y);
             posZ.text = string.Format("Z {0}", newBlock.Z);
 
-            core.GUI.Add(posX);
-            core.GUI.Add(posY);
-            core.GUI.Add(posZ);
+            cam.GUI.Add(posX);
+            cam.GUI.Add(posY);
+            cam.GUI.Add(posZ);
 
-            core.exclusiveReference.Add(newBlock);
+            cam.exclusiveReference.Add(newBlock);
 
-            xRectangle border = new xRectangle(-8, -8, 32,map.Width, map.Height);
+            xRectangle border = new xRectangle(-8, -8, 32, map.Width, map.Height);
 
-            core.borderReference = border;
-            core.worldReference = map;
+            cam.borderReference = border;
+            cam.worldReference = map;
 
-            cam.Init(-(Shared.RenderWidth / 2 - 8), -(Shared.RenderHeight / 2 - 8), core);
+            cam.Init(-(Shared.RenderWidth / 2 - 8), -(Shared.RenderHeight / 2 - 8));
         }
         
         private I3Dimensional BlockFinder(xList<I3Dimensional> model, int x, int y, int z)
@@ -238,19 +263,19 @@ namespace Mario_vNext.Data.Scenes
 
         private void LayerUp()
         {
-            if (Z < 99)
+            if (newBlock.Z < 99)
             {
-                Z++;
-                posZ.text = string.Format("Z {0}", Z);
+                newBlock.Z++;
+                posZ.text = string.Format("Z {0}", newBlock.Z);
             }
         }
 
         private void LayerDown()
         {
-            if (Z > 0)
+            if (newBlock.Z > 0)
             {
-                Z--;
-                posZ.text = string.Format("Z {0}", Z);
+                newBlock.Z--;
+                posZ.text = string.Format("Z {0}", newBlock.Z);
             }
         }
 
@@ -267,7 +292,7 @@ namespace Mario_vNext.Data.Scenes
 
             while (true)
             {
-                temp.Add(new Block(type, Xoffset, Yoffset, Z));
+                temp.Add(new Block(type, Xoffset, Yoffset, newBlock.Z));
 
                 Yoffset += newBlock.height;
 
@@ -287,8 +312,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void Save()
         {
-            World temp = new World();
-            temp = (World)map.DeepCopy();
+            keyboard.Abort();
 
             BinaryWriter bw;
 
@@ -304,20 +328,21 @@ namespace Mario_vNext.Data.Scenes
 
             try
             {
-                bw.Write(temp.Level);
-                bw.Write(temp.Width);
-                bw.Write(temp.Height);
-                bw.Write(temp.Gravity);
 
-                bw.Write(temp.PlayerSpawnX);
-                bw.Write(temp.PlayerSpawnY);
-                bw.Write(temp.PlayerSpawnZ);
+                bw.Write(map.Level);
+                bw.Write(map.Width);
+                bw.Write(map.Height);
+                bw.Write(map.Gravity);
 
-                bw.Write(temp.model.Count);
+                bw.Write(map.PlayerSpawnX);
+                bw.Write(map.PlayerSpawnY);
+                bw.Write(map.PlayerSpawnZ);
 
-                foreach (var item in temp.model)
+                bw.Write(map.model.Count);
+
+                foreach (Block item in map.model)
                 {
-                    bw.Write((int)((item as Block).Type));
+                    bw.Write((int)item.Type);
                     bw.Write(item.X);
                     bw.Write(item.Y);
                     bw.Write(item.Z);
@@ -330,6 +355,8 @@ namespace Mario_vNext.Data.Scenes
             }
 
             bw.Close();
+
+            keyboard.Start();
         }
 
         private void Undo()

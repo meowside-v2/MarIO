@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace Mario_vNext.Core.SystemExt
 {
@@ -19,17 +18,22 @@ namespace Mario_vNext.Core.SystemExt
         
         public Keyboard()
         {
-            checker = new Timer(CheckForKeys, null, 0, 75);
-            //Task.Factory.StartNew(() => CheckForKeys());
+            checker.AutoReset = true;
+            checker.Interval = 75;
+            checker.Elapsed += CheckForKeys;
+        }
+
+        public void Start()
+        {
+            checker.Start();
         }
 
         public void Abort()
         {
-            if(checker != null)
-                checker.Dispose();
+            checker.Stop();
         }
 
-        Timer checker;
+        Timer checker = new Timer();
 
         public Action onEnterKey { get; set; }
         public Action onWKey { get; set; }
@@ -49,7 +53,7 @@ namespace Mario_vNext.Core.SystemExt
         public Action onPageUpKey { get; set; }
         public Action onPageDownKey { get; set; }
 
-        private void CheckForKeys(object state)
+        private void CheckForKeys(object sender, ElapsedEventArgs e)
         {
 
             if (this.IsKeyPressed(ConsoleKey.W))

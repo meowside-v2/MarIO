@@ -1,4 +1,6 @@
-﻿using Mario_vNext.Core.SystemExt;
+﻿using Mario_vNext.Core.Interfaces;
+using Mario_vNext.Core.SystemExt;
+using Mario_vNext.Data.Objects;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,14 +26,15 @@ namespace Mario_vNext.Core.Components
         
         private TextBlock fpsMeter = new TextBlock();
 
-        private byte[] _tempBuffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth]; 
+        private byte[] _tempBuffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth];
 
-        private BaseFrame referenceToWorld;
+        public World worldReference;
+        public xRectangle borderReference;
+        public xList<TextBlock> GUI = new xList<TextBlock>();
+        public xList<I3Dimensional> exclusiveReference = new xList<I3Dimensional>();
 
-        public void Init(int Xoffset, int Yoffset, BaseFrame objectsToRender)
+        public void Init(int Xoffset, int Yoffset)
         {
-            referenceToWorld = objectsToRender;
-
             this.Xoffset = Xoffset;
             this.Yoffset = Yoffset;
 
@@ -40,7 +43,7 @@ namespace Mario_vNext.Core.Components
             fpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
 
             //fpsMeter.text = "";
-            referenceToWorld.GUI.Add(fpsMeter);
+            GUI.Add(fpsMeter);
             
             Thread Buff = new Thread(() => Buffering());
             Buff.Start();
@@ -102,7 +105,10 @@ namespace Mario_vNext.Core.Components
                 Array.Clear(_buffer, 0, _buffer.Length);
                 Array.Clear(_rendered, 0, _rendered.Length);
 
-                referenceToWorld.Render(Xoffset, Yoffset, _buffer, _rendered);
+                GUI.Render(0, 0, _buffer, _rendered);
+                if (borderReference != null) borderReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                exclusiveReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                if (worldReference != null) worldReference.Render(Xoffset, Yoffset, _buffer, _rendered);
 
                 Buffer.BlockCopy(_buffer, 0, _tempBuffer, 0, _buffer.Count());
 

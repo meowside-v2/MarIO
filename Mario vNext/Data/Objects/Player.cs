@@ -12,9 +12,11 @@ namespace Mario_vNext.Data.Objects
         private bool Jumped = false;
         private bool WKeyIsHeld = false;
 
-        public void Init()
+        public void Init(int X, int Y, int Z)
         {
-
+            this.X = X;
+            this.Y = Y;
+            this.Z = Z;
         }
 
 
