@@ -18,6 +18,14 @@ namespace Mario_vNext.Core.SystemExt
             }
         }
 
+        public void AddAll(params T[] stuff)
+        {
+            foreach (var item in stuff)
+            {
+                this.Add(item);
+            }
+        }
+
         public object DeepCopy()
         {
             xList<T> retValue = new xList<T>();
@@ -40,16 +48,11 @@ namespace Mario_vNext.Core.SystemExt
 
                 int tempHeight = temp.Max(item => ((I3Dimensional)item).Z);
                 var toRender = temp.Where(item => ((I3Dimensional)item).Z == tempHeight).Select(item => item).ToList();
-
-                //List<Task> awaitTaskList = new List<Task>();
-
+                
                 foreach (ICore item in toRender)
                 {
                     item.Render(x, y, imageBuffer, imageBufferKey);
-                    //awaitTaskList.Add(Task.Factory.StartNew(() => item.Render(x, y, imageBuffer)));
                 }
-
-                //Task.WaitAll(awaitTaskList.ToArray());
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
             }

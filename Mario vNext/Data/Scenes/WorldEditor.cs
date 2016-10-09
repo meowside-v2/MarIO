@@ -16,7 +16,7 @@ namespace Mario_vNext.Data.Scenes
     {
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-        Keyboard keyboard = new Keyboard();
+        Keyboard keyboard = new Keyboard(100, 100, 50);
         World map = new World();
         Block newBlock = new Block();
         Camera cam = new Camera();
@@ -62,38 +62,9 @@ namespace Mario_vNext.Data.Scenes
 
         private void New()
         {
-            bool _done = false;
-
-            int w = 0;
-            int h = 0;
-            string n = "";
-
-            do
-            {
-                try
-                {
-                    Console.Clear();
-                    Console.WriteLine("1) NEW");
-                    Console.WriteLine("2) LOAD");
-
-                    Console.Write("Width (number of blocks):  ");
-                    w = int.Parse(Console.ReadLine());
-
-                    Console.Write("Height (number of blocks):  ");
-                    h = int.Parse(Console.ReadLine());
-
-                    Console.Write("World Name:  ");
-                    n = Console.ReadLine();
-
-                    _done = true;
-                }
-                catch
-                {
-                    _done = false;
-                }
-            } while (!_done);
-            
-            map = new World(w * 16, h * 16, n);
+            NewWorld worldInfoGet = new NewWorld();
+            worldInfoGet.Init(map);
+            worldInfoGet.Destroy();
         }
 
         private void Load()
@@ -153,9 +124,9 @@ namespace Mario_vNext.Data.Scenes
 
             newBlock = new Block((ObjectDatabase.Blocks)selected, 0, 0, 0);
 
-            posX.text = string.Format("X {0}", newBlock.X);
-            posY.text = string.Format("Y {0}", newBlock.Y);
-            posZ.text = string.Format("Z {0}", newBlock.Z);
+            posX.Text = string.Format("X {0}", newBlock.X);
+            posY.Text = string.Format("Y {0}", newBlock.Y);
+            posZ.Text = string.Format("Z {0}", newBlock.Z);
 
             cam.GUI.Add(posX);
             cam.GUI.Add(posY);
@@ -181,7 +152,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.Y > 0)
             {
                 newBlock.Y -= 16;
-                posY.text = string.Format("Y {0}", newBlock.Y);
+                posY.Text = string.Format("Y {0}", newBlock.Y);
 
                 cam.Yoffset -= 16;
             }
@@ -192,7 +163,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.Y + newBlock.height < map.Height)
             {
                 newBlock.Y += 16;
-                posY.text = string.Format("Y {0}", newBlock.Y);
+                posY.Text = string.Format("Y {0}", newBlock.Y);
 
                 cam.Yoffset += 16;
             }
@@ -203,7 +174,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.X > 0)
             {
                 newBlock.X -= 16;
-                posX.text = string.Format("X {0}", newBlock.X);
+                posX.Text = string.Format("X {0}", newBlock.X);
 
                 cam.Xoffset -= 16;
             }
@@ -214,7 +185,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.X + newBlock.width < map.Width)
             {
                 newBlock.X += 16;
-                posX.text = string.Format("X {0}", newBlock.X);
+                posX.Text = string.Format("X {0}", newBlock.X);
 
                 cam.Xoffset += 16;
             }
@@ -266,7 +237,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.Z < 99)
             {
                 newBlock.Z++;
-                posZ.text = string.Format("Z {0}", newBlock.Z);
+                posZ.Text = string.Format("Z {0}", newBlock.Z);
             }
         }
 
@@ -275,7 +246,7 @@ namespace Mario_vNext.Data.Scenes
             if (newBlock.Z > 0)
             {
                 newBlock.Z--;
-                posZ.text = string.Format("Z {0}", newBlock.Z);
+                posZ.Text = string.Format("Z {0}", newBlock.Z);
             }
         }
 

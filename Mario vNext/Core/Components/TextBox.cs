@@ -3,13 +3,13 @@ using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mario_vNext.Core.Components
 {
-    class TextBlock : ICore, I3Dimensional
+    class TextBox : ICore, I3Dimensional
     {
         private int _x;
         private int _y;
@@ -43,7 +43,7 @@ namespace Mario_vNext.Core.Components
         }
         public int Z { get; set; }
 
-        
+
         public enum HorizontalAlignment
         {
             Left,
@@ -112,14 +112,14 @@ namespace Mario_vNext.Core.Components
             }
         }
 
-        public TextBlock() { }
-        public TextBlock(int X, int Y, int Z)
+        public TextBox() { }
+        public TextBox(int X, int Y, int Z)
         {
             this.X = X;
             this.Y = Y;
             this.Z = Z;
         }
-        public TextBlock(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+        public TextBox(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
         {
             this.X = X;
             this.Y = Y;
@@ -130,7 +130,7 @@ namespace Mario_vNext.Core.Components
             this.HAlignment = HAlignment;
             this.VAlignment = VAlignment;
         }
-        public TextBlock(int X, int Y, string Layer)
+        public TextBox(int X, int Y, string Layer)
         {
             this.X = X;
             this.Y = Y;
@@ -146,7 +146,7 @@ namespace Mario_vNext.Core.Components
                     break;
             }
         }
-        public TextBlock(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+        public TextBox(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
         {
             this.X = X;
             this.Y = Y;
@@ -161,21 +161,36 @@ namespace Mario_vNext.Core.Components
                     this.Z = 0;
                     break;
             }
-            
+
             this.Text = Text;
 
             this.HAlignment = HAlignment;
             this.VAlignment = VAlignment;
         }
 
-        private string _stringText;
+
         private xList<Letter> _text = new xList<Letter>();
+        private string _stringText = "";
+        private int _textXOffset = 0;
+
+        public Type AllowedChars { get; set; }
+
+        public enum Type
+        {
+            All,
+            AlphaNumerical,
+            Alpha,
+            Numerical
+        };
 
         public string Text
         {
             set
             {
-                Task.Factory.StartNew(() => TextRasterize(value));
+                if (TextControl(value.ToArray()))
+                {
+                    TextRasterize(value);
+                }
             }
 
             get
@@ -206,57 +221,96 @@ namespace Mario_vNext.Core.Components
                 return 0;
             }
         }
-        
+
+        public void RemoveLastLetter()
+        {
+            if(this.Text.Length > 0)
+            {
+                this.Text = Text.Remove(Text.Length - 1, 1);
+            }
+        }
 
         private void TextRasterize(string txt)
         {
-            _stringText = txt;
-
-            xList<Letter> retValue = new xList<Letter>();
-
-            int Xoffset = 0;
-
-            foreach (char letter in txt)
+            if (txt.Length > _stringText.Length)
             {
-                if (letter == ' ')
-                {
-                    Xoffset += 3;
-                }
+                string temp = txt.Remove(0, _stringText.Length);
 
-                else
+                foreach (char letter in temp)
                 {
-                    retValue.Add(new Letter(Xoffset,
-                                        0,
-                                        0,
-                                        ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
+                    if (letter == ' ')
+                    {
+                        _textXOffset += 3;
+                    }
 
-                    Xoffset += ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
+                    else
+                    {
+                        _text.Add(new Letter(_textXOffset,
+                                            0,
+                                            0,
+                                            ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
+
+                        _textXOffset += ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
+                    }
                 }
             }
 
-            _text = retValue;
+            else if (txt.Length < _stringText.Length)
+            {
+                int numberOfLettersToRemove = _stringText.Length - txt.Length;
+
+                for (int i = 0; i < numberOfLettersToRemove; i++)
+                {
+                    if (_stringText[_stringText.Length - 1] == ' ')
+                    {
+                        _textXOffset -= 3;
+                    }
+
+                    else
+                    {
+                        _textXOffset -= _text[_text.Count - 1].width + 1;
+                        _text.Remove(_text[_text.Count - 1]);
+                    }
+                }
+            }
 
             VAlignment = _VA;
             HAlignment = _HA;
+
+            _stringText = txt;
+        }
+
+        public bool TextControl(params char[] key)
+        {
+            if (AllowedChars == Type.All)
+                return true;
+            
+            foreach (char k in key)
+            {
+                if (AllowedChars == Type.Alpha)
+                    if (!Char.IsLetter(k))
+                        return false;
+
+                else if (AllowedChars == Type.Numerical)
+                    if (!Char.IsNumber(k))
+                        return false;
+
+                else if (AllowedChars == Type.AlphaNumerical)
+                    if (!(Char.IsLetterOrDigit(k) || k == ' '))
+                        return false;
+            }
+
+            return true;
         }
 
         public object DeepCopy()
         {
-            TextBlock retVal = (TextBlock) this.MemberwiseClone();
-
-            retVal.Text = "";
-
-            foreach(Letter letter in _text.ToList())
-            {
-                retVal._text.Add((Letter) letter.DeepCopy());
-            }
-
-            return retVal;
+            return MemberwiseClone();
         }
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            foreach(Letter item in _text.FindAll(obj => Finder(obj, x, y)))
+            foreach (Letter item in _text.FindAll(obj => Finder(obj, x, y)))
             {
                 item.Render(this.X - x, this.Y - y, imageBuffer, imageBufferKey);
             }

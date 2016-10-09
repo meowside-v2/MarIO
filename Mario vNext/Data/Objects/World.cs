@@ -26,17 +26,27 @@ namespace Mario_vNext.Data.Objects
 
         public World() { }
 
-        public World(int width, int height, string name)
-        {
-            this.Width = width;
-            this.Height = height;
-            this.Level = name;
-        }
-
         public enum Mode
         {
             Game,
             Edit
+        }
+
+        public void New(int heightInBlocks, int widthInBlocks, string LevelName)
+        {
+            if(heightInBlocks <= 0 || widthInBlocks <= 0)
+                throw new WorldInitFailedException("One of sizes is less or equal 0");
+
+            try
+            {
+                this.Height = heightInBlocks * 16;
+                this.Width = widthInBlocks * 16;
+                this.Level = LevelName;
+            }
+            catch (Exception ex)
+            {
+                throw new WorldInitFailedException("World creation failed", ex);
+            }
         }
 
         public void Init(string path, Mode mode)
@@ -49,7 +59,7 @@ namespace Mario_vNext.Data.Objects
             }
             catch (IOException e)
             {
-                throw new WorldInitFailedException(e.Message + "Selected world wasn't found");
+                throw new WorldInitFailedException(path + "\nWorld wasn't found", e);
             }
 
             try
@@ -92,7 +102,7 @@ namespace Mario_vNext.Data.Objects
             }
             catch (Exception e)
             {
-                throw new WorldInitFailedException(e.Message + "World loading failed");
+                throw new WorldInitFailedException("World loading failed", e);
             }
 
             br.Close();

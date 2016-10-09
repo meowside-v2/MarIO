@@ -30,8 +30,11 @@ namespace Mario_vNext.Core.Components
 
         public World worldReference;
         public xRectangle borderReference;
-        public xList<TextBlock> GUI = new xList<TextBlock>();
+        public xList<I3Dimensional> GUI = new xList<I3Dimensional>();
         public xList<I3Dimensional> exclusiveReference = new xList<I3Dimensional>();
+
+        Thread Ren;
+        Thread Buff;
 
         public void Init(int Xoffset, int Yoffset)
         {
@@ -45,10 +48,16 @@ namespace Mario_vNext.Core.Components
             //fpsMeter.text = "";
             GUI.Add(fpsMeter);
             
-            Thread Buff = new Thread(() => Buffering());
+            Buff = new Thread(() => Buffering());
             Buff.Start();
-            Thread Ren = new Thread(() => Rendering());
+            Ren = new Thread(() => Rendering());
             Ren.Start();
+        }
+
+        public void Abort()
+        {
+            if (Ren != null) Ren.Abort();
+            if (Buff != null) Ren.Abort();
         }
 
         private void Rendering()
@@ -142,7 +151,7 @@ namespace Mario_vNext.Core.Components
 
                     if (temp > 0)
                     {
-                        fpsMeter.text = string.Format("{0}", sampleSize * 1000 / temp);
+                        fpsMeter.Text = string.Format("{0}", sampleSize * 1000 / temp);
                         Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
                     }
 

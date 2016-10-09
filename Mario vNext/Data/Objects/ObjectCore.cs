@@ -47,7 +47,7 @@ namespace Mario_vNext.Data.Objects
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(X - x, Y - y, imageBuffer, imageBufferKey);
+            if(model != null) model.Render(X - x, Y - y, imageBuffer, imageBufferKey);
         }
     }
 }

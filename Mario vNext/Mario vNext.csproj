@@ -67,6 +67,7 @@
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Components\TextBlock.cs" />
+    <Compile Include="Core\Components\TextBox.cs" />
     <Compile Include="Core\Exceptions\WorldInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\ICore.cs" />
