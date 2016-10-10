@@ -15,5 +15,9 @@ namespace Mario_vNext.Core.Interfaces
         int X { get; set; }
         int Y { get; set; }
         int Z { get; set; }
+        
+        int ScaleX { get; set; }
+        int ScaleY { get; set; }
+        int ScaleZ { get; set; }
     }
 }
