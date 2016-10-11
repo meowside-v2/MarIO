@@ -15,8 +15,33 @@ namespace Mario_vNext.Core.Components
         private byte[,] _G;
         private byte[,] _B;*/
 
-        public int width;
-        public int height;
+        private I3Dimensional Parent;
+
+        private int _width;
+        private int _height;
+
+        public int width
+        {
+            get
+            {
+                return (int)(_width * Parent.ScaleX);
+            }
+            set
+            {
+                _width = value;
+            }
+        }
+        public int height
+        {
+            get
+            {
+                return (int)(_height * Parent.ScaleY);
+            }
+            set
+            {
+                _height = value;
+            }
+        }
 
         public Color[,] colorMap;
 
@@ -35,6 +60,16 @@ namespace Mario_vNext.Core.Components
                     colorMap[column, row] = source.GetPixel(column, row);
                 }
             }
+        }
+
+        public Material(I3Dimensional Parent, Material source)
+        {
+            this.width = source.width;
+            this.height = source.height;
+
+            Array.Copy(source.colorMap, 0, this.colorMap, 0, source.colorMap.Length);
+
+            this.Parent = Parent;
         }
 
         public string PixelToString(int x, int y)
@@ -63,7 +98,7 @@ namespace Mario_vNext.Core.Components
 
                         if (!imageBufferKey[keyOffset])
                         {
-                            Color temp = colorMap[column, row];
+                            Color temp = colorMap[(int)(column/Parent.ScaleX), (int)(row / Parent.ScaleY)];
 
                             if(temp.A != 0)
                             {
