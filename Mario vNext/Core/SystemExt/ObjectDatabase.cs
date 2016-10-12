@@ -66,33 +66,6 @@ namespace Mario_vNext.Core.SystemExt
             }
         }
 
-        /*public static readonly string[] path_block =
-        {
-            "\\Data\\Sprites\\Ground\\block_01.png",
-            "\\Data\\Sprites\\Ground\\block_02.png",
-            "\\Data\\Sprites\\Ground\\block_03.png",
-            "\\Data\\Sprites\\Ground\\block_04.png",
-            "\\Data\\Sprites\\Ground\\sky_01.png",
-            "\\Data\\Sprites\\Ground\\sky_02.png",
-            "\\Data\\Sprites\\Ground\\sky_03.png",
-            "\\Data\\Sprites\\Ground\\sky_04.png",
-            "\\Data\\Sprites\\Ground\\sky_05.png",
-            "\\Data\\Sprites\\Ground\\sky_06.png",
-            "\\Data\\Sprites\\Ground\\sky_07.png",
-            "\\Data\\Sprites\\Underground\\block_01.png",
-            "\\Data\\Sprites\\Underground\\block_02.png",
-            "\\Data\\Sprites\\Underground\\block_03.png",
-            "\\Data\\Sprites\\Underground\\block_04.png",
-            "\\Data\\Sprites\\Underground\\background_01.png",
-            "\\Data\\Sprites\\Underground\\background_02.png",
-            "\\Data\\Sprites\\Pipes\\pipe_01.png",
-            "\\Data\\Sprites\\Pipes\\pipe_02.png",
-            "\\Data\\Sprites\\Pipes\\pipe_03.png",
-            "\\Data\\Sprites\\Pipes\\pipe_04.png",
-            "\\Data\\Sprites\\Pipes\\pipe_05.png",
-            "\\Data\\Sprites\\border.png"
-        };*/
-
         public enum Font
         {
             Num0,
@@ -135,48 +108,6 @@ namespace Mario_vNext.Core.SystemExt
             space,
             NumberOfTypes
         };
-
-        /*public static readonly string[] font_path =
-        {
-            "\\Data\\Font\\A.png",
-            "\\Data\\Font\\B.png",
-            "\\Data\\Font\\C.png",
-            "\\Data\\Font\\D.png",
-            "\\Data\\Font\\E.png",
-            "\\Data\\Font\\F.png",
-            "\\Data\\Font\\G.png",
-            "\\Data\\Font\\H.png",
-            "\\Data\\Font\\I.png",
-            "\\Data\\Font\\J.png",
-            "\\Data\\Font\\K.png",
-            "\\Data\\Font\\L.png",
-            "\\Data\\Font\\M.png",
-            "\\Data\\Font\\N.png",
-            "\\Data\\Font\\O.png",
-            "\\Data\\Font\\P.png",
-            "\\Data\\Font\\Q.png",
-            "\\Data\\Font\\R.png",
-            "\\Data\\Font\\S.png",
-            "\\Data\\Font\\T.png",
-            "\\Data\\Font\\U.png",
-            "\\Data\\Font\\V.png",
-            "\\Data\\Font\\W.png",
-            "\\Data\\Font\\X.png",
-            "\\Data\\Font\\Y.png",
-            "\\Data\\Font\\Z.png",
-            "\\Data\\Font\\0.png",
-            "\\Data\\Font\\1.png",
-            "\\Data\\Font\\2.png",
-            "\\Data\\Font\\3.png",
-            "\\Data\\Font\\4.png",
-            "\\Data\\Font\\5.png",
-            "\\Data\\Font\\6.png",
-            "\\Data\\Font\\7.png",
-            "\\Data\\Font\\8.png",
-            "\\Data\\Font\\9.png",
-            "\\Data\\Font\\space.png",
-            "\\Data\\Font\\minus.png"
-        };*/
 
         public static Dictionary<char, Font> font = new Dictionary<char, Font>()
         {

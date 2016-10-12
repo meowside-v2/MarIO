@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Components\Camera.cs" />
+    <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Components\TextBlock.cs" />
@@ -92,6 +93,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Data\Font\font.psd" />
+    <None Include="Data\MarioBlockSpriteFile.MEX" />
     <None Include="Data\Sprites\blocks_project.psd" />
     <None Include="Data\WorldEditMenu.WORLD" />
   </ItemGroup>
@@ -140,6 +142,9 @@
     <Content Include="Data\Sprites\Ground\block_02.png" />
     <Content Include="Data\Sprites\Ground\block_03.png" />
     <Content Include="Data\Sprites\Ground\block_04.png" />
+    <Content Include="Data\Sprites\Ground\castle_small.png" />
+    <Content Include="Data\Sprites\Ground\finish_flag.png" />
+    <Content Include="Data\Sprites\Ground\finish_pole.png" />
     <Content Include="Data\Sprites\Ground\sky_01.png" />
     <Content Include="Data\Sprites\Ground\sky_02.png" />
     <Content Include="Data\Sprites\Ground\sky_03.png" />

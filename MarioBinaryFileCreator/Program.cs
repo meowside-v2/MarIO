@@ -14,8 +14,8 @@ namespace MarioBinaryFileCreator
     {
         static void Main(string[] args)
         {
-            MusicToFile();
-            FontToFile();
+            //MusicToFile();
+            //FontToFile();
             BlocksToFile();
         }
 
@@ -158,7 +158,7 @@ namespace MarioBinaryFileCreator
             bw.Close();
         }
 
-        public static void MusicToFile()
+        /*public static void MusicToFile()
         {
             string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"\Data\Music", "*.wav");
 
@@ -205,7 +205,7 @@ namespace MarioBinaryFileCreator
             }
 
             bw.Close();
-        }
+        }*/
     }
 }
 

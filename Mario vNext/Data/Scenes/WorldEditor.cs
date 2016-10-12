@@ -225,7 +225,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockSwitchRight()
         {
-            if (selected < 21)
+            if (selected < (int)ObjectDatabase.Blocks.UnderGroundBackground2)
             {
                 selected++;
                 newBlock.Type = (ObjectDatabase.Blocks)selected;

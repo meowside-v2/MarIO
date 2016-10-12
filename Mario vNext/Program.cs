@@ -12,6 +12,8 @@ namespace Mario_vNext
 
             ObjectDatabase.Init();
 
+            //Test test = new Test();
+
             WorldEditor worldEdit = new WorldEditor();
             worldEdit.Start();
         }
