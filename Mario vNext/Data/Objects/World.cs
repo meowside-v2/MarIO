@@ -89,7 +89,7 @@ namespace Mario_vNext.Data.Objects
                 {
                     case Mode.Game:
                         player = new Player();
-                        player.Init(PlayerSpawnX, PlayerSpawnY, PlayerSpawnZ);
+                        player.Init(this, PlayerSpawnX, PlayerSpawnY, PlayerSpawnZ);
                         model.Add(player);
                         break;
 

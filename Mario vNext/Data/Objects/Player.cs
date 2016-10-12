@@ -1,67 +1,37 @@
 ﻿using Mario_vNext.Core.Components;
+using Mario_vNext.Core.Interfaces;
+using Mario_vNext.Core.SystemExt;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mario_vNext.Data.Objects
 {
     class Player : ObjectCore
     {
-        Physics basicPhysics = new Physics();
-        //Keyboard keyboard = new Keyboard();
-        //Camera cam = new Camera();
+        Physics basicPhysics;
+        Keyboard keyboard;
 
+        World Parent; 
+            
         private bool Jumped = false;
-        private bool WKeyIsHeld = false;
-
-        public void Init(int X, int Y, int Z)
+        
+        public void Init(World Parent, int X, int Y, int Z)
         {
             this.X = X;
             this.Y = Y;
             this.Z = Z;
-        }
 
+            this.Parent = Parent;
 
+            collider = new Collider(this, Parent.model);
+            basicPhysics = new Physics(this, collider);
+            keyboard = new Keyboard(100, 100, 100);
 
-        private void KeyPress()
-        {
-            /*while (true)
-            {
-
-                if (keyboard.IsKeyPressed(ConsoleKey.W))
-                {
-                    DoPhysics(Physics.PhysicState.Jump);
-                    WKeyIsHeld = true;
-                }
-                else
-                {
-                    WKeyIsHeld = false;
-                }
-
-
-                if (keyboard.IsKeyPressed(ConsoleKey.A))
-                {
-                    if (!collider.CollisionLeft(this, world, enemies)) X--;
-                    if (!collider.CollisionBottom(this, world, enemies) && !Jumped)
-                    {
-                        DoPhysics(Physics.PhysicState.Fall);
-                    }
-                }
-
-                if (keyboard.IsKeyPressed(ConsoleKey.D))
-                {
-                    if (!collider.CollisionRight(this, world, enemies)) X++;
-                    if (!collider.CollisionBottom(this, world, enemies) && !Jumped)
-                    {
-                        DoPhysics(Physics.PhysicState.Fall);
-                    }
-                }
-
-                Thread.Sleep(10);
-            }*/
+            keyboard.onWKey = Jump;
         }
 
         private void DoPhysics(Physics.PhysicState type)
         {
-
             switch (type)
             {
                 case Physics.PhysicState.Jump:
@@ -69,8 +39,7 @@ namespace Mario_vNext.Data.Objects
                     if (!Jumped)
                     {
                         Jumped = true;
-                        Thread JumpEvent = new Thread(() => basicPhysics.Jump(this));
-                        JumpEvent.Start();
+                        Task JumpEvent = Task.Factory.StartNew(() => basicPhysics.Jump());
                     }
 
                     break;
@@ -78,12 +47,44 @@ namespace Mario_vNext.Data.Objects
                 case Physics.PhysicState.Fall:
 
                     Jumped = true;
-                    Thread FallEvent = new Thread(() => basicPhysics.Fall(this));
-                    FallEvent.Start();
+                    Task FallEvent = Task.Factory.StartNew(() => basicPhysics.Fall());
 
                     break;
             }
+        }
 
+        private void Jump()
+        {
+            if (!Jumped)
+            {
+                DoPhysics(Physics.PhysicState.Jump);
+            }
+        }
+
+        private void MoveLeft()
+        {
+            if (this.X > 0 && !collider.Collision(Collider.Direction.Left))
+            {
+                X--;
+
+                if (collider.Collision(Collider.Direction.Down))
+                {
+                    this.DoPhysics(Physics.PhysicState.Fall);
+                }
+            }
+        }
+
+        private void MoveRight()
+        {
+            if (this.X < 1000 && !collider.Collision(Collider.Direction.Right))
+            {
+                X++;
+
+                if (collider.Collision(Collider.Direction.Down))
+                {
+                    this.DoPhysics(Physics.PhysicState.Fall);
+                }
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Mario_vNext.Data.Objects
 {
     class ObjectCore : ICore, I3Dimensional, IGraphics
     {
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
@@ -32,62 +33,17 @@ namespace Mario_vNext.Data.Objects
             }
         }
 
-        private double _scaleX = 1f;
-        private double _scaleY = 1f;
-        private double _scaleZ = 1f;
-
-        public double ScaleX
-        {
-            get
-            {
-                return _scaleX;
-            }
-            set
-            {
-                if (value > 0)
-                    _scaleX = (float)value;
-
-                else
-                    _scaleX = 0.1f;
-            }
-        }
-        public double ScaleY
-        {
-            get
-            {
-                return _scaleY;
-            }
-            set
-            {
-                if (value > 0)
-                    _scaleY = (float)value;
-
-                else
-                    _scaleY = 0.1f;
-            }
-        }
-        public double ScaleZ
-        {
-            get
-            {
-                return _scaleZ;
-            }
-            set
-            {
-                if (value > 0)
-                    _scaleZ = (float)value;
-
-                else
-                    _scaleZ = 0.1f;
-            }
-        }
-
         public int AnimationState { get; set; }
 
         public Material model { get; set; }
 
+        public Collider collider;
+
         public int jumpheight { get; set; }     // Number of Blocks
         public int jumplength { get; set; }     // In miliseconds
+
+        public bool ForceJump { get; set; }
+        public bool Jumped { get; set; }
 
         public object DeepCopy()
         {
