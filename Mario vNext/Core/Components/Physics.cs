@@ -1,4 +1,5 @@
-﻿using Mario_vNext.Data.Objects;
+﻿using Mario_vNext.Core.Interfaces;
+using Mario_vNext.Data.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,51 +18,57 @@ namespace Mario_vNext.Core.Components
             Fall
         };
 
-        private bool Jumped = false;
+        Collider colliderReference;
+        ObjectCore Parent;
 
-
-        public void Jump(ObjectCore reference)
+        public Physics(ObjectCore Parent, Collider colliderReference)
         {
-            int StartPositon = reference.Y;
-            int MinJump = 10;
-
-            /*do
-            {
-                if (StartPositon - reference.Y == reference.jumpheight)
-                {
-                    //Fall(world, enemies);
-                    Jumped = false;
-                    return;
-                }
-                else if (collider.CollisionTop(this, world, enemies))
-                {
-                    Fall(reference);
-                    Jumped = false;
-                    return;
-                }
-                else if (!WKeyIsHeld && StartPositon - reference.Y > MinJump)
-                {
-                    Fall(reference);
-                    Jumped = false;
-                    return;
-                }
-
-                else reference.Y -= 1;
-
-                Thread.Sleep(reference.jumplength);
-            } while (true);*/
+            this.Parent = Parent;
+            this.colliderReference = colliderReference;
         }
 
-        public void Fall(ObjectCore reference)
+        public void Jump()
         {
-            /*do
+            int StartPositon = Parent.Y;
+            int MinJump = 10;
+
+            do
             {
-                reference.Y += 1;
+                if (StartPositon - Parent.Y == Parent.jumpheight)
+                {
+                    //Fall(world, enemies);
+                    Parent.Jumped = false;
+                    return;
+                }
+                else if (colliderReference.Collision(Collider.Direction.Up))
+                {
+                    Fall();
+                    Parent.Jumped = false;
+                    return;
+                }
+                else if (!Parent.ForceJump && StartPositon - Parent.Y > MinJump)
+                {
+                    Fall();
+                    Parent.Jumped = false;
+                    return;
+                }
 
-                Thread.Sleep(reference.jumplength);
-            } while (!collider.CollisionBottom());*/
+                else Parent.Y -= 1;
 
-            Jumped = false;
+                Thread.Sleep(Parent.jumplength);
+            } while (true);
+        }
+
+        public void Fall()
+        {
+            do
+            {
+                Parent.Y += 1;
+
+                Thread.Sleep(Parent.jumplength);
+            } while (!colliderReference.Collision(Collider.Direction.Down));
+
+            Parent.Jumped = false;
         }
     }
 }

@@ -15,14 +15,5 @@ namespace Mario_vNext.Core.Interfaces
         int X { get; set; }
         int Y { get; set; }
         int Z { get; set; }
-
-        double ScaleX { get; set; }
-        double ScaleY { get; set; }
-        double ScaleZ { get; set; }
-
-        /*int ScaledX { get; }
-        int ScaledY { get; }
-        int ScaledZ { get; }*/
-
     }
 }
