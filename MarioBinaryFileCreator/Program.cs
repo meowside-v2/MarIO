@@ -23,7 +23,7 @@ namespace MarioBinaryFileCreator
         {
             List<byte[]> converted = new List<byte[]>();
             
-            string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"\Data\Sprites\Ground", "*.png");
+            string[] files = Directory.GetFiles(@"Data\Sprites\Ground", "*.png");
             
             foreach (string s in files)
             {
@@ -38,7 +38,7 @@ namespace MarioBinaryFileCreator
                 }
             }
 
-            files = Directory.GetFiles(Environment.CurrentDirectory + @"\Data\Sprites\Underground", "*.png");
+            files = Directory.GetFiles(@"Data\Sprites\Underground", "*.png");
 
             foreach (string s in files)
             {
@@ -53,7 +53,7 @@ namespace MarioBinaryFileCreator
                 }
             }
 
-            files = Directory.GetFiles(Environment.CurrentDirectory + @"\Data\Sprites\Pipes", "*.png");
+            files = Directory.GetFiles(@"Data\Sprites\Pipes", "*.png");
 
             foreach (string s in files)
             {
@@ -68,7 +68,7 @@ namespace MarioBinaryFileCreator
                 }
             }
 
-            using (FileStream fs = new FileStream(Environment.CurrentDirectory + @"\Data\Sprites\border.png", FileMode.Open, FileAccess.Read))
+            using (FileStream fs = new FileStream(@"Data\Sprites\border.png", FileMode.Open, FileAccess.Read))
             {
                 byte[] temp = new byte[fs.Length];
 
@@ -82,7 +82,7 @@ namespace MarioBinaryFileCreator
 
             try
             {
-                bw = new BinaryWriter(new FileStream(Environment.CurrentDirectory + @"\Data\Sprites\MarioBlockSpriteFile.MEX", FileMode.Create));
+                bw = new BinaryWriter(new FileStream(@"Data\Sprites\MarioBlockSpriteFile.MEX", FileMode.Create));
             }
             catch (IOException e)
             {

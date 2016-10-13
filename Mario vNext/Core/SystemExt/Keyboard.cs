@@ -168,6 +168,11 @@ namespace Mario_vNext.Core.SystemExt
 
         private void AlphaKeysEvent(object sender, ElapsedEventArgs e)
         {
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey(true);
+            }
+
             if (this.IsKeyPressed(ConsoleKey.A))
             {
                 onAKey?.Invoke();
@@ -276,6 +281,11 @@ namespace Mario_vNext.Core.SystemExt
 
         private void NumKeysEvent(object sender, ElapsedEventArgs e)
         {
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey(true);
+            }
+
             if (this.IsKeyPressed(ConsoleKey.NumPad0))
             {
                 onN0ArrowKey?.Invoke();
@@ -320,6 +330,11 @@ namespace Mario_vNext.Core.SystemExt
 
         private void OtherKeyEvent(object sender, ElapsedEventArgs e)
         {
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey(true);
+            }
+
             if (this.IsKeyPressed(ConsoleKey.Enter))
             {
                 onEnterKey?.Invoke();

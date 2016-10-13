@@ -16,7 +16,7 @@ namespace Mario_vNext.Data.Scenes
     {
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-        Keyboard keyboard = new Keyboard(100, 100, 50);
+        Keyboard keyboard = new Keyboard(100, 100, 100);
         World map = new World();
         WorldObject newBlock = new WorldObject();
         Camera cam = new Camera();
@@ -139,7 +139,7 @@ namespace Mario_vNext.Data.Scenes
             cam.borderReference = border;
             cam.worldReference = map;
 
-            cam.Init(-(Shared.RenderWidth / 2 - 8), -(Shared.RenderHeight / 2 - 8));
+            cam.Init(-(Shared.RenderWidth / 2 - newBlock.width / 2), -(Shared.RenderHeight / 2 - newBlock.height / 2));
         }
         
         private I3Dimensional BlockFinder(xList<I3Dimensional> model, int x, int y, int z)
@@ -151,10 +151,10 @@ namespace Mario_vNext.Data.Scenes
         {
             if (newBlock.Y > 0)
             {
-                newBlock.Y -= 16;
+                newBlock.Y -= 8;
                 posY.Text = string.Format("Y {0}", newBlock.Y);
 
-                cam.Yoffset -= 16;
+                cam.Yoffset -= 8;
             }
         }
 
@@ -162,10 +162,10 @@ namespace Mario_vNext.Data.Scenes
         {
             if (newBlock.Y + newBlock.height < map.Height)
             {
-                newBlock.Y += 16;
+                newBlock.Y += 8;
                 posY.Text = string.Format("Y {0}", newBlock.Y);
 
-                cam.Yoffset += 16;
+                cam.Yoffset += 8;
             }
         }
 
@@ -173,10 +173,10 @@ namespace Mario_vNext.Data.Scenes
         {
             if (newBlock.X > 0)
             {
-                newBlock.X -= 16;
+                newBlock.X -= 8;
                 posX.Text = string.Format("X {0}", newBlock.X);
 
-                cam.Xoffset -= 16;
+                cam.Xoffset -= 8;
             }
         }
 
@@ -184,10 +184,10 @@ namespace Mario_vNext.Data.Scenes
         {
             if (newBlock.X + newBlock.width < map.Width)
             {
-                newBlock.X += 16;
+                newBlock.X += 8;
                 posX.Text = string.Format("X {0}", newBlock.X);
 
-                cam.Xoffset += 16;
+                cam.Xoffset += 8;
             }
         }
 
@@ -218,17 +218,29 @@ namespace Mario_vNext.Data.Scenes
         {
             if (selected > 0)
             {
+                newBlock.X += newBlock.width / 2;
+                newBlock.Y += newBlock.height / 2;
+
                 selected--;
                 newBlock.Type = (ObjectDatabase.WorldObjects)selected;
+
+                newBlock.X -= newBlock.width / 2;
+                newBlock.Y -= newBlock.height / 2;
             }
         }
 
         private void BlockSwitchRight()
         {
-            if (selected < (int)ObjectDatabase.WorldObjects.UnderGroundBackground2)
+            if (selected < (int)ObjectDatabase.WorldObjects.Pipe5)
             {
+                newBlock.X += newBlock.width / 2;
+                newBlock.Y += newBlock.height / 2;
+
                 selected++;
                 newBlock.Type = (ObjectDatabase.WorldObjects)selected;
+
+                newBlock.X -= newBlock.width / 2;
+                newBlock.Y -= newBlock.height / 2;
             }
         }
 

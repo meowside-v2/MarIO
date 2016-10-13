@@ -11,10 +11,6 @@ namespace Mario_vNext.Core.Components
     class Material : ICore
     {
 
-        /*private byte[,] _R;
-        private byte[,] _G;
-        private byte[,] _B;*/
-
         public int width;
         public int height;
 

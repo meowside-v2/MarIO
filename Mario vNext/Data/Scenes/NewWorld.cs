@@ -105,7 +105,7 @@ namespace Mario_vNext.Data.Scenes
 
             keyboard.Start();
 
-            background.Init(@"Data/Worlds/WorldEditMenu.WORLD", World.Mode.Game);
+            background.Init(@"Data/Worlds/WorldEditor.WORLD", World.Mode.Game);
 
             cam.worldReference = background;
             cam.GUI.AddAll(nameTxt, widthTxt, heightTxt, selectionTxt, selectionTxt2, returnTxt, _nameTxt, _widthTxt, _heightTxt);
@@ -113,7 +113,7 @@ namespace Mario_vNext.Data.Scenes
             textblockSelection = 0;
             NewSelectionPosition();
 
-            cam.Init(0, 128);
+            cam.Init(0, 0);
 
             SpinWait.SpinUntil(() => { return returnToEdit; });
         }
@@ -222,30 +222,32 @@ namespace Mario_vNext.Data.Scenes
 
         private void GetLetter()
         {
+            char key = Console.ReadKey(true).KeyChar;
+
             if (Console.KeyAvailable)
             {
-                char key = Console.ReadKey(true).KeyChar;
+                Console.ReadKey(true);
+            }
 
-                if (!Char.IsWhiteSpace(key) && !Shared.IsEscapeSequence(key) || key == ' ')
+            if (!Char.IsWhiteSpace(key) && !Shared.IsEscapeSequence(key) || key == ' ')
+            {
+                switch (textblockSelection)
                 {
-                    switch (textblockSelection)
-                    {
-                        case 0:
-                            _nameTxt.Text = _nameTxt.Text + key;
-                            break;
+                    case 0:
+                        _nameTxt.Text = _nameTxt.Text + key;
+                        break;
 
-                        case 1:
-                            _widthTxt.Text = _widthTxt.Text + key;
-                            break;
+                    case 1:
+                        _widthTxt.Text = _widthTxt.Text + key;
+                        break;
 
-                        case 2:
-                            _heightTxt.Text = _heightTxt.Text + key;
-                            break;
-                    }
+                    case 2:
+                        _heightTxt.Text = _heightTxt.Text + key;
+                        break;
                 }
+            }
 
                 NewSelectionPosition();
-            }
         }
 
         private void RemoveLetter()

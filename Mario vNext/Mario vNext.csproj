@@ -95,7 +95,7 @@
     <None Include="Data\Font\font.psd" />
     <None Include="Data\MarioBlockSpriteFile.MEX" />
     <None Include="Data\Sprites\blocks_project.psd" />
-    <None Include="Data\WorldEditMenu.WORLD" />
+    <None Include="Data\WorldEditor.WORLD" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Font\0.png" />
