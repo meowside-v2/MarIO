@@ -3,6 +3,7 @@ using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +15,49 @@ namespace Mario_vNext.Core.Components
         xList<I3Dimensional> collidableReference;
         ObjectCore Parent;
 
+        Rectangle Area;
+
         /// <summary>
-        /// Constructor of Collider class
+        /// Creates new Instance of Collider class
         /// </summary>
         /// <param name="Parent"></param>
         /// <param name="collidableReference"></param>
-        public Collider(ObjectCore Parent , xList<I3Dimensional> collidableReference)
+        /// <param name="Xoffset"></param>
+        /// <param name="Yoffset"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        public Collider(ObjectCore Parent , xList<I3Dimensional> collidableReference, int Xoffset, int Yoffset, int Width, int Height)
         {
             this.Parent = Parent;
             this.collidableReference = collidableReference;
+
+            this.Area = new Rectangle(Xoffset, Yoffset, Width, Height);
         }
-        
+
+        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference)
+        {
+            this.Parent = Parent;
+            this.collidableReference = collidableReference;
+
+            this.Area = new Rectangle(0, 0, Parent.width, Parent.height);
+        }
+
+        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference, Rectangle Area)
+        {
+            this.Parent = Parent;
+            this.collidableReference = collidableReference;
+
+            this.Area = Area;
+        }
+
+        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference, Point Coordinates, Size _Size)
+        {
+            this.Parent = Parent;
+            this.collidableReference = collidableReference;
+
+            this.Area = new Rectangle(Coordinates, _Size);
+        }
+
 #if DEBUG
 
         /// <summary>
@@ -45,6 +78,11 @@ namespace Mario_vNext.Core.Components
             Left,
             Down,
             Right
+        }
+
+        public Rectangle GetCollider()
+        {
+            return Area;
         }
 
         /// <summary>

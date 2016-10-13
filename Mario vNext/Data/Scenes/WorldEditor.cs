@@ -18,7 +18,7 @@ namespace Mario_vNext.Data.Scenes
 
         Keyboard keyboard = new Keyboard(100, 100, 50);
         World map = new World();
-        Block newBlock = new Block();
+        WorldObject newBlock = new WorldObject();
         Camera cam = new Camera();
 
         xList<xList<I3Dimensional>> undo = new xList<xList<I3Dimensional>>();
@@ -122,7 +122,7 @@ namespace Mario_vNext.Data.Scenes
 
             keyboard.Start();
 
-            newBlock = new Block((ObjectDatabase.Blocks)selected, 0, 0, 0);
+            newBlock = new WorldObject((ObjectDatabase.WorldObjects)selected, 0, 0, 0);
 
             posX.Text = string.Format("X {0}", newBlock.X);
             posY.Text = string.Format("Y {0}", newBlock.Y);
@@ -196,14 +196,14 @@ namespace Mario_vNext.Data.Scenes
             undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
-            Block temp = new Block();
+            WorldObject temp = new WorldObject();
 
-            temp = (Block)newBlock.DeepCopy();
+            temp = (WorldObject)newBlock.DeepCopy();
 
             map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
             map.model.Add(temp);
 
-            newBlock.Type = (ObjectDatabase.Blocks)selected;
+            newBlock.Type = (ObjectDatabase.WorldObjects)selected;
         }
 
         private void BlockDelete()
@@ -219,16 +219,16 @@ namespace Mario_vNext.Data.Scenes
             if (selected > 0)
             {
                 selected--;
-                newBlock.Type = (ObjectDatabase.Blocks)selected;
+                newBlock.Type = (ObjectDatabase.WorldObjects)selected;
             }
         }
 
         private void BlockSwitchRight()
         {
-            if (selected < (int)ObjectDatabase.Blocks.UnderGroundBackground2)
+            if (selected < (int)ObjectDatabase.WorldObjects.UnderGroundBackground2)
             {
                 selected++;
-                newBlock.Type = (ObjectDatabase.Blocks)selected;
+                newBlock.Type = (ObjectDatabase.WorldObjects)selected;
             }
         }
 
@@ -257,13 +257,13 @@ namespace Mario_vNext.Data.Scenes
 
             int Xoffset = 0;
             int Yoffset = 0;
-            ObjectDatabase.Blocks type = newBlock.Type;
+            ObjectDatabase.WorldObjects type = newBlock.Type;
 
             xList<I3Dimensional> temp = new xList<I3Dimensional>();
 
             while (true)
             {
-                temp.Add(new Block(type, Xoffset, Yoffset, newBlock.Z));
+                temp.Add(new WorldObject(type, Xoffset, Yoffset, newBlock.Z));
 
                 Yoffset += newBlock.height;
 
@@ -311,7 +311,7 @@ namespace Mario_vNext.Data.Scenes
 
                 bw.Write(map.model.Count);
 
-                foreach (Block item in map.model)
+                foreach (WorldObject item in map.model)
                 {
                     bw.Write((int)item.Type);
                     bw.Write(item.X);

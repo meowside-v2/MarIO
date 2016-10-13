@@ -79,7 +79,7 @@ namespace Mario_vNext.Data.Objects
 
                 for(int count = 0; count < temp_ModelCount; count++)
                 {
-                    model.Add(new Block((ObjectDatabase.Blocks)br.ReadInt32(),
+                    model.Add(new WorldObject((ObjectDatabase.WorldObjects)br.ReadInt32(),
                                          br.ReadInt32(),
                                          br.ReadInt32(),
                                          br.ReadInt32()));
@@ -115,9 +115,9 @@ namespace Mario_vNext.Data.Objects
 
             for (int i = 0; i < this.model.Count; i++)
             {
-                Block temp_Block = (Block)this.model[i];
+                WorldObject temp_Block = (WorldObject)this.model[i];
 
-                temp.model.Add(new Block(temp_Block.Type, temp_Block.X, temp_Block.Y, temp_Block.Z));
+                temp.model.Add(new WorldObject(temp_Block.Type, temp_Block.X, temp_Block.Y, temp_Block.Z));
             }
 
             return temp;

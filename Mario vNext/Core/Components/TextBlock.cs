@@ -228,9 +228,9 @@ namespace Mario_vNext.Core.Components
                     retValue.Add(new Letter(Xoffset,
                                         0,
                                         0,
-                                        ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
+                                        ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
 
-                    Xoffset += ObjectDatabase.letterMesh[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
+                    Xoffset += ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
                 }
             }
 

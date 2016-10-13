@@ -18,19 +18,29 @@ namespace Mario_vNext.Core.SystemExt
             "\\Data\\Sprites\\mario_12x16.png"
         };*/
 
-        public enum Blocks
+        public enum WorldObjects
         {
             BlockGround1,
             BlockGround2,
             BlockGround3,
             BlockGround4,
-            Sky1,
-            Sky2,
-            Sky3,
-            Sky4,
-            Sky5,
-            Sky6,
-            Sky7,
+            Bridge,
+            Bush1,
+            Bush2,
+            Bush3,
+            BushSmall,
+            CastleBig,
+            CastleSmall,
+            Cloud1,
+            Cloud2,
+            Cloud3,
+            Fence,
+            FinishFlag,
+            FlagPole,
+            Mountain,
+            Sky,
+            Water1,
+            Water2,
             BlockUnderGround1,
             BlockUnderGround2,
             BlockUnderGround3,
@@ -45,7 +55,7 @@ namespace Mario_vNext.Core.SystemExt
             Border
         };
 
-        public static List<Material> blockMesh = new List<Material>();
+        public static List<Material> worldObjectsMaterial = new List<Material>();
 
         private static void CreateBlockSpriteReferences()
         {
@@ -60,7 +70,7 @@ namespace Mario_vNext.Core.SystemExt
 
                     using (MemoryStream ms = new MemoryStream(byteArray))
                     {
-                        blockMesh.Add(new Material((Bitmap) Image.FromStream(ms)));
+                        worldObjectsMaterial.Add(new Material((Bitmap) Image.FromStream(ms)));
                     }
                 }
             }
@@ -151,7 +161,7 @@ namespace Mario_vNext.Core.SystemExt
             { ' ' , Font.space }
         };
 
-        public static List<Material> letterMesh = new List<Material>();
+        public static List<Material> letterMaterial = new List<Material>();
 
         private static void CreateLetterReferences()
         {
@@ -166,7 +176,7 @@ namespace Mario_vNext.Core.SystemExt
 
                     using (MemoryStream ms = new MemoryStream(byteArray))
                     {
-                        letterMesh.Add(new Material((Bitmap) Image.FromStream(ms)));
+                        letterMaterial.Add(new Material((Bitmap) Image.FromStream(ms)));
                     }
                 }
             }
