@@ -42,17 +42,5 @@ namespace Mario_vNext.Core
 
             return false;
         }
-
-        public static PrivateFontCollection pfc = new PrivateFontCollection();
-
-        public static void LoadFont()
-        {
-            int fontLength = Properties.Resources.Pixel_Millennium.Length;
-            byte[] fontdata = Properties.Resources.Pixel_Millennium;
-            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-            Marshal.Copy(fontdata, 0, data, fontLength);
-            
-            pfc.AddMemoryFont(data, fontLength);
-        }
     }
 }

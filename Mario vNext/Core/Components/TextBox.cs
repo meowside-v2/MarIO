@@ -1,8 +1,8 @@
-﻿using Mario_vNext.Core.Interfaces;
+﻿using Mario_vNext.Core.Componenets;
+using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,22 +11,26 @@ namespace Mario_vNext.Core.Components
 {
     class TextBox : TextBlock
     {
-        public override string Text
-        {
-            get
-            {
-                return _text;
-            }
 
-            set
-            {
-                if (TextControl(value.ToArray()))
-                {
-                    _text = value;
-                    Update();
-                }
-            }
-        }
+        public TextBox()
+            : base()
+        { }
+        public TextBox(int X, int Y, int Z)
+            : base(X, Y, Z)
+        { }
+        public TextBox(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+            : base(X, Y, Z, HAlignment, VAlignment, Text)
+        { }
+        public TextBox(int X, int Y, string Layer)
+            : base(X, Y, Layer)
+        { }
+        public TextBox(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+            : base(X, Y, Layer, HAlignment, VAlignment, Text)
+        { }
+
+        private int _textXOffset = 0;
+
+        public Type AllowedChars { get; set; }
 
         public enum Type
         {
@@ -36,45 +40,20 @@ namespace Mario_vNext.Core.Components
             Numerical
         };
 
-        public Type AllowedChars { get; set; }
-
-        public bool TextControl(params char[] key)
+        public override string Text
         {
-            if (AllowedChars == Type.All)
-                return true;
-
-            foreach (char k in key)
+            set
             {
-                if (AllowedChars == Type.Alpha)
-                    if (!Char.IsLetter(k))
-                        return false;
-
-                else if (AllowedChars == Type.Numerical)
-                    if (!Char.IsNumber(k))
-                        return false;
-
-                else if (AllowedChars == Type.AlphaNumerical)
-                    if (!(Char.IsLetterOrDigit(k) || k == ' '))
-                        return false;
+                if (TextControl(value))
+                {
+                    TextRasterize(value);
+                }
             }
 
-            return true;
-        }
-        
-        public TextBox(int X,
-                       int Y,
-                       string Layer,
-                       HAlignment HAlignment,
-                       VAlignment VAlignment,
-                       string Text,
-                       FontFamily FontFamily,
-                       float FontSize,
-                       Color TextColor,
-                       bool HasShadow,
-                       Type AllowedChars)
-            :base(X, Y, Layer, HAlignment, VAlignment, Text, FontFamily, FontSize, TextColor, HasShadow)
-        {
-            this.AllowedChars = AllowedChars;
+            get
+            {
+                return _stringText;
+            }
         }
 
         public void RemoveLastLetter()
@@ -83,6 +62,74 @@ namespace Mario_vNext.Core.Components
             {
                 this.Text = Text.Remove(Text.Length - 1, 1);
             }
+        }
+
+        protected override void TextRasterize(string txt)
+        {
+            if (txt.Length > _stringText.Length)
+            {
+                string temp = txt.Remove(0, _stringText.Length);
+
+                foreach (char letter in temp)
+                {
+                    if (letter == ' ')
+                    {
+                        _textXOffset += 3;
+                    }
+
+                    else
+                    {
+                        _text.Add(new Letter(this,
+                                            _textXOffset,
+                                            0,
+                                            0,
+                                            ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
+
+                        _textXOffset += ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
+                    }
+                }
+            }
+
+            else if (txt.Length < _stringText.Length)
+            {
+                int numberOfLettersToRemove = _stringText.Length - txt.Length;
+
+                for (int i = 0; i < numberOfLettersToRemove; i++)
+                {
+                    if (_stringText[_stringText.Length - 1] == ' ')
+                    {
+                        _textXOffset -= 3;
+                    }
+
+                    else
+                    {
+                        _textXOffset -= _text[_text.Count - 1].width + 1;
+                        _text.Remove(_text[_text.Count - 1]);
+                    }
+                }
+            }
+
+            VAlignment = _VA;
+            HAlignment = _HA;
+
+            _stringText = txt;
+        }
+
+        public bool TextControl(string key)
+        {
+            if (AllowedChars == Type.All)
+                return true;
+
+            else if (AllowedChars == Type.Alpha)
+                return key.All(Char.IsLetter);
+
+            else if (AllowedChars == Type.Numerical)
+                return key.All(Char.IsNumber);
+
+            else if (AllowedChars == Type.AlphaNumerical)
+                return key.All(Char.IsLetterOrDigit);
+
+            return true;
         }
     }
 }

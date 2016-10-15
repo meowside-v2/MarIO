@@ -12,7 +12,6 @@ namespace Mario_vNext
             mainWindow.WindowInit();
 
             ObjectDatabase.Init();
-            Shared.LoadFont();
 
             //Test test = new Test();
 

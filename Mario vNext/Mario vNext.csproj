@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
+    <Compile Include="Core\Components\Letter.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Components\TextBox.cs" />
@@ -88,20 +89,12 @@
     <Compile Include="Data\Scenes\WorldEditor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Data\Font\font.psd" />
-    <None Include="Data\ka1.ttf" />
     <None Include="Data\MarioBlockSpriteFile.MEX" />
-    <None Include="Data\Pixel Millennium.ttf" />
-    <None Include="Data\solid.ttf" />
     <None Include="Data\Sprites\blocks_project.psd" />
     <None Include="Data\WorldEditor.WORLD" />
   </ItemGroup>
@@ -195,12 +188,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

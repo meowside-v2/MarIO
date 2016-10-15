@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mario_vNext.Core.Components
 {
-    class Material : ICore
+    class Material
     {
 
         public int width;
@@ -45,38 +45,94 @@ namespace Mario_vNext.Core.Components
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey, double scaleX, double scaleY, Color? clr = null)
         {
-            for(int row = 0; row < this.height; row++)
+            int rowInBuffer = 0;
+            int columnInBuffer = 0;
+
+            double plusX = 1 / scaleX;
+            double plusY = 1 / scaleY;
+
+            if (clr == null)
             {
-                for(int column = 0; column < this.width; column++)
+                for (double row = 0; row < this.height; row += plusY)
                 {
-                    if (IsOnScreen(x, y, row, column))
+                    if (y + row > Shared.RenderHeight) return;
+
+                    for (double column = 0; column < this.width; column += plusX)
                     {
-                        int offset = ((3 * (y + row)) * Shared.RenderWidth) + (3 * (x + column));
-                        int keyOffset = (y + row) * Shared.RenderWidth + x + column;
+                        if (x + column > Shared.RenderWidth) break;
 
-                        if (!imageBufferKey[keyOffset])
+                        if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            Color temp = colorMap[column, row];
+                            int offset = (((3 * (y + rowInBuffer)) * Shared.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = ((y + rowInBuffer) * Shared.RenderWidth + x + columnInBuffer);
 
-                            if(temp.A != 0)
+                            if (!imageBufferKey[keyOffset])
                             {
-                                imageBuffer[offset] = temp.B;
-                                imageBuffer[offset + 1] = temp.G;
-                                imageBuffer[offset + 2] = temp.R;
+                                Color temp = colorMap[(int)column, (int)row];
 
-                                imageBufferKey[keyOffset] = true;
+                                if (temp.A != 0)
+                                {
+                                    imageBuffer[offset] = temp.B;
+                                    imageBuffer[offset + 1] = temp.G;
+                                    imageBuffer[offset + 2] = temp.R;
+
+                                    imageBufferKey[keyOffset] = true;
+                                }
                             }
                         }
+
+                        columnInBuffer++;
                     }
+
+                    rowInBuffer++;
+                    columnInBuffer = 0;
+                }
+            }
+
+            else
+            {
+                for (double row = 0; row < this.height; row += (1 / scaleY))
+                {
+                    if (y + row > Shared.RenderHeight) return;
+
+                    for (double column = 0; column < this.width; column += (1 / scaleX))
+                    {
+                        if (x + column > Shared.RenderWidth) break;
+
+                        if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
+                        {
+                            int offset = (((3 * (y + rowInBuffer)) * Shared.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = ((y + rowInBuffer) * Shared.RenderWidth + x + columnInBuffer);
+
+                            if (!imageBufferKey[keyOffset])
+                            {
+                                Color temp = colorMap[(int)column, (int)row];
+
+                                if (temp.A != 0)
+                                {
+                                    imageBuffer[offset] = ((Color)clr).B;
+                                    imageBuffer[offset + 1] = ((Color)clr).G;
+                                    imageBuffer[offset + 2] = ((Color)clr).R;
+
+                                    imageBufferKey[keyOffset] = true;
+                                }
+                            }
+                        }
+
+                        columnInBuffer++;
+                    }
+
+                    rowInBuffer++;
+                    columnInBuffer = 0;
                 }
             }
         }
 
-        private bool IsOnScreen(int x, int y, int row, int column)
+        private bool IsOnScreen(int x, int y)
         {
-            return x + column >= 0 && x + column < Shared.RenderWidth && y + row >= 0 && y + row < Shared.RenderHeight;
+            return x >= 0 && x < Shared.RenderWidth && y >= 0 && y < Shared.RenderHeight;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Mario_vNext.Core.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,12 +41,12 @@ namespace Mario_vNext.Core.SystemExt
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            var temp = this.ToList().Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
+            Stopwatch t = Stopwatch.StartNew();
 
-            while (true)
+            var temp = this.Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
+
+            while (temp.Count > 0)
             {
-                if (temp.Count == 0) return;
-
                 int tempHeight = temp.Max(item => ((I3Dimensional)item).Z);
                 var toRender = temp.Where(item => ((I3Dimensional)item).Z == tempHeight).Select(item => item).ToList();
 
@@ -56,6 +57,9 @@ namespace Mario_vNext.Core.SystemExt
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
             }
+
+            t.Stop();
+            Debug.WriteLine("{0} {1}", t.Elapsed, t.ElapsedTicks);
         }
 
         private bool Finder(I3Dimensional obj, int x, int y)

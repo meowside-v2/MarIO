@@ -23,37 +23,10 @@ namespace Mario_vNext.Data.Scenes
 
         xList<xList<I3Dimensional>> undo = new xList<xList<I3Dimensional>>();
 
-        TextBlock posX = new TextBlock(1,
-                                        1,
-                                        "GUI",
-                                        TextBlock.HAlignment.Left,
-                                        TextBlock.VAlignment.Top,
-                                        "",
-                                        Shared.pfc.Families[0],
-                                        5f,
-                                        System.Drawing.Color.White,
-                                        true);
-        TextBlock posY = new TextBlock(1,
-                                        7,
-                                        "GUI",
-                                        TextBlock.HAlignment.Left,
-                                        TextBlock.VAlignment.Top,
-                                        "",
-                                        Shared.pfc.Families[0],
-                                        5f,
-                                        System.Drawing.Color.White,
-                                        true);
-        TextBlock posZ = new TextBlock(1,
-                                        13,
-                                        "GUI",
-                                        TextBlock.HAlignment.Left,
-                                        TextBlock.VAlignment.Top,
-                                        "",
-                                        Shared.pfc.Families[0],
-                                        5f,
-                                        System.Drawing.Color.White,
-                                        true);
-        
+        TextBlock posX = new TextBlock(1, 1, "GUI");
+        TextBlock posY = new TextBlock(1, 7, "GUI");
+        TextBlock posZ = new TextBlock(1, 13, "GUI");
+
         private int selected = 0;
         private int undoMaxCapacity = 50;
 

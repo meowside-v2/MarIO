@@ -6,6 +6,12 @@ namespace Mario_vNext.Core.SystemExt
 {
     class xRectangle : ICore, I3Dimensional
     {
+        private double _scaleX = 1;
+        private double _scaleY = 1;
+        private double _scaleZ = 1;
+
+        xList<WorldObject> border = new xList<WorldObject>();
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
@@ -14,8 +20,54 @@ namespace Mario_vNext.Core.SystemExt
         public int height { get; set; }
         public int depth { get; set; }
 
-        xList<WorldObject> border = new xList<WorldObject>();
+        public double ScaleX
+        {
+            get
+            {
+                return _scaleX;
+            }
+            set
+            {
+                if (value < 0.1f)
+                    _scaleX = 0.1f;
 
+                else
+                    _scaleX = value;
+            }
+        }
+
+        public double ScaleY
+        {
+            get
+            {
+                return _scaleY;
+            }
+            set
+            {
+                if (value < 0.1f)
+                    _scaleY = 0.1f;
+
+                else
+                    _scaleY = value;
+            }
+        }
+
+        public double ScaleZ
+        {
+            get
+            {
+                return _scaleZ;
+            }
+            set
+            {
+                if (value < 0.1f)
+                    _scaleZ = 0.1f;
+
+                else
+                    _scaleZ = value;
+            }
+        }
+        
         public xRectangle(int x, int y, int z, int width, int height)
         {
             this.X = x;

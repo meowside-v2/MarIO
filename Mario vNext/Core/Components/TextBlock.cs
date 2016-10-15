@@ -1,22 +1,60 @@
-﻿using Mario_vNext.Core.Interfaces;
+﻿using Mario_vNext.Core.Componenets;
+using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mario_vNext.Core.Components
 {
     class TextBlock : ICore, I3Dimensional
     {
+        protected int _x = 0;
+        protected int _y = 0;
+
+        protected int vertOffset = 0;
+        protected int horiOffset = 0;
+
+        protected HorizontalAlignment _HA;
+        protected VerticalAlignment _VA;
+
+        protected string _stringText = "";
+        protected xList<Letter> _text = new xList<Letter>();
+
+        protected double _scaleX = 1;
+        protected double _scaleY = 1;
+        protected double _scaleZ = 1;
+
+        public enum HorizontalAlignment
+        {
+            Left,
+            Center,
+            Right
+        };
+
+        public enum VerticalAlignment
+        {
+            Top,
+            Center,
+            Bottom
+        };
+
+        public enum Layer
+        {
+            Background = 0,
+            GUI = 128
+        };
+
         public int X
         {
             get
             {
-                return _x + HOffset;
+                return _x + horiOffset;
             }
+
             set
             {
                 _x = value;
@@ -26,196 +64,171 @@ namespace Mario_vNext.Core.Components
         {
             get
             {
-                return _y + VOffset;
+                return _y + vertOffset;
             }
+
             set
             {
                 _y = value;
             }
         }
         public int Z { get; set; }
-        
+
         public int width
         {
             get
             {
-                return (HasShadow ? _width + 1 : _width);
+                return (_text.Count > 0 ? _text[_text.Count - 1].X + _text[_text.Count - 1].width - 1 : 0);
             }
         }
+
         public int height
         {
             get
             {
-                return Font.Height;
+                return (int)(5 * ScaleY);
             }
         }
-        public int depth { get; set; }
-        
-        public virtual string Text
+        public int depth
         {
             get
             {
-                return _text;
+                return 0;
+            }
+        }
+
+        public double ScaleX
+        {
+            get
+            {
+                return _scaleX;
             }
             set
             {
-                _text = value;
+                if (value < 0.1f)
+                    _scaleX = 0.1f;
+
+                else
+                    _scaleX = value;
+            }
+        }
+
+        public double ScaleY
+        {
+            get
+            {
+                return _scaleY;
+            }
+            set
+            {
+                if (value < 0.1f)
+                    _scaleY = 0.1f;
+
+                else
+                    _scaleY = value;
+            }
+        }
+
+        public double ScaleZ
+        {
+            get
+            {
+                return _scaleZ;
+            }
+            set
+            {
+                if (value < 0.1f)
+                    _scaleZ = 0.1f;
+
+                else
+                    _scaleZ = value;
             }
         }
 
         public bool HasShadow { get; set; }
 
-        protected Material rastered;
-
-        protected SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x55, 0x00, 0x00, 0x00));
-
-        protected Font Font;
-
-        protected string _text;
-        protected double _fontSize = 12f;
-        protected FontFamily _fontFamily = FontFamily.Families[0];
-        protected int HOffset = 0;
-        protected int VOffset = 0;
-        protected HAlignment _HA;
-        protected VAlignment _VA;
-
-        protected SolidBrush _outputBrush = new SolidBrush(Color.White);
-
-        protected int _width;
-        protected int _x;
-        protected int _y;
-
-        public enum HAlignment
+        public virtual string Text
         {
-            Left,
-            Center,
-            Right
-        }
-
-        public enum VAlignment
-        {
-            Top,
-            Center,
-            Bottom
-        }
-
-        public HAlignment HorizontalAlignment
-        {
-            get
+            set
             {
-                return _HA;
+                Task.Factory.StartNew(() => TextRasterize(value));
             }
 
+            get
+            {
+                return _stringText;
+            }
+        }
+
+        public HorizontalAlignment HAlignment
+        {
             set
             {
                 _HA = value;
-                
-                switch (_HA)
+
+                switch (value)
                 {
-                    case HAlignment.Left:
-                        HOffset = 0;
+                    case HorizontalAlignment.Left:
+                        horiOffset = 0;
                         break;
-                    case HAlignment.Center:
-                        HOffset = (Shared.RenderWidth - width) / 2; 
+
+                    case HorizontalAlignment.Center:
+                        horiOffset = (Shared.RenderWidth - this.width) / 2;
                         break;
-                    case HAlignment.Right:
-                        HOffset = Shared.RenderWidth - width;
+
+                    case HorizontalAlignment.Right:
+                        horiOffset = Shared.RenderWidth - this.width;
                         break;
+
                     default:
                         break;
                 }
             }
         }
-
-        public VAlignment VerticalAlignment
+        public VerticalAlignment VAlignment
         {
-            get
-            {
-                return _VA;
-            }
-
             set
             {
                 _VA = value;
 
-                switch (_VA)
+                switch (value)
                 {
-                    case VAlignment.Top:
-                        VOffset = 0;
+                    case VerticalAlignment.Top:
+                        vertOffset = 0;
                         break;
-                    case VAlignment.Center:
-                        VOffset = (Shared.RenderHeight - Font.Height) / 2;
+
+                    case VerticalAlignment.Center:
+                        vertOffset = (Shared.RenderHeight - this.height) / 2;
                         break;
-                    case VAlignment.Bottom:
-                        VOffset = Shared.RenderWidth - Font.Height;
+
+                    case VerticalAlignment.Bottom:
+                        vertOffset = Shared.RenderHeight - this.height;
                         break;
+
                     default:
                         break;
                 }
             }
         }
 
-        public double FontSize
+        public TextBlock() { }
+        public TextBlock(int X, int Y, int Z)
+            :this()
         {
-            get
-            {
-                return _fontSize;
-            }
-            set
-            {
-                if (value > 0)
-                {
-                    _fontSize = value;
-                    Font = new Font(_fontFamily, (float)value);
-                }
-
-
-                else
-                {
-                    _fontSize = 0.1f;
-                    Font = new Font(_fontFamily, (float)value);
-                }
-            }
+            this.X = X;
+            this.Y = Y;
+            this.Z = Z;
         }
-
-        
-        public FontFamily FontFamily
+        public TextBlock(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+            :this(X, Y, Z)
         {
-            get
-            {
-                return _fontFamily;
-            }
-            set
-            {
-                _fontFamily = value;
-                Font = new Font(value, (float)_fontSize);
-            }
+            this.Text = Text;
+
+            this.HAlignment = HAlignment;
+            this.VAlignment = VAlignment;
         }
-
-        
-
-        public Color Color
-        {
-            get
-            {
-                return _outputBrush.Color;
-            }
-            set
-            {
-                _outputBrush = new SolidBrush(value);
-            }
-        }
-
-        public TextBlock(int X,
-                         int Y,
-                         string Layer,
-                         HAlignment HAlignment,
-                         VAlignment VAlignment,
-                         string Text,
-                         FontFamily FontFamily,
-                         float FontSize,
-                         Color TextColor,
-                         bool HasShadow)
+        public TextBlock(int X, int Y, string Layer)
+            :this()
         {
             this.X = X;
             this.Y = Y;
@@ -229,71 +242,92 @@ namespace Mario_vNext.Core.Components
                 case "Background":
                     this.Z = 0;
                     break;
+            }
+        }
+        public TextBlock(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
+            :this(X, Y, Layer)
+        {
+            this.X = X;
+            this.Y = Y;
 
-                default:
-                    try
-                    {
-                        this.Z = int.Parse(Layer);
-                    }
+            switch (Layer)
+            {
+                case "GUI":
+                    this.Z = 100;
+                    break;
 
-                    catch
-                    {
-                        this.Z = 0;
-                    }
+                case "Background":
+                    this.Z = 0;
                     break;
             }
-            
-            this.FontFamily = FontFamily;
-            this.FontSize = FontSize;
 
-            this.HasShadow = HasShadow;
-
-            this.Color = TextColor;
-
-            this.HorizontalAlignment = HAlignment;
-            this.VerticalAlignment = VAlignment;
-            
             this.Text = Text;
 
-            Update();
+            this.HAlignment = HAlignment;
+            this.VAlignment = VAlignment;
         }
 
-        private void Rasterize()
+        protected virtual void TextRasterize(string txt)
         {
-            Bitmap temp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            _stringText = txt;
 
-            temp.MakeTransparent();
+            xList<Letter> retValue = new xList<Letter>();
 
-            lock (Text)
+            int Xoffset = 0;
+
+            foreach (char letter in txt)
             {
-                using (Graphics g = Graphics.FromImage(temp))
+                if (letter == ' ')
                 {
-                    if (this.HasShadow) g.DrawString(Text, Font, _shadowBrush, 1f, 1f);
-                    g.DrawString(Text, Font, _outputBrush, 0f, 0f);
+                    Xoffset += 3;
+                }
+
+                else
+                {
+                    retValue.Add(new Letter(this,
+                                        Xoffset,
+                                        0,
+                                        0,
+                                        ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
+
+                    Xoffset += ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
                 }
             }
-            
-            rastered = new Material(temp);
-        }
 
-        protected void Update()
-        {
-            _width = (int)xGraphics.MeasureString(Text, Font).Width;
+            _text = retValue;
 
-            HorizontalAlignment = _HA;
-            VerticalAlignment = _VA;
-
-            Rasterize();
-        }
-
-        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
-        {
-            if (rastered != null) rastered.Render(X - x, Y - y, bufferData, bufferKey);
+            VAlignment = _VA;
+            HAlignment = _HA;
         }
 
         public object DeepCopy()
         {
-            return this.MemberwiseClone();
+            TextBlock retVal = (TextBlock)this.MemberwiseClone();
+
+            retVal.Text = "";
+
+            foreach (Letter letter in _text.ToList())
+            {
+                retVal._text.Add((Letter)letter.DeepCopy());
+            }
+
+            return retVal;
+        }
+
+        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        {
+
+
+            foreach (Letter item in _text.FindAll(obj => Finder(obj, x, y)))
+            {
+                item.Render(this.X - x, this.Y - y, imageBuffer, imageBufferKey);
+                if(HasShadow) item.Render(this.X - x + 1, this.Y - y + 1, imageBuffer, imageBufferKey, Color.Black);
+            }
+        }
+
+        protected bool Finder(I3Dimensional obj, int x, int y)
+        {
+            return obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight;
         }
     }
 }

@@ -23,17 +23,13 @@ namespace Mario_vNext.Core.Components
         private int lastTime = 0;
         private int numRenders = 0;
         private bool _Vsync = true;
-        
+
         private TextBlock fpsMeter = new TextBlock(1,
                                                    -1,
                                                    "GUI",
-                                                   TextBlock.HAlignment.Left,
-                                                   TextBlock.VAlignment.Bottom,
-                                                   "",
-                                                   Shared.pfc.Families[0],
-                                                   12,
-                                                   Color.White,
-                                                   true);
+                                                   TextBlock.HorizontalAlignment.Left,
+                                                   TextBlock.VerticalAlignment.Bottom,
+                                                   "0");
 
         private byte[] toRenderData = new byte[3 * Shared.RenderWidth * Shared.RenderHeight];
 
@@ -155,8 +151,9 @@ namespace Mario_vNext.Core.Components
 
                 Array.Clear(_buffer, 0, _buffer.Length);
                 Array.Clear(_rendered, 0, _rendered.Length);
-
+                
                 GUI.Render(0, 0, _buffer, _rendered);
+                
                 if (borderReference != null) borderReference.Render(Xoffset, Yoffset, _buffer, _rendered);
                 exclusiveReference.Render(Xoffset, Yoffset, _buffer, _rendered);
                 if (worldReference != null) worldReference.Render(Xoffset, Yoffset, _buffer, _rendered);
