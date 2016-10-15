@@ -10,6 +10,6 @@ namespace Mario_vNext.Core.Interfaces
     interface ICore
     {
         object DeepCopy();
-        void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey);
+        void Render(int x, int y, byte[] bufferData, bool[] bufferKey);
     }
 }

@@ -38,7 +38,7 @@ namespace Mario_vNext.Core.SystemExt
             return (xList<T>)retValue;
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
             var temp = this.ToList().Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
 
@@ -48,10 +48,10 @@ namespace Mario_vNext.Core.SystemExt
 
                 int tempHeight = temp.Max(item => ((I3Dimensional)item).Z);
                 var toRender = temp.Where(item => ((I3Dimensional)item).Z == tempHeight).Select(item => item).ToList();
-                
+
                 foreach (ICore item in toRender)
                 {
-                    item.Render(x, y, imageBuffer, imageBufferKey);
+                    item.Render(x, y, bufferData, bufferKey);
                 }
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);

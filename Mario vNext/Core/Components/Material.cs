@@ -16,7 +16,6 @@ namespace Mario_vNext.Core.Components
 
         public Color[,] colorMap;
 
-
         public Material(Bitmap source)
         {
             colorMap = new Color[source.Width, source.Height];

@@ -1,29 +1,22 @@
-﻿using Mario_vNext.Core.Componenets;
-using Mario_vNext.Core.Interfaces;
+﻿using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mario_vNext.Core.Components
 {
     class TextBlock : ICore, I3Dimensional
     {
-        private int _x;
-        private int _y;
-
-        private int vertOffset;
-        private int horiOffset;
-
         public int X
         {
             get
             {
-                return _x + horiOffset;
+                return _x + HOffset;
             }
-
             set
             {
                 _x = value;
@@ -33,238 +26,274 @@ namespace Mario_vNext.Core.Components
         {
             get
             {
-                return _y + vertOffset;
+                return _y + VOffset;
             }
-
             set
             {
                 _y = value;
             }
         }
         public int Z { get; set; }
-
         
-        public enum HorizontalAlignment
-        {
-            Left,
-            Center,
-            Right
-        };
-
-        public enum VerticalAlignment
-        {
-            Top,
-            Center,
-            Bottom
-        };
-
-        private HorizontalAlignment _HA;
-        private VerticalAlignment _VA;
-
-        public HorizontalAlignment HAlignment
-        {
-            set
-            {
-                _HA = value;
-
-                switch (value)
-                {
-                    case HorizontalAlignment.Left:
-                        horiOffset = 0;
-                        break;
-
-                    case HorizontalAlignment.Center:
-                        horiOffset = (Shared.RenderWidth - this.width) / 2;
-                        break;
-
-                    case HorizontalAlignment.Right:
-                        horiOffset = Shared.RenderWidth - this.width;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-        public VerticalAlignment VAlignment
-        {
-            set
-            {
-                _VA = value;
-
-                switch (value)
-                {
-                    case VerticalAlignment.Top:
-                        vertOffset = 0;
-                        break;
-
-                    case VerticalAlignment.Center:
-                        vertOffset = (Shared.RenderHeight - this.height) / 2;
-                        break;
-
-                    case VerticalAlignment.Bottom:
-                        vertOffset = Shared.RenderHeight - this.height;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-
-        public TextBlock() { }
-        public TextBlock(int X, int Y, int Z)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
-        public TextBlock(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-
-            this.Text = Text;
-
-            this.HAlignment = HAlignment;
-            this.VAlignment = VAlignment;
-        }
-        public TextBlock(int X, int Y, string Layer)
-        {
-            this.X = X;
-            this.Y = Y;
-
-            switch (Layer)
-            {
-                case "GUI":
-                    this.Z = 100;
-                    break;
-
-                case "Background":
-                    this.Z = 0;
-                    break;
-            }
-        }
-        public TextBlock(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-        {
-            this.X = X;
-            this.Y = Y;
-
-            switch (Layer)
-            {
-                case "GUI":
-                    this.Z = 100;
-                    break;
-
-                case "Background":
-                    this.Z = 0;
-                    break;
-            }
-            
-            this.Text = Text;
-
-            this.HAlignment = HAlignment;
-            this.VAlignment = VAlignment;
-        }
-
-        private string _stringText;
-        private xList<Letter> _text = new xList<Letter>();
-
-        public string Text
-        {
-            set
-            {
-                Task.Factory.StartNew(() => TextRasterize(value));
-            }
-
-            get
-            {
-                return _stringText;
-            }
-        }
-
         public int width
         {
             get
             {
-                return (_text.Count > 0 ? _text[_text.Count - 1].X + _text[_text.Count - 1].width - 1 : 0);
+                return (HasShadow ? _width + 1 : _width);
             }
         }
-
         public int height
         {
             get
             {
-                return (_text.Count > 0 ? _text[0].height : 0);
+                return Font.Height;
             }
         }
-        public int depth
+        public int depth { get; set; }
+        
+        public virtual string Text
         {
             get
             {
-                return 0;
+                return _text;
+            }
+            set
+            {
+                _text = value;
             }
         }
-        
 
-        private void TextRasterize(string txt)
+        public bool HasShadow { get; set; }
+
+        protected Material rastered;
+
+        protected SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x55, 0x00, 0x00, 0x00));
+
+        protected Font Font;
+
+        protected string _text;
+        protected double _fontSize = 12f;
+        protected FontFamily _fontFamily = FontFamily.Families[0];
+        protected int HOffset = 0;
+        protected int VOffset = 0;
+        protected HAlignment _HA;
+        protected VAlignment _VA;
+
+        protected SolidBrush _outputBrush = new SolidBrush(Color.White);
+
+        protected int _width;
+        protected int _x;
+        protected int _y;
+
+        public enum HAlignment
         {
-            _stringText = txt;
+            Left,
+            Center,
+            Right
+        }
 
-            xList<Letter> retValue = new xList<Letter>();
+        public enum VAlignment
+        {
+            Top,
+            Center,
+            Bottom
+        }
 
-            int Xoffset = 0;
-
-            foreach (char letter in txt)
+        public HAlignment HorizontalAlignment
+        {
+            get
             {
-                if (letter == ' ')
+                return _HA;
+            }
+
+            set
+            {
+                _HA = value;
+                
+                switch (_HA)
                 {
-                    Xoffset += 3;
+                    case HAlignment.Left:
+                        HOffset = 0;
+                        break;
+                    case HAlignment.Center:
+                        HOffset = (Shared.RenderWidth - width) / 2; 
+                        break;
+                    case HAlignment.Right:
+                        HOffset = Shared.RenderWidth - width;
+                        break;
+                    default:
+                        break;
                 }
+            }
+        }
+
+        public VAlignment VerticalAlignment
+        {
+            get
+            {
+                return _VA;
+            }
+
+            set
+            {
+                _VA = value;
+
+                switch (_VA)
+                {
+                    case VAlignment.Top:
+                        VOffset = 0;
+                        break;
+                    case VAlignment.Center:
+                        VOffset = (Shared.RenderHeight - Font.Height) / 2;
+                        break;
+                    case VAlignment.Bottom:
+                        VOffset = Shared.RenderWidth - Font.Height;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public double FontSize
+        {
+            get
+            {
+                return _fontSize;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    _fontSize = value;
+                    Font = new Font(_fontFamily, (float)value);
+                }
+
 
                 else
                 {
-                    retValue.Add(new Letter(Xoffset,
-                                        0,
-                                        0,
-                                        ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]]));
-
-                    Xoffset += ObjectDatabase.letterMaterial[(int)ObjectDatabase.font[Char.ToUpper(letter)]].width + 1;
+                    _fontSize = 0.1f;
+                    Font = new Font(_fontFamily, (float)value);
                 }
             }
+        }
 
-            _text = retValue;
+        
+        public FontFamily FontFamily
+        {
+            get
+            {
+                return _fontFamily;
+            }
+            set
+            {
+                _fontFamily = value;
+                Font = new Font(value, (float)_fontSize);
+            }
+        }
 
-            VAlignment = _VA;
-            HAlignment = _HA;
+        
+
+        public Color Color
+        {
+            get
+            {
+                return _outputBrush.Color;
+            }
+            set
+            {
+                _outputBrush = new SolidBrush(value);
+            }
+        }
+
+        public TextBlock(int X,
+                         int Y,
+                         string Layer,
+                         HAlignment HAlignment,
+                         VAlignment VAlignment,
+                         string Text,
+                         FontFamily FontFamily,
+                         float FontSize,
+                         Color TextColor,
+                         bool HasShadow)
+        {
+            this.X = X;
+            this.Y = Y;
+
+            switch (Layer)
+            {
+                case "GUI":
+                    this.Z = 100;
+                    break;
+
+                case "Background":
+                    this.Z = 0;
+                    break;
+
+                default:
+                    try
+                    {
+                        this.Z = int.Parse(Layer);
+                    }
+
+                    catch
+                    {
+                        this.Z = 0;
+                    }
+                    break;
+            }
+            
+            this.FontFamily = FontFamily;
+            this.FontSize = FontSize;
+
+            this.HasShadow = HasShadow;
+
+            this.Color = TextColor;
+
+            this.HorizontalAlignment = HAlignment;
+            this.VerticalAlignment = VAlignment;
+            
+            this.Text = Text;
+
+            Update();
+        }
+
+        private void Rasterize()
+        {
+            Bitmap temp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
+            temp.MakeTransparent();
+
+            lock (Text)
+            {
+                using (Graphics g = Graphics.FromImage(temp))
+                {
+                    if (this.HasShadow) g.DrawString(Text, Font, _shadowBrush, 1f, 1f);
+                    g.DrawString(Text, Font, _outputBrush, 0f, 0f);
+                }
+            }
+            
+            rastered = new Material(temp);
+        }
+
+        protected void Update()
+        {
+            _width = (int)xGraphics.MeasureString(Text, Font).Width;
+
+            HorizontalAlignment = _HA;
+            VerticalAlignment = _VA;
+
+            Rasterize();
+        }
+
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
+        {
+            if (rastered != null) rastered.Render(X - x, Y - y, bufferData, bufferKey);
         }
 
         public object DeepCopy()
         {
-            TextBlock retVal = (TextBlock) this.MemberwiseClone();
-
-            retVal.Text = "";
-
-            foreach(Letter letter in _text.ToList())
-            {
-                retVal._text.Add((Letter) letter.DeepCopy());
-            }
-
-            return retVal;
-        }
-
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
-        {
-            foreach(Letter item in _text.FindAll(obj => Finder(obj, x, y)))
-            {
-                item.Render(this.X - x, this.Y - y, imageBuffer, imageBufferKey);
-            }
-        }
-
-        private bool Finder(I3Dimensional obj, int x, int y)
-        {
-            return obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight;
+            return this.MemberwiseClone();
         }
     }
 }

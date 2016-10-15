@@ -24,9 +24,18 @@ namespace Mario_vNext.Core.Components
         private int numRenders = 0;
         private bool _Vsync = true;
         
-        private TextBlock fpsMeter = new TextBlock();
+        private TextBlock fpsMeter = new TextBlock(1,
+                                                   -1,
+                                                   "GUI",
+                                                   TextBlock.HAlignment.Left,
+                                                   TextBlock.VAlignment.Bottom,
+                                                   "",
+                                                   Shared.pfc.Families[0],
+                                                   12,
+                                                   Color.White,
+                                                   true);
 
-        private byte[] _tempBuffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth];
+        private byte[] toRenderData = new byte[3 * Shared.RenderWidth * Shared.RenderHeight];
 
         public World worldReference;
         public xRectangle borderReference;
@@ -40,11 +49,7 @@ namespace Mario_vNext.Core.Components
         {
             this.Xoffset = Xoffset;
             this.Yoffset = Yoffset;
-
-            fpsMeter.X = 1;
-            fpsMeter.Y = -1;
-            fpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
-
+            
             //fpsMeter.text = "";
             GUI.Add(fpsMeter);
             
@@ -62,6 +67,43 @@ namespace Mario_vNext.Core.Components
 
         private void Rendering()
         {
+            /*Size fontSize = GetConsoleFontSize();
+            Point location = new Point(0, 0);
+            Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
+
+            Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
+                                                        location.Y * fontSize.Height,
+                                                        imageSize.Width * fontSize.Width,
+                                                        imageSize.Height * fontSize.Height);
+
+            using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
+            {
+                while (true)
+                {
+                    
+                    int beginRender = Environment.TickCount;
+                    
+                    unsafe
+                    {
+                        fixed (byte* ptr = toRenderData)
+                        {
+                            using (Bitmap outImage = new Bitmap(Shared.RenderWidth,
+                                                   Shared.RenderWidth,
+                                                   3 * imageRect.Width,
+                                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                                                   new IntPtr(ptr)))
+                            {
+                                g.DrawImage(outImage, imageRect);
+                            }
+                        }
+                    }
+                    
+                    int endRender = Environment.TickCount - beginRender;
+
+                    Vsync(MAX_FRAME_RATE, endRender, false);
+                }
+            }*/
+
             using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
             {
                 while (true)
@@ -73,7 +115,7 @@ namespace Mario_vNext.Core.Components
 
                     unsafe
                     {
-                        fixed (byte* ptr = _tempBuffer)
+                        fixed (byte* ptr = toRenderData)
                         {
 
                             using (Bitmap outFrame = new Bitmap(Shared.RenderWidth,
@@ -119,7 +161,7 @@ namespace Mario_vNext.Core.Components
                 exclusiveReference.Render(Xoffset, Yoffset, _buffer, _rendered);
                 if (worldReference != null) worldReference.Render(Xoffset, Yoffset, _buffer, _rendered);
 
-                Buffer.BlockCopy(_buffer, 0, _tempBuffer, 0, _buffer.Count());
+                Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());
 
                 int endRender = Environment.TickCount - beginRender;
 

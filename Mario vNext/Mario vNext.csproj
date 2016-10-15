@@ -67,17 +67,17 @@
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
-    <Compile Include="Core\Components\TextBlock.cs" />
     <Compile Include="Core\Components\TextBox.cs" />
+    <Compile Include="Core\Components\TextBlock.cs" />
     <Compile Include="Core\Exceptions\WorldInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\ICore.cs" />
     <Compile Include="Core\Interfaces\IGraphics.cs" />
-    <Compile Include="Core\Components\Letter.cs" />
     <Compile Include="Core\Shared.cs" />
     <Compile Include="Core\SystemExt\Keyboard.cs" />
     <Compile Include="Core\SystemExt\ObjectDatabase.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
+    <Compile Include="Core\SystemExt\xGraphics.cs" />
     <Compile Include="Core\SystemExt\xList.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Data\Objects\WorldObject.cs" />
@@ -88,12 +88,20 @@
     <Compile Include="Data\Scenes\WorldEditor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Data\Font\font.psd" />
+    <None Include="Data\ka1.ttf" />
     <None Include="Data\MarioBlockSpriteFile.MEX" />
+    <None Include="Data\Pixel Millennium.ttf" />
+    <None Include="Data\solid.ttf" />
     <None Include="Data\Sprites\blocks_project.psd" />
     <None Include="Data\WorldEditor.WORLD" />
   </ItemGroup>
@@ -187,6 +195,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

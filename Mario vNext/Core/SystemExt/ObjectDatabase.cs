@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Mario_vNext.Core.SystemExt
 {
-    class ObjectDatabase
+    static class ObjectDatabase
     {
         public enum Live
         {

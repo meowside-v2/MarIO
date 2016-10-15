@@ -50,9 +50,9 @@ namespace Mario_vNext.Data.Objects
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            if(model != null) model.Render(X - x, Y - y, imageBuffer, imageBufferKey);
+            if (model != null) model.Render(X - x, Y - y, bufferData, bufferKey);
         }
     }
 }

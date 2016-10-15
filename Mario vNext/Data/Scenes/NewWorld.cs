@@ -5,6 +5,7 @@ using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,64 +23,103 @@ namespace Mario_vNext.Data.Scenes
         TextBlock nameTxt = new TextBlock(0,
                                           -40,
                                           "GUI",
-                                          TextBlock.HorizontalAlignment.Center,
-                                          TextBlock.VerticalAlignment.Center,
-                                          "Level name");
+                                          TextBlock.HAlignment.Center,
+                                          TextBlock.VAlignment.Center,
+                                          "Level name",
+                                          Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
 
         TextBlock widthTxt = new TextBlock(0,
                                            -10,
                                            "GUI",
-                                           TextBlock.HorizontalAlignment.Center,
-                                           TextBlock.VerticalAlignment.Center,
-                                           "Width");
+                                           TextBlock.HAlignment.Center,
+                                           TextBlock.VAlignment.Center,
+                                           "Width",
+                                           Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
 
         TextBlock heightTxt = new TextBlock(0,
                                             20,
                                             "GUI",
-                                            TextBlock.HorizontalAlignment.Center,
-                                            TextBlock.VerticalAlignment.Center,
-                                            "Height");
+                                            TextBlock.HAlignment.Center,
+                                            TextBlock.VAlignment.Center,
+                                            "Height",
+                                            Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
 
         TextBlock returnTxt = new TextBlock(0,
                                             50,
                                             "GUI",
-                                            TextBlock.HorizontalAlignment.Center,
-                                            TextBlock.VerticalAlignment.Center,
-                                            "OK");
+                                            TextBlock.HAlignment.Center,
+                                            TextBlock.VAlignment.Center,
+                                            "OK",
+                                            Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
 
         TextBlock selectionTxt = new TextBlock(0,
                                                0,
                                                "GUI",
-                                               TextBlock.HorizontalAlignment.Left,
-                                               TextBlock.VerticalAlignment.Top,
-                                               "-");
+                                               TextBlock.HAlignment.Left,
+                                               TextBlock.VAlignment.Top,
+                                               ">",
+                                               Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
         TextBlock selectionTxt2 = new TextBlock(0,
                                                0,
                                                "GUI",
-                                               TextBlock.HorizontalAlignment.Left,
-                                               TextBlock.VerticalAlignment.Top,
-                                               "-");
+                                               TextBlock.HAlignment.Left,
+                                               TextBlock.VAlignment.Top,
+                                               "<",
+                                               Shared.pfc.Families[0],
+                                          24f,
+                                          Color.White,
+                                          true);
 
         TextBox _nameTxt = new TextBox(0,
                                            -30,
                                            "GUI",
-                                           TextBox.HorizontalAlignment.Center,
-                                           TextBox.VerticalAlignment.Center,
-                                           "");
+                                           TextBox.HAlignment.Center,
+                                           TextBox.VAlignment.Center,
+                                           "",
+                                           Shared.pfc.Families[0],
+                                          18f,
+                                          Color.White,
+                                          true,
+                                          TextBox.Type.AlphaNumerical);
 
         TextBox _widthTxt = new TextBox(0,
                                             0,
                                             "GUI",
-                                            TextBox.HorizontalAlignment.Center,
-                                            TextBox.VerticalAlignment.Center,
-                                            "");
+                                            TextBox.HAlignment.Center,
+                                            TextBox.VAlignment.Center,
+                                            "",
+                                            Shared.pfc.Families[0],
+                                          18f,
+                                          Color.White,
+                                          true,
+                                          TextBox.Type.Numerical);
 
         TextBox _heightTxt = new TextBox(0,
                                              30,
                                              "GUI",
-                                             TextBox.HorizontalAlignment.Center,
-                                             TextBox.VerticalAlignment.Center,
-                                             "");
+                                             TextBox.HAlignment.Center,
+                                             TextBox.VAlignment.Center,
+                                             "",
+                                             Shared.pfc.Families[0],
+                                          18f,
+                                          Color.White,
+                                          true,
+                                          TextBox.Type.Numerical);
 
         int textblockSelection = 0;
         bool returnToEdit = false;
@@ -92,10 +132,6 @@ namespace Mario_vNext.Data.Scenes
         {
             referenceToWorld = worldReference;
 
-            _heightTxt.AllowedChars = TextBox.Type.Numerical;
-            _widthTxt.AllowedChars = TextBox.Type.Numerical;
-            _nameTxt.AllowedChars = TextBox.Type.AlphaNumerical;
-
             keyboard.onUpArrowKey = this.MoveUp;
             keyboard.onDownArrowKey = this.MoveDown;
             keyboard.onEnterKey = this.EnterDoStuff;
@@ -105,7 +141,7 @@ namespace Mario_vNext.Data.Scenes
 
             keyboard.Start();
 
-            background.Init(@"Data/Worlds/WorldEditor.WORLD", World.Mode.Game);
+            background.Init(@"Data\Worlds\WorldEditor.WORLD", World.Mode.Game);
 
             cam.worldReference = background;
             cam.GUI.AddAll(nameTxt, widthTxt, heightTxt, selectionTxt, selectionTxt2, returnTxt, _nameTxt, _widthTxt, _heightTxt);
@@ -184,39 +220,35 @@ namespace Mario_vNext.Data.Scenes
 
         private void NewSelectionPosition()
         {
+
+            TextBlock reference = null;
+
             switch (textblockSelection)
             {
                 case 0:
-                    selectionTxt.X = _nameTxt.X - selectionTxt.width - 5;
-                    selectionTxt.Y = _nameTxt.Y;
-
-                    selectionTxt2.X = _nameTxt.X +_nameTxt.width + 6;
-                    selectionTxt2.Y = _nameTxt.Y;
+                    reference = _nameTxt;
                     break;
 
                 case 1:
-                    selectionTxt.X = _widthTxt.X - selectionTxt.width - 5;
-                    selectionTxt.Y = _widthTxt.Y;
-
-                    selectionTxt2.X = _widthTxt.X + _widthTxt.width + 6;
-                    selectionTxt2.Y = _widthTxt.Y;
+                    reference = _widthTxt;
                     break;
 
                 case 2:
-                    selectionTxt.X = _heightTxt.X - selectionTxt.width - 5;
-                    selectionTxt.Y = _heightTxt.Y;
-
-                    selectionTxt2.X = _heightTxt.X + _heightTxt.width + 6;
-                    selectionTxt2.Y = _heightTxt.Y;
+                    reference = _heightTxt;
                     break;
 
                 case 3:
-                    selectionTxt.X = returnTxt.X - selectionTxt.width - 5;
-                    selectionTxt.Y = returnTxt.Y;
-
-                    selectionTxt2.X = returnTxt.X + returnTxt.width + 6;
-                    selectionTxt2.Y = returnTxt.Y;
+                    reference = returnTxt;
                     break;
+            }
+
+            if (reference != null)
+            {
+                selectionTxt.X = reference.X - selectionTxt.width - 5;
+                selectionTxt.Y = reference.Y - reference.height / 2 + 2;
+
+                selectionTxt2.X = reference.X + reference.width + 6;
+                selectionTxt2.Y = reference.Y - reference.height / 2 + 2;
             }
         }
 
@@ -247,7 +279,7 @@ namespace Mario_vNext.Data.Scenes
                 }
             }
 
-                NewSelectionPosition();
+            NewSelectionPosition();
         }
 
         private void RemoveLetter()
@@ -266,6 +298,8 @@ namespace Mario_vNext.Data.Scenes
                     _heightTxt.RemoveLastLetter();
                     break;
             }
+
+            NewSelectionPosition();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mario_vNext.Core.SystemExt;
+﻿using Mario_vNext.Core;
+using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Scenes;
 
 namespace Mario_vNext
@@ -11,6 +12,7 @@ namespace Mario_vNext
             mainWindow.WindowInit();
 
             ObjectDatabase.Init();
+            Shared.LoadFont();
 
             //Test test = new Test();
 

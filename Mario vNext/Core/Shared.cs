@@ -1,6 +1,9 @@
-﻿namespace Mario_vNext.Core
+﻿using System.Drawing.Text;
+using System.Runtime.InteropServices;
+
+namespace Mario_vNext.Core
 {
-    class Shared
+    static class Shared
     {
         public static int RenderWidth = 640;
         public static int RenderHeight = 360;
@@ -38,6 +41,18 @@
                 return true;
 
             return false;
+        }
+
+        public static PrivateFontCollection pfc = new PrivateFontCollection();
+
+        public static void LoadFont()
+        {
+            int fontLength = Properties.Resources.Pixel_Millennium.Length;
+            byte[] fontdata = Properties.Resources.Pixel_Millennium;
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontdata, 0, data, fontLength);
+            
+            pfc.AddMemoryFont(data, fontLength);
         }
     }
 }

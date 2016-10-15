@@ -4,7 +4,6 @@ using Mario_vNext.Core.SystemExt;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
 
 namespace Mario_vNext.Data.Objects
 {
@@ -123,9 +122,9 @@ namespace Mario_vNext.Data.Objects
             return temp;
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            model.Render(x, y, imageBuffer, imageBufferKey);
+            model.Render(x, y, bufferData, bufferKey);
         }
     }
 }
