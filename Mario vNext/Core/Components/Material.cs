@@ -32,6 +32,22 @@ namespace Mario_vNext.Core.Components
             }
         }
 
+        public Material(Color clr, int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+
+            colorMap = new Color[width, height];
+
+            for (int row = 0; row < height; row++)
+            {
+                for (int column = 0; column < width; column++)
+                {
+                    colorMap[column, row] = clr;
+                }
+            }
+        }
+
         public string PixelToString(int x, int y)
         {
             return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", this.colorMap[x, y].A,

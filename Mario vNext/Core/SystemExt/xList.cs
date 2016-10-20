@@ -43,7 +43,7 @@ namespace Mario_vNext.Core.SystemExt
         {
             Stopwatch t = Stopwatch.StartNew();
 
-            var temp = this.Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
+            var temp = this.ToList().Where(item => Finder((I3Dimensional)item, x, y)).Select(item => item).ToList();
 
             while (temp.Count > 0)
             {

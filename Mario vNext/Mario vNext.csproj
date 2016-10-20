@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
+    <Compile Include="Core\Components\Dialog.cs" />
     <Compile Include="Core\Components\Letter.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />

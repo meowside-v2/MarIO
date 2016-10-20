@@ -5,6 +5,7 @@ using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -269,19 +270,25 @@ namespace Mario_vNext.Data.Scenes
 
             int Xoffset = 0;
             int Yoffset = 0;
+            int Zoffset = newBlock.Z;
             ObjectDatabase.WorldObjects type = newBlock.Type;
 
-            xList<I3Dimensional> temp = new xList<I3Dimensional>();
+            xList<I3Dimensional> temp_List = new xList<I3Dimensional>(map.model);
 
             while (true)
             {
-                temp.Add(new WorldObject(type, Xoffset, Yoffset, newBlock.Z));
+                I3Dimensional temp = BlockFinder(temp_List, Xoffset, Yoffset, Zoffset);
+
+                if (temp != null)
+                    temp_List.Remove(temp);
+
+                temp_List.Add(new WorldObject(type, Xoffset, Yoffset, Zoffset));
 
                 Yoffset += newBlock.height;
 
                 if (Xoffset + newBlock.width >= map.Width && Yoffset + newBlock.height > map.Height)
                 {
-                    map.model = temp;
+                    map.model = temp_List;
                     return;
                 }
 

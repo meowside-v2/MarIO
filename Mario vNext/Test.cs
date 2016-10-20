@@ -17,7 +17,13 @@ namespace Mario_vNext
     {
         public Test()
         {
-            
+            List<int> t = new List<int>()
+            {
+                1,2,3,4,5,6,8,7,4,8,78,9,4
+            };
+
+            xList<int> t2 = (xList<int>)t;
+
             Console.ReadLine();
         }
     }
