@@ -12,7 +12,7 @@ namespace Mario_vNext.Core.Components
 {
     class Collider
     {
-        xList<I3Dimensional> collidableReference;
+        List<I3Dimensional> collidableReference;
         ObjectCore Parent;
 
         Rectangle Area;
@@ -26,7 +26,7 @@ namespace Mario_vNext.Core.Components
         /// <param name="Yoffset"></param>
         /// <param name="Width"></param>
         /// <param name="Height"></param>
-        public Collider(ObjectCore Parent , xList<I3Dimensional> collidableReference, int Xoffset, int Yoffset, int Width, int Height)
+        public Collider(ObjectCore Parent , List<I3Dimensional> collidableReference, int Xoffset, int Yoffset, int Width, int Height)
         {
             this.Parent = Parent;
             this.collidableReference = collidableReference;
@@ -34,7 +34,7 @@ namespace Mario_vNext.Core.Components
             this.Area = new Rectangle(Xoffset, Yoffset, Width, Height);
         }
 
-        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference)
+        public Collider(ObjectCore Parent, List<I3Dimensional> collidableReference)
         {
             this.Parent = Parent;
             this.collidableReference = collidableReference;
@@ -42,7 +42,7 @@ namespace Mario_vNext.Core.Components
             this.Area = new Rectangle(0, 0, Parent.width, Parent.height);
         }
 
-        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference, Rectangle Area)
+        public Collider(ObjectCore Parent, List<I3Dimensional> collidableReference, Rectangle Area)
         {
             this.Parent = Parent;
             this.collidableReference = collidableReference;
@@ -50,7 +50,7 @@ namespace Mario_vNext.Core.Components
             this.Area = Area;
         }
 
-        public Collider(ObjectCore Parent, xList<I3Dimensional> collidableReference, Point Coordinates, Size _Size)
+        public Collider(ObjectCore Parent, List<I3Dimensional> collidableReference, Point Coordinates, Size _Size)
         {
             this.Parent = Parent;
             this.collidableReference = collidableReference;

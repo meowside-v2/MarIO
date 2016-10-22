@@ -22,7 +22,7 @@ namespace Mario_vNext.Data.Scenes
         WorldObject newBlock = new WorldObject();
         Camera cam = new Camera();
 
-        xList<xList<I3Dimensional>> undo = new xList<xList<I3Dimensional>>();
+        List<List<I3Dimensional>> undo = new List<List<I3Dimensional>>();
 
         TextBlock posX = new TextBlock(1, 1, "GUI");
         TextBlock posY = new TextBlock(1, 7, "GUI");
@@ -143,7 +143,7 @@ namespace Mario_vNext.Data.Scenes
             cam.Init(-(Shared.RenderWidth / 2 - newBlock.width / 2), -(Shared.RenderHeight / 2 - newBlock.height / 2));
         }
         
-        private I3Dimensional BlockFinder(xList<I3Dimensional> model, int x, int y, int z)
+        private I3Dimensional BlockFinder(List<I3Dimensional> model, int x, int y, int z)
         {
             return model.Where(item => item.X == x && item.Y == y && item.Z == z).FirstOrDefault();
         }
@@ -194,7 +194,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockPlace()
         {
-            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            undo.Add(map.model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             WorldObject temp = new WorldObject();
@@ -209,7 +209,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockDelete()
         {
-            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            undo.Add(map.model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
@@ -265,7 +265,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void Fill()
         {
-            undo.Add((xList<I3Dimensional>)map.model.DeepCopy());
+            undo.Add(map.model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             int Xoffset = 0;
@@ -273,7 +273,7 @@ namespace Mario_vNext.Data.Scenes
             int Zoffset = newBlock.Z;
             ObjectDatabase.WorldObjects type = newBlock.Type;
 
-            xList<I3Dimensional> temp_List = new xList<I3Dimensional>(map.model);
+            List<I3Dimensional> temp_List = new List<I3Dimensional>(map.model);
 
             while (true)
             {
@@ -353,7 +353,7 @@ namespace Mario_vNext.Data.Scenes
         {
             if (undo.Count > 0)
             {
-                map.model = (xList<I3Dimensional>) undo[undo.Count - 1].DeepCopy();
+                map.model = undo[undo.Count - 1].ToList();
 
                 undo.Remove(undo[undo.Count - 1]);
             }

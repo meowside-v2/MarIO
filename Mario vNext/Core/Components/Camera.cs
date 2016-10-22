@@ -2,6 +2,7 @@
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -35,8 +36,8 @@ namespace Mario_vNext.Core.Components
 
         public World worldReference;
         public xRectangle borderReference;
-        public xList<I3Dimensional> GUI = new xList<I3Dimensional>();
-        public xList<I3Dimensional> exclusiveReference = new xList<I3Dimensional>();
+        public List<I3Dimensional> GUI = new List<I3Dimensional>();
+        public List<I3Dimensional> exclusiveReference = new List<I3Dimensional>();
 
         Thread Ren;
         Thread Buff;
@@ -151,12 +152,34 @@ namespace Mario_vNext.Core.Components
 
                 Array.Clear(_buffer, 0, _buffer.Length);
                 Array.Clear(_rendered, 0, _rendered.Length);
+
+                lock (GUI)
+                {
+                    foreach (ICore item in GUI)
+                    {
+                        item.Render(0, 0, _buffer, _rendered);
+                    }
+                }
                 
-                GUI.Render(0, 0, _buffer, _rendered);
-                
-                if (borderReference != null) borderReference.Render(Xoffset, Yoffset, _buffer, _rendered);
-                exclusiveReference.Render(Xoffset, Yoffset, _buffer, _rendered);
-                if (worldReference != null) worldReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                if (borderReference != null)
+                    lock (borderReference)
+                    {
+                        borderReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                    }
+
+                lock (exclusiveReference)
+                {
+                    foreach (ICore item in exclusiveReference)
+                    {
+                        item.Render(Xoffset, Yoffset, _buffer, _rendered);
+                    }
+                }
+
+                if (worldReference != null)
+                    lock (worldReference)
+                    {
+                        worldReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                    }
 
                 Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());
 

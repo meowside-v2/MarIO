@@ -80,7 +80,7 @@
     <Compile Include="Core\SystemExt\ObjectDatabase.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
     <Compile Include="Core\SystemExt\xGraphics.cs" />
-    <Compile Include="Core\SystemExt\xList.cs" />
+    <Compile Include="Core\SystemExt\ListExtension.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Data\Objects\WorldObject.cs" />
     <Compile Include="Data\Objects\ObjectCore.cs" />

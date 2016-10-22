@@ -1,6 +1,8 @@
 ﻿using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Data.Objects;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Mario_vNext.Core.SystemExt
 {
@@ -10,7 +12,7 @@ namespace Mario_vNext.Core.SystemExt
         private double _scaleY = 1;
         private double _scaleZ = 1;
 
-        xList<WorldObject> border = new xList<WorldObject>();
+        List<I3Dimensional> border = new List<I3Dimensional>();
 
         public int X { get; set; }
         public int Y { get; set; }
@@ -99,7 +101,41 @@ namespace Mario_vNext.Core.SystemExt
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            border.Render(x, y, bufferData, bufferKey);
+            List<I3Dimensional> temp;
+
+            lock (border)
+            {
+                temp = border.Where(item => Finder(item, x, y)).ToList();
+            }
+
+            while (temp.Count > 0 || !BufferIsFull(bufferKey))
+            {
+                int tempHeight = temp.Max(item => (item).Z);
+                List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
+
+                foreach (ICore item in toRender)
+                {
+                    item.Render(x, y, bufferData, bufferKey);
+                }
+
+                temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
+            }
+            //model.Render(x, y, bufferData, bufferKey);
+        }
+
+        private bool Finder(I3Dimensional obj, int x, int y)
+        {
+            return (obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight);
+        }
+
+        private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)
+        {
+            return (item1.Z > item2.Z);
+        }
+
+        private bool BufferIsFull(bool[] key)
+        {
+            return key.FirstOrDefault(ret => ret == false);
         }
     }
 }

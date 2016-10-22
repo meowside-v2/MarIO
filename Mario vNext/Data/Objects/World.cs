@@ -1,9 +1,12 @@
-﻿using Mario_vNext.Core.Exceptions;
+﻿using Mario_vNext.Core;
+using Mario_vNext.Core.Exceptions;
 using Mario_vNext.Core.Interfaces;
 using Mario_vNext.Core.SystemExt;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace Mario_vNext.Data.Objects
 {
@@ -12,7 +15,7 @@ namespace Mario_vNext.Data.Objects
         public double Gravity { get; set; }
         public string Level { get; set; }
 
-        public xList<I3Dimensional> model = new xList<I3Dimensional>();
+        public List<I3Dimensional> model = new List<I3Dimensional>();
 
         public Player player;
 
@@ -110,21 +113,48 @@ namespace Mario_vNext.Data.Objects
         public object DeepCopy()
         {
             World temp = (World) MemberwiseClone();
-            temp.model = new xList<I3Dimensional>();
-
-            for (int i = 0; i < this.model.Count; i++)
-            {
-                WorldObject temp_Block = (WorldObject)this.model[i];
-
-                temp.model.Add(new WorldObject(temp_Block.Type, temp_Block.X, temp_Block.Y, temp_Block.Z));
-            }
+            temp.model = model.ToList();
 
             return temp;
         }
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            model.Render(x, y, bufferData, bufferKey);
+            List<I3Dimensional> temp;
+
+            lock (model)
+            {
+                temp = model.Where(item => Finder(item, x, y)).ToList();
+            }
+            
+            while (temp.Count > 0 || !BufferIsFull(bufferKey))
+            {
+                int tempHeight = temp.Max(item => (item).Z);
+                List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
+
+                foreach (ICore item in toRender)
+                {
+                    item.Render(x, y, bufferData, bufferKey);
+                }
+
+                temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
+            }
+            //model.Render(x, y, bufferData, bufferKey);
+        }
+
+        private bool Finder(I3Dimensional obj, int x, int y)
+        {
+            return (obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight);
+        }
+
+        private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)
+        {
+            return (item1.Z > item2.Z);
+        }
+
+        private bool BufferIsFull(bool[] key)
+        {
+            return key.FirstOrDefault(ret => ret == false);
         }
     }
 }

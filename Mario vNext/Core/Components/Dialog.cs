@@ -26,7 +26,7 @@ namespace Mario_vNext.Core.Components
 
         public string Caption { get; set; }
 
-        protected xList<I3Dimensional> Content = new xList<I3Dimensional>();
+        protected List<I3Dimensional> Content = new List<I3Dimensional>();
 
         protected Material background;
 

@@ -22,7 +22,7 @@ namespace Mario_vNext.Core.Components
         protected VerticalAlignment _VA;
 
         protected string _stringText = "";
-        protected xList<Letter> _text = new xList<Letter>();
+        protected List<Letter> _text = new List<Letter>();
 
         protected double _scaleX = 1;
         protected double _scaleY = 1;
@@ -271,7 +271,7 @@ namespace Mario_vNext.Core.Components
         {
             _stringText = txt;
 
-            xList<Letter> retValue = new xList<Letter>();
+            List<Letter> retValue = new List<Letter>();
 
             int Xoffset = 0;
 
