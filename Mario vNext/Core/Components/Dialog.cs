@@ -26,9 +26,9 @@ namespace Mario_vNext.Core.Components
 
         public string Caption { get; set; }
 
-        xList<I3Dimensional> Content = new xList<I3Dimensional>();
+        protected xList<I3Dimensional> Content = new xList<I3Dimensional>();
 
-        Material background;
+        protected Material background;
 
         public object DeepCopy()
         {
