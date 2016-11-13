@@ -1,9 +1,10 @@
-﻿using Mario_vNext.Core.SystemExt;
+﻿using DKBasicEngine_1_0;
+using Mario_vNext.Core.SystemExt;
 using System;
 
 namespace Mario_vNext.Data.Objects
 {
-    class WorldObject : ObjectCore
+    class WorldObject : GameObject
     {
         public bool IsSecret { get; set; }
         public bool IsBonus { get; set; }

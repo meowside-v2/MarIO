@@ -1,8 +1,4 @@
-﻿using Mario_vNext.Core;
-using Mario_vNext.Core.Components;
-using Mario_vNext.Core.Exceptions;
-using Mario_vNext.Core.SystemExt;
-using Mario_vNext.Data.Objects;
+﻿using DKBasicEngine_1_0;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +14,7 @@ namespace Mario_vNext.Data.Scenes
         Keyboard keyboard = new Keyboard(40, 100, 40);
         Camera cam = new Camera();
 
-        World background = new World();
+        Scene background = new Scene();
 
         TextBlock nameTxt = new TextBlock()
         {
@@ -30,32 +26,6 @@ namespace Mario_vNext.Data.Scenes
             ScaleX = 2,
             ScaleY = 2,
             Text = "Level",
-            HasShadow = true
-        };
-
-        TextBlock widthTxt = new TextBlock()
-        {
-            X = 0,
-            Y = -20,
-            Z = (int)TextBlock.Layer.GUI,
-            HAlignment = TextBlock.HorizontalAlignment.Center,
-            VAlignment = TextBlock.VerticalAlignment.Center,
-            ScaleX = 2,
-            ScaleY = 2,
-            Text = "Width",
-            HasShadow = true
-        };
-
-        TextBlock heightTxt = new TextBlock()
-        {
-            X = 0,
-            Y = 20,
-            Z = (int)TextBlock.Layer.GUI,
-            HAlignment = TextBlock.HorizontalAlignment.Center,
-            VAlignment = TextBlock.VerticalAlignment.Center,
-            ScaleX = 2,
-            ScaleY = 2,
-            Text = "Height",
             HasShadow = true
         };
 
@@ -111,42 +81,14 @@ namespace Mario_vNext.Data.Scenes
             HasShadow = true
         };
 
-        TextBox _widthTxt = new TextBox()
-        {
-            AllowedChars = TextBox.Type.Numerical,
-            X = 0,
-            Y = -5,
-            Z = (int)TextBlock.Layer.GUI,
-            HAlignment = TextBlock.HorizontalAlignment.Center,
-            VAlignment = TextBlock.VerticalAlignment.Center,
-            ScaleX = 1,
-            ScaleY = 1,
-            Text = "",
-            HasShadow = true
-        };
-
-        TextBox _heightTxt = new TextBox()
-        {
-            AllowedChars = TextBox.Type.Numerical,
-            X = 0,
-            Y = 35,
-            Z = (int)TextBlock.Layer.GUI,
-            HAlignment = TextBlock.HorizontalAlignment.Center,
-            VAlignment = TextBlock.VerticalAlignment.Center,
-            ScaleX = 1,
-            ScaleY = 1,
-            Text = "",
-            HasShadow = true
-        };
-
         int textblockSelection = 0;
         bool returnToEdit = false;
 
-        World referenceToWorld;
+        Scene referenceToWorld;
 
         public NewWorld() { }
 
-        public void Init(World worldReference)
+        public void Init(Scene worldReference)
         {
             referenceToWorld = worldReference;
 
@@ -159,10 +101,10 @@ namespace Mario_vNext.Data.Scenes
 
             keyboard.Start();
 
-            background.Init(@"Data\Worlds\WorldEditor.WORLD", World.Mode.Game);
+            //background.Init(@"Data\Worlds\WorldEditor.WORLD", Scene.Mode.Game);
 
-            cam.worldReference = background;
-            cam.GUI.AddAll(nameTxt, widthTxt, heightTxt, selectionTxt, selectionTxt2, returnTxt, _nameTxt, _widthTxt, _heightTxt);
+            cam.sceneReference = background;
+            cam.GUI.AddAll(nameTxt, selectionTxt, selectionTxt2, returnTxt, _nameTxt);
 
             textblockSelection = 0;
             NewSelectionPosition();
@@ -179,13 +121,8 @@ namespace Mario_vNext.Data.Scenes
 
             referenceToWorld = null;
             background = null;
-
-            _heightTxt = null;
+            
             _nameTxt = null;
-            _widthTxt = null;
-
-            heightTxt = null;
-            widthTxt = null;
             nameTxt = null;
             returnTxt = null;
         }
@@ -201,7 +138,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void MoveDown()
         {
-            if (textblockSelection < 3)
+            if (textblockSelection < 1)
             {
                 textblockSelection++;
                 NewSelectionPosition();
@@ -217,11 +154,9 @@ namespace Mario_vNext.Data.Scenes
             {
                 try
                 {
-                    referenceToWorld.New(int.Parse(_heightTxt.Text),
-                                         int.Parse(_widthTxt.Text),
-                                         _nameTxt.Text);
+                    referenceToWorld.New(_nameTxt.Text);
                 }
-                catch (WorldInitFailedException ex)
+                catch (SceneInitFailedException ex)
                 {
                     System.Windows.Forms.MessageBox.Show(ex.Message);
                     return;
@@ -248,14 +183,6 @@ namespace Mario_vNext.Data.Scenes
                     break;
 
                 case 1:
-                    reference = _widthTxt;
-                    break;
-
-                case 2:
-                    reference = _heightTxt;
-                    break;
-
-                case 3:
                     reference = returnTxt;
                     break;
             }
@@ -281,14 +208,6 @@ namespace Mario_vNext.Data.Scenes
                     case 0:
                         _nameTxt.Text = _nameTxt.Text + key;
                         break;
-
-                    case 1:
-                        _widthTxt.Text = _widthTxt.Text + key;
-                        break;
-
-                    case 2:
-                        _heightTxt.Text = _heightTxt.Text + key;
-                        break;
                 }
             }
 
@@ -301,14 +220,6 @@ namespace Mario_vNext.Data.Scenes
             {
                 case 0:
                     _nameTxt.RemoveLastLetter();
-                    break;
-
-                case 1:
-                    _widthTxt.RemoveLastLetter();
-                    break;
-
-                case 2:
-                    _heightTxt.RemoveLastLetter();
                     break;
             }
 

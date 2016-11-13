@@ -1,5 +1,4 @@
-﻿using Mario_vNext.Core.Interfaces;
-using Mario_vNext.Core.SystemExt;
+﻿using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mario_vNext.Core.Components
 {
-    abstract class Dialog : ICore, I3Dimensional
+    /*abstract class Dialog : ICore, I3Dimensional
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -30,10 +29,7 @@ namespace Mario_vNext.Core.Components
 
         protected Material background;
 
-        public object DeepCopy()
-        {
-            return MemberwiseClone();
-        }
+        protected Keyboard Control = new Keyboard(null, 100, null);
 
         public void Render(int X, int Y, byte[] bufferData, bool[] bufferKey)
         {
@@ -48,6 +44,8 @@ namespace Mario_vNext.Core.Components
 
     class BlockDialog : Dialog
     {
+        private int selection = 0;
+
         WorldObject toChange = new WorldObject();
 
         TextBlock coordX = new TextBlock()
@@ -69,5 +67,101 @@ namespace Mario_vNext.Core.Components
             Text = "Y",
             HasShadow = true
         };
-    }
+
+        TextBlock objectType = new TextBlock()
+        {
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            VAlignment = TextBlock.VerticalAlignment.Top,
+            X = 2,
+            Y = 60,
+            Text = "Type",
+            HasShadow = true
+        };
+
+        TextBlock OK = new TextBlock()
+        {
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            VAlignment = TextBlock.VerticalAlignment.Top,
+            X = 2,
+            Y = 100,
+            Text = "Type",
+            HasShadow = true
+        };
+
+        TextBlock Cancel = new TextBlock()
+        {
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            VAlignment = TextBlock.VerticalAlignment.Top,
+            X = 40,
+            Y = 100,
+            Text = "Type",
+            HasShadow = true
+        };
+
+        TextBlock SelLeft = new TextBlock()
+        {
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            VAlignment = TextBlock.VerticalAlignment.Top,
+            X = 0,
+            Y = 0,
+            Text = "-",
+            HasShadow = true
+        };
+
+        TextBlock SelRight = new TextBlock()
+        {
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            VAlignment = TextBlock.VerticalAlignment.Top,
+            X = 0,
+            Y = 0,
+            Text = "-",
+            HasShadow = true
+        };
+
+        public BlockDialog(WorldObject reference)
+        {
+            this.Content.AddAll(coordX, coordY, objectType, OK, Cancel);
+
+
+        }
+
+        public void ChangeCursorPosition()
+        {
+            switch (selection)
+            {
+                case 0:
+                    break;
+
+                case 1:
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    break;
+            }
+        }
+
+        private void MoveCursorUp()
+        {
+            if(selection > 0)
+            {
+                selection--;
+                ChangeCursorPosition();
+            }
+        }
+
+        private void MoveCursorDown()
+        {
+            if(selection < 4)
+            {
+                selection++;
+                ChangeCursorPosition();
+            }
+        }
+    }*/
 }

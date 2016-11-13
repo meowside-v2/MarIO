@@ -50,6 +50,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DKBasicEngine 1.0, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DKBasicEngine 1.0\bin\Release\DKBasicEngine 1.0.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -63,29 +67,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Components\Camera.cs" />
-    <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Dialog.cs" />
-    <Compile Include="Core\Components\Letter.cs" />
-    <Compile Include="Core\Components\Material.cs" />
-    <Compile Include="Core\Components\Physics.cs" />
-    <Compile Include="Core\Components\TextBox.cs" />
-    <Compile Include="Core\Components\TextBlock.cs" />
-    <Compile Include="Core\Exceptions\WorldInitFailedException.cs" />
-    <Compile Include="Core\Interfaces\I3Dimensional.cs" />
-    <Compile Include="Core\Interfaces\ICore.cs" />
-    <Compile Include="Core\Interfaces\IGraphics.cs" />
-    <Compile Include="Core\Shared.cs" />
-    <Compile Include="Core\SystemExt\Keyboard.cs" />
     <Compile Include="Core\SystemExt\ObjectDatabase.cs" />
-    <Compile Include="Core\SystemExt\WindowControl.cs" />
-    <Compile Include="Core\SystemExt\xGraphics.cs" />
-    <Compile Include="Core\SystemExt\ListExtension.cs" />
-    <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Data\Objects\WorldObject.cs" />
-    <Compile Include="Data\Objects\ObjectCore.cs" />
     <Compile Include="Data\Objects\Player.cs" />
-    <Compile Include="Data\Objects\World.cs" />
     <Compile Include="Data\Scenes\NewWorld.cs" />
     <Compile Include="Data\Scenes\WorldEditor.cs" />
     <Compile Include="Program.cs" />

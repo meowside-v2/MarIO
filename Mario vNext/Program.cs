@@ -1,4 +1,5 @@
-﻿using Mario_vNext.Core;
+﻿using DKBasicEngine_1_0;
+
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Scenes;
 
@@ -11,6 +12,7 @@ namespace Mario_vNext
             WindowControl mainWindow = new WindowControl();
             mainWindow.WindowInit();
 
+            Database.InitDatabase();
             ObjectDatabase.Init();
 
             //Test test = new Test();

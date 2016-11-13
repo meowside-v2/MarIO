@@ -1,21 +1,19 @@
-﻿using Mario_vNext.Core.Components;
-using Mario_vNext.Core.Interfaces;
-using Mario_vNext.Core.SystemExt;
-using System.Threading;
+﻿using DKBasicEngine_1_0;
 using System.Threading.Tasks;
+
 
 namespace Mario_vNext.Data.Objects
 {
-    class Player : ObjectCore
+    class Player : GameObject
     {
         Physics basicPhysics;
         Keyboard keyboard;
 
-        World Parent; 
+        Scene Parent; 
             
         private bool Jumped = false;
         
-        public void Init(World Parent, int X, int Y, int Z)
+        public void Init(Scene Parent, int X, int Y, int Z)
         {
             this.X = X;
             this.Y = Y;
@@ -23,7 +21,7 @@ namespace Mario_vNext.Data.Objects
 
             this.Parent = Parent;
 
-            collider = new Collider(this, Parent.model);
+            collider = new Collider(this, Parent.Model);
             basicPhysics = new Physics(this, collider);
             keyboard = new Keyboard(100, 100, 100);
 

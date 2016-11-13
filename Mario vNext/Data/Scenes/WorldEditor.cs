@@ -1,7 +1,4 @@
-﻿using Mario_vNext.Core;
-using Mario_vNext.Core.Components;
-using Mario_vNext.Core.Exceptions;
-using Mario_vNext.Core.Interfaces;
+﻿using DKBasicEngine_1_0;
 using Mario_vNext.Core.SystemExt;
 using Mario_vNext.Data.Objects;
 using System;
@@ -18,7 +15,7 @@ namespace Mario_vNext.Data.Scenes
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         Keyboard keyboard = new Keyboard(100, 100, 100);
-        World map = new World();
+        Scene map = new Scene();
         WorldObject newBlock = new WorldObject();
         Camera cam = new Camera();
 
@@ -86,9 +83,9 @@ namespace Mario_vNext.Data.Scenes
                 try
                 {
                     int select = int.Parse(Console.ReadLine());
-                    map.Init(files[select], World.Mode.Edit);
+                    map.Init(files[select], Scene.Mode.Edit);
                 }
-                catch (WorldInitFailedException e)
+                catch (SceneInitFailedException e)
                 {
                     MessageBox.Show(e.Message);
                     Environment.Exit(-1);
@@ -135,17 +132,17 @@ namespace Mario_vNext.Data.Scenes
 
             cam.exclusiveReference.Add(newBlock);
 
-            xRectangle border = new xRectangle(-8, -8, 32, map.Width, map.Height);
+            //xRectangle border = new xRectangle(-8, -8, 32, map.Width, map.Height);
 
-            cam.borderReference = border;
-            cam.worldReference = map;
+            //cam.borderReference = border;
+            cam.sceneReference = map;
 
             cam.Init(-(Shared.RenderWidth / 2 - newBlock.width / 2), -(Shared.RenderHeight / 2 - newBlock.height / 2));
         }
         
-        private I3Dimensional BlockFinder(List<I3Dimensional> model, int x, int y, int z)
+        private I3Dimensional BlockFinder(List<I3Dimensional> Model, int x, int y, int z)
         {
-            return model.Where(item => item.X == x && item.Y == y && item.Z == z).FirstOrDefault();
+            return Model.Where(item => item.X == x && item.Y == y && item.Z == z).FirstOrDefault();
         }
 
         private void BlockMoveUp()
@@ -161,13 +158,10 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockMoveDown()
         {
-            if (newBlock.Y + newBlock.height < map.Height)
-            {
-                newBlock.Y += 8;
-                posY.Text = string.Format("Y {0}", newBlock.Y);
+            newBlock.Y += 8;
+            posY.Text = string.Format("Y {0}", newBlock.Y);
 
-                cam.Yoffset += 8;
-            }
+            cam.Yoffset += 8;
         }
 
         private void BlockMoveLeft()
@@ -183,36 +177,33 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockMoveRight()
         {
-            if (newBlock.X + newBlock.width < map.Width)
-            {
-                newBlock.X += 8;
-                posX.Text = string.Format("X {0}", newBlock.X);
+            newBlock.X += 8;
+            posX.Text = string.Format("X {0}", newBlock.X);
 
-                cam.Xoffset += 8;
-            }
+            cam.Xoffset += 8;
         }
 
         private void BlockPlace()
         {
-            undo.Add(map.model.ToList());
+            undo.Add(map.Model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             WorldObject temp = new WorldObject();
 
             temp = (WorldObject)newBlock.DeepCopy();
 
-            map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
-            map.model.Add(temp);
+            map.Model.Remove(BlockFinder(map.Model, newBlock.X, newBlock.Y, newBlock.Z));
+            map.Model.Add(temp);
 
             newBlock.Type = (ObjectDatabase.WorldObjects)selected;
         }
 
         private void BlockDelete()
         {
-            undo.Add(map.model.ToList());
+            undo.Add(map.Model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
-            map.model.Remove(BlockFinder(map.model, newBlock.X, newBlock.Y, newBlock.Z));
+            map.Model.Remove(BlockFinder(map.Model, newBlock.X, newBlock.Y, newBlock.Z));
         }
 
         private void BlockSwitchLeft()
@@ -265,7 +256,7 @@ namespace Mario_vNext.Data.Scenes
 
         private void Fill()
         {
-            undo.Add(map.model.ToList());
+            /*undo.Add(map.Model.ToList());
             if (undo.Count > undoMaxCapacity) undo.Remove(undo[0]);
 
             int Xoffset = 0;
@@ -273,7 +264,7 @@ namespace Mario_vNext.Data.Scenes
             int Zoffset = newBlock.Z;
             ObjectDatabase.WorldObjects type = newBlock.Type;
 
-            List<I3Dimensional> temp_List = new List<I3Dimensional>(map.model);
+            List<I3Dimensional> temp_List = new List<I3Dimensional>(map.Model);
 
             while (true)
             {
@@ -288,7 +279,7 @@ namespace Mario_vNext.Data.Scenes
 
                 if (Xoffset + newBlock.width >= map.Width && Yoffset + newBlock.height > map.Height)
                 {
-                    map.model = temp_List;
+                    map.Model = temp_List;
                     return;
                 }
 
@@ -297,7 +288,7 @@ namespace Mario_vNext.Data.Scenes
                     Yoffset = 0;
                     Xoffset += newBlock.width;
                 }
-            }
+            }*/
         }
 
         private void Save()
@@ -308,7 +299,7 @@ namespace Mario_vNext.Data.Scenes
 
             try
             {
-                bw = new BinaryWriter(new FileStream("Data\\Worlds\\" + map.Level + ".WORLD", FileMode.Create));
+                bw = new BinaryWriter(new FileStream("Data\\Worlds\\" + map.Name + ".WORLD", FileMode.Create));
             }
             catch (IOException e)
             {
@@ -319,18 +310,15 @@ namespace Mario_vNext.Data.Scenes
             try
             {
 
-                bw.Write(map.Level);
-                bw.Write(map.Width);
-                bw.Write(map.Height);
-                bw.Write(map.Gravity);
+                bw.Write(map.Name);
 
                 bw.Write(map.PlayerSpawnX);
                 bw.Write(map.PlayerSpawnY);
                 bw.Write(map.PlayerSpawnZ);
 
-                bw.Write(map.model.Count);
+                bw.Write(map.Model.Count);
 
-                foreach (WorldObject item in map.model)
+                foreach (WorldObject item in map.Model)
                 {
                     bw.Write((int)item.Type);
                     bw.Write(item.X);
@@ -353,7 +341,7 @@ namespace Mario_vNext.Data.Scenes
         {
             if (undo.Count > 0)
             {
-                map.model = undo[undo.Count - 1].ToList();
+                map.Model = undo[undo.Count - 1].ToList();
 
                 undo.Remove(undo[undo.Count - 1]);
             }
