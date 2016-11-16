@@ -50,9 +50,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DKBasicEngine 1.0, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DKBasicEngine 1.0\bin\Release\DKBasicEngine 1.0.dll</HintPath>
+    <Reference Include="DKBasicEngine 1.0">
+      <HintPath>..\..\DKBasicEngine-1.0\DKBasicEngine 1.0\bin\Debug\DKBasicEngine 1.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,97 +67,100 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Components\Dialog.cs" />
-    <Compile Include="Core\SystemExt\ObjectDatabase.cs" />
     <Compile Include="Data\Objects\WorldObject.cs" />
     <Compile Include="Data\Objects\Player.cs" />
     <Compile Include="Data\Scenes\NewWorld.cs" />
     <Compile Include="Data\Scenes\WorldEditor.cs" />
+    <Compile Include="Data\Sprites.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sprites.resx</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Data\Font\font.psd" />
     <None Include="Data\MarioBlockSpriteFile.MEX" />
     <None Include="Data\Sprites\blocks_project.psd" />
     <None Include="Data\WorldEditor.WORLD" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Font\0.png" />
-    <Content Include="Data\Font\1.png" />
-    <Content Include="Data\Font\2.png" />
-    <Content Include="Data\Font\3.png" />
-    <Content Include="Data\Font\4.png" />
-    <Content Include="Data\Font\5.png" />
-    <Content Include="Data\Font\6.png" />
-    <Content Include="Data\Font\7.png" />
-    <Content Include="Data\Font\8.png" />
-    <Content Include="Data\Font\9.png" />
-    <Content Include="Data\Font\A.png" />
-    <Content Include="Data\Font\B.png" />
-    <Content Include="Data\Font\C.png" />
-    <Content Include="Data\Font\D.png" />
-    <Content Include="Data\Font\E.png" />
-    <Content Include="Data\Font\F.png" />
-    <Content Include="Data\Font\G.png" />
-    <Content Include="Data\Font\H.png" />
-    <Content Include="Data\Font\I.png" />
-    <Content Include="Data\Font\J.png" />
-    <Content Include="Data\Font\K.png" />
-    <Content Include="Data\Font\L.png" />
-    <Content Include="Data\Font\M.png" />
-    <Content Include="Data\Font\minus.png" />
-    <Content Include="Data\Font\N.png" />
-    <Content Include="Data\Font\O.png" />
-    <Content Include="Data\Font\P.png" />
-    <Content Include="Data\Font\Q.png" />
-    <Content Include="Data\Font\R.png" />
-    <Content Include="Data\Font\S.png" />
-    <Content Include="Data\Font\space.png" />
-    <Content Include="Data\Font\T.png" />
-    <Content Include="Data\Font\U.png" />
-    <Content Include="Data\Font\V.png" />
-    <Content Include="Data\Font\W.png" />
-    <Content Include="Data\Font\X.png" />
-    <Content Include="Data\Font\Y.png" />
-    <Content Include="Data\Font\Z.png" />
-    <Content Include="Data\Sprites\border.png" />
-    <Content Include="Data\Sprites\ColorPalette.png" />
-    <Content Include="Data\Sprites\Ground\block_01.png" />
-    <Content Include="Data\Sprites\Ground\block_02.png" />
-    <Content Include="Data\Sprites\Ground\block_03.png" />
-    <Content Include="Data\Sprites\Ground\block_04.png" />
-    <Content Include="Data\Sprites\Ground\bridge.png" />
-    <Content Include="Data\Sprites\Ground\bush_01.png" />
-    <Content Include="Data\Sprites\Ground\bush_02.png" />
-    <Content Include="Data\Sprites\Ground\bush_03.png" />
-    <Content Include="Data\Sprites\Ground\bush_small.png" />
-    <Content Include="Data\Sprites\Ground\castle_big.png" />
-    <Content Include="Data\Sprites\Ground\castle_small.png" />
-    <Content Include="Data\Sprites\Ground\cloud_01.png" />
-    <Content Include="Data\Sprites\Ground\cloud_02.png" />
-    <Content Include="Data\Sprites\Ground\cloud_03.png" />
-    <Content Include="Data\Sprites\Ground\fence.png" />
-    <Content Include="Data\Sprites\Ground\finish_flag.png" />
-    <Content Include="Data\Sprites\Ground\finish_pole.png" />
-    <Content Include="Data\Sprites\Ground\mountain.png" />
-    <Content Include="Data\Sprites\Ground\sky_07.png" />
-    <Content Include="Data\Sprites\Ground\water_01.png" />
-    <Content Include="Data\Sprites\Ground\water_02.png" />
+    <None Include="Data\Sprites\Underground\block_041.png" />
+    <None Include="Data\Sprites\Underground\block_031.png" />
+    <None Include="Data\Sprites\Underground\block_021.png" />
+    <None Include="Data\Sprites\Underground\block_011.png" />
+    <None Include="Data\Sprites\Underground\background_021.png" />
+    <None Include="Data\Sprites\Underground\background_011.png" />
+    <None Include="Data\Sprites\Pipes\pipe_051.png" />
+    <None Include="Data\Sprites\Pipes\pipe_041.png" />
+    <None Include="Data\Sprites\Pipes\pipe_031.png" />
+    <None Include="Data\Sprites\Pipes\pipe_021.png" />
+    <None Include="Data\Sprites\Pipes\pipe_011.png" />
+    <EmbeddedResource Include="Data\Sprites.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Sprites.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Sprites\Ground\block_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\block_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\block_03.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\block_04.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\bridge.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\bush_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\bush_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\bush_03.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\bush_small.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\castle_big.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\castle_small.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\cloud_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\cloud_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\cloud_03.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\fence.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\finish_flag.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\finish_pole.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\mountain.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\sky_07.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\water_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Ground\water_02.png" />
+    <None Include="Data\Sprites\Ground\block_011.png" />
+    <None Include="Data\Sprites\Ground\block_021.png" />
+    <None Include="Data\Sprites\Ground\block_031.png" />
+    <None Include="Data\Sprites\Ground\block_041.png" />
+    <None Include="Data\Sprites\Ground\bridge1.png" />
+    <None Include="Data\Sprites\Ground\bush_011.png" />
+    <None Include="Data\Sprites\Ground\bush_021.png" />
+    <None Include="Data\Sprites\Ground\bush_031.png" />
+    <None Include="Data\Sprites\Ground\bush_small1.png" />
+    <None Include="Data\Sprites\Ground\castle_big1.png" />
+    <None Include="Data\Sprites\Ground\castle_small1.png" />
+    <None Include="Data\Sprites\Ground\cloud_011.png" />
+    <None Include="Data\Sprites\Ground\cloud_021.png" />
+    <None Include="Data\Sprites\Ground\cloud_031.png" />
+    <None Include="Data\Sprites\Ground\fence1.png" />
+    <None Include="Data\Sprites\Ground\finish_flag1.png" />
+    <None Include="Data\Sprites\Ground\finish_pole1.png" />
+    <None Include="Data\Sprites\Ground\mountain1.png" />
+    <None Include="Data\Sprites\Ground\sky_071.png" />
+    <None Include="Data\Sprites\Ground\water_011.png" />
+    <None Include="Data\Sprites\Ground\water_021.png" />
     <Content Include="Data\Sprites\mario_12x16.png" />
-    <Content Include="Data\Sprites\Pipes\pipe_01.png" />
-    <Content Include="Data\Sprites\Pipes\pipe_02.png" />
-    <Content Include="Data\Sprites\Pipes\pipe_03.png" />
-    <Content Include="Data\Sprites\Pipes\pipe_04.png" />
-    <Content Include="Data\Sprites\Pipes\pipe_05.png" />
-    <Content Include="Data\Sprites\Underground\background_01.png" />
-    <Content Include="Data\Sprites\Underground\background_02.png" />
-    <Content Include="Data\Sprites\Underground\block_01.png" />
-    <Content Include="Data\Sprites\Underground\block_02.png" />
-    <Content Include="Data\Sprites\Underground\block_03.png" />
-    <Content Include="Data\Sprites\Underground\block_04.png" />
-    <Content Include="Data\Sprites\world_test.png" />
+    <EmbeddedResource Include="Data\Sprites\Pipes\pipe_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Pipes\pipe_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Pipes\pipe_03.png" />
+    <EmbeddedResource Include="Data\Sprites\Pipes\pipe_04.png" />
+    <EmbeddedResource Include="Data\Sprites\Pipes\pipe_05.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\background_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\background_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\block_01.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\block_02.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\block_03.png" />
+    <EmbeddedResource Include="Data\Sprites\Underground\block_04.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -174,6 +176,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

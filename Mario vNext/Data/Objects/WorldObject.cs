@@ -1,6 +1,4 @@
 ﻿using DKBasicEngine_1_0;
-using Mario_vNext.Core.SystemExt;
-using System;
 
 namespace Mario_vNext.Data.Objects
 {
@@ -10,9 +8,9 @@ namespace Mario_vNext.Data.Objects
         public bool IsBonus { get; set; }
         public bool IsDestroyable { get; set; }
 
-        private ObjectDatabase.WorldObjects _type;
+        private string _type;
 
-        public ObjectDatabase.WorldObjects Type
+        public string Type
         {
             get
             {
@@ -28,26 +26,26 @@ namespace Mario_vNext.Data.Objects
 
         public WorldObject() { }
 
-        public WorldObject(ObjectDatabase.WorldObjects type, int x, int y, int z)
+        public WorldObject(string Type, int x, int y, int z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
 
-            this.Type = type;
+            this.Type = Type;
         }
 
-        private void BlockTypeSet(ObjectDatabase.WorldObjects type)
+        private void BlockTypeSet(string Type)
         {
 
-            switch (type)
+            switch (Type)
             {
-                case ObjectDatabase.WorldObjects.BlockGround1:
+                case "":
                     IsSecret = false;
                     IsBonus = false;
                     IsDestroyable = false;
 
-                    model = ObjectDatabase.worldObjectsMaterial[(int)ObjectDatabase.WorldObjects.BlockGround1];
+                    model = Database.GetGameObjectMaterial(Type);    //ObjectDatabase.worldObjectsMaterial[(int)ObjectDatabase.WorldObjects.BlockGround1];
                     break;
                 case ObjectDatabase.WorldObjects.BlockGround2:
                     IsSecret = false;
