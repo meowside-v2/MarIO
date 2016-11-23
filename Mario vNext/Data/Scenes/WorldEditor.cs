@@ -1,5 +1,5 @@
 ﻿using DKBasicEngine_1_0;
-using Mario_vNext.Core.SystemExt;
+
 using Mario_vNext.Data.Objects;
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,10 @@ using System.Windows.Forms;
 
 namespace Mario_vNext.Data.Scenes
 {
-    class WorldEditor
+    class WorldEditor : ICore
     {
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-        Keyboard keyboard = new Keyboard(100, 100, 100);
         Scene map = new Scene();
         WorldObject newBlock = new WorldObject();
         Camera cam = new Camera();
@@ -25,7 +24,7 @@ namespace Mario_vNext.Data.Scenes
         TextBlock posY = new TextBlock(1, 7, "GUI");
         TextBlock posZ = new TextBlock(1, 13, "GUI");
 
-        private int selected = 0;
+        private int selected = Database.GetMaterialDatabasePosition("block_01");
         private int undoMaxCapacity = 50;
 
         public void Start()
@@ -103,24 +102,9 @@ namespace Mario_vNext.Data.Scenes
 
         private void Init()
         {
-            keyboard.onWKey = this.BlockMoveUp;
-            keyboard.onSKey = this.BlockMoveDown;
-            keyboard.onAKey = this.BlockMoveLeft;
-            keyboard.onDKey = this.BlockMoveRight;
-            keyboard.onQKey = this.BlockSwitchLeft;
-            keyboard.onEKey = this.BlockSwitchRight;
-            keyboard.onFKey = this.Fill;
-            keyboard.onZKey = this.Undo;
-            keyboard.onDeleteKey = this.BlockDelete;
-            keyboard.onBackSpaceKey = this.BlockDelete;
-            keyboard.onPageUpKey = this.LayerUp;
-            keyboard.onPageDownKey = this.LayerDown;
-            keyboard.onEnterKey = this.BlockPlace;
-            keyboard.onInsertKey = this.Save;
+            
 
-            keyboard.Start();
-
-            newBlock = new WorldObject((ObjectDatabase.WorldObjects)selected, 0, 0, 0);
+            newBlock = new WorldObject(Database.GetMaterialDatabaseKey(selected), 0, 0, 0);
 
             posX.Text = string.Format("X {0}", newBlock.X);
             posY.Text = string.Format("Y {0}", newBlock.Y);
@@ -137,10 +121,10 @@ namespace Mario_vNext.Data.Scenes
             //cam.borderReference = border;
             cam.sceneReference = map;
 
-            cam.Init(-(Shared.RenderWidth / 2 - newBlock.width / 2), -(Shared.RenderHeight / 2 - newBlock.height / 2));
+            cam.Init(-(int)(Engine.Render.RenderWidth / 2 - newBlock.width / 2), -(int)(Engine.Render.RenderHeight / 2 - newBlock.height / 2));
         }
         
-        private I3Dimensional BlockFinder(List<I3Dimensional> Model, int x, int y, int z)
+        private I3Dimensional BlockFinder(List<I3Dimensional> Model, double x, double y, double z)
         {
             return Model.Where(item => item.X == x && item.Y == y && item.Z == z).FirstOrDefault();
         }
@@ -195,7 +179,7 @@ namespace Mario_vNext.Data.Scenes
             map.Model.Remove(BlockFinder(map.Model, newBlock.X, newBlock.Y, newBlock.Z));
             map.Model.Add(temp);
 
-            newBlock.Type = (ObjectDatabase.WorldObjects)selected;
+            newBlock.Type = Database.GetMaterialDatabaseKey(selected);
         }
 
         private void BlockDelete()
@@ -208,13 +192,13 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockSwitchLeft()
         {
-            if (selected > 0)
+            if (selected > Database.GetMaterialDatabasePosition("block_01"))
             {
                 newBlock.X += newBlock.width / 2;
                 newBlock.Y += newBlock.height / 2;
 
                 selected--;
-                newBlock.Type = (ObjectDatabase.WorldObjects)selected;
+                newBlock.Type = Database.GetMaterialDatabaseKey(selected);
 
                 newBlock.X -= newBlock.width / 2;
                 newBlock.Y -= newBlock.height / 2;
@@ -223,13 +207,13 @@ namespace Mario_vNext.Data.Scenes
 
         private void BlockSwitchRight()
         {
-            if (selected < (int)ObjectDatabase.WorldObjects.Pipe5)
+            if (selected < Database.GetMaterialDatabasePosition("water_02"))
             {
                 newBlock.X += newBlock.width / 2;
                 newBlock.Y += newBlock.height / 2;
 
                 selected++;
-                newBlock.Type = (ObjectDatabase.WorldObjects)selected;
+                newBlock.Type = Database.GetMaterialDatabaseKey(selected);
 
                 newBlock.X -= newBlock.width / 2;
                 newBlock.Y -= newBlock.height / 2;
@@ -293,8 +277,6 @@ namespace Mario_vNext.Data.Scenes
 
         private void Save()
         {
-            keyboard.Abort();
-
             BinaryWriter bw;
 
             try
@@ -320,7 +302,7 @@ namespace Mario_vNext.Data.Scenes
 
                 foreach (WorldObject item in map.Model)
                 {
-                    bw.Write((int)item.Type);
+                    bw.Write(item.Type);
                     bw.Write(item.X);
                     bw.Write(item.Y);
                     bw.Write(item.Z);
@@ -333,8 +315,6 @@ namespace Mario_vNext.Data.Scenes
             }
 
             bw.Close();
-
-            keyboard.Start();
         }
 
         private void Undo()
@@ -345,6 +325,74 @@ namespace Mario_vNext.Data.Scenes
 
                 undo.Remove(undo[undo.Count - 1]);
             }
+        }
+
+        public void Update()
+        {
+            if (Engine.Input.IsKeyPressed(ConsoleKey.W))
+            {
+                this.BlockMoveUp();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.S))
+            {
+                this.BlockMoveDown();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.A))
+            {
+                this.BlockMoveLeft();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.D))
+            {
+                this.BlockMoveRight();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.Q))
+            {
+                this.BlockSwitchLeft();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.E))
+            {
+                this.BlockSwitchRight();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.Z))
+            {
+                this.Undo();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.Delete) || Engine.Input.IsKeyPressed(ConsoleKey.Backspace))
+            {
+                this.BlockDelete();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.PageUp))
+            {
+                this.LayerUp();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.PageDown))
+            {
+                this.LayerDown();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.Enter))
+            {
+                this.BlockPlace();
+            }
+
+            if (Engine.Input.IsKeyPressed(ConsoleKey.Insert))
+            {
+                this.Save();
+            }
+        }
+
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace Mario_vNext.Data.Scenes
 {
-    class NewWorld
+    class NewWorld : ICore
     {
-        Keyboard keyboard = new Keyboard(40, 100, 40);
         Camera cam = new Camera();
 
         Scene background = new Scene();
@@ -91,16 +90,7 @@ namespace Mario_vNext.Data.Scenes
         public void Init(Scene worldReference)
         {
             referenceToWorld = worldReference;
-
-            keyboard.onUpArrowKey = this.MoveUp;
-            keyboard.onDownArrowKey = this.MoveDown;
-            keyboard.onEnterKey = this.EnterDoStuff;
-            keyboard.onBackSpaceKey = this.RemoveLetter;
-
-            keyboard.onAlphaNumericalKeys(GetLetter);
-
-            keyboard.Start();
-
+            
             //background.Init(@"Data\Worlds\WorldEditor.WORLD", Scene.Mode.Game);
 
             cam.sceneReference = background;
@@ -116,7 +106,6 @@ namespace Mario_vNext.Data.Scenes
 
         public void Destroy()
         {
-            keyboard.Abort();
             cam.Abort();
 
             referenceToWorld = null;
@@ -201,7 +190,7 @@ namespace Mario_vNext.Data.Scenes
         {
             char key = Console.ReadKey(true).KeyChar;
             
-            if (!Char.IsWhiteSpace(key) && !Shared.IsEscapeSequence(key) || key == ' ')
+            if (!Char.IsWhiteSpace(key) && !key.IsEscapeSequence() || key == ' ')
             {
                 switch (textblockSelection)
                 {
@@ -224,6 +213,30 @@ namespace Mario_vNext.Data.Scenes
             }
 
             NewSelectionPosition();
+        }
+
+        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Start()
+        {
+            
+        }
+
+        public void Update()
+        {
+            /*
+             keyboard.onUpArrowKey = this.MoveUp;
+            keyboard.onDownArrowKey = this.MoveDown;
+            keyboard.onEnterKey = this.EnterDoStuff;
+            keyboard.onBackSpaceKey = this.RemoveLetter;
+
+            keyboard.onAlphaNumericalKeys(GetLetter);
+             */
+
+            if()
         }
     }
 }

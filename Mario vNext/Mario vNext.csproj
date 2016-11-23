@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DKBasicEngine 1.0">
-      <HintPath>..\..\DKBasicEngine-1.0\DKBasicEngine 1.0\bin\Debug\DKBasicEngine 1.0.dll</HintPath>
+      <HintPath>..\..\DKBasicEngine-1.0\DKBasicEngine 1.0\bin\Release\DKBasicEngine 1.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

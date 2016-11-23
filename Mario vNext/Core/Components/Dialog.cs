@@ -1,11 +1,4 @@
-﻿using Mario_vNext.Core.SystemExt;
-using Mario_vNext.Data.Objects;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Mario_vNext.Core.Components
 {

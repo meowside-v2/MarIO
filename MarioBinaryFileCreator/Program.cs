@@ -15,8 +15,8 @@ namespace MarioBinaryFileCreator
         static void Main(string[] args)
         {
             //MusicToFile();
-            //FontToFile();
-            BlocksToFile();
+            FontToFile();
+            //BlocksToFile();
         }
 
         public static void BlocksToFile()
@@ -111,7 +111,7 @@ namespace MarioBinaryFileCreator
 
         public static void FontToFile()
         {
-            string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"\Data\Font", "*.png");
+            string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"\Font", "*.png");
 
             List<byte[]> converted = new List<byte[]>();
 
@@ -131,7 +131,7 @@ namespace MarioBinaryFileCreator
 
             try
             {
-                bw = new BinaryWriter(new FileStream(Environment.CurrentDirectory + @"\Data\Font\MarioFontFile.MEX", FileMode.Create));
+                bw = new BinaryWriter(new FileStream(Environment.CurrentDirectory + @"\MarioFontFile.MEX", FileMode.Create));
             }
             catch (IOException e)
             {

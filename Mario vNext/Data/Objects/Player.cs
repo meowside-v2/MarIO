@@ -7,7 +7,6 @@ namespace Mario_vNext.Data.Objects
     class Player : GameObject
     {
         Physics basicPhysics;
-        Keyboard keyboard;
 
         Scene Parent; 
             
@@ -23,9 +22,43 @@ namespace Mario_vNext.Data.Objects
 
             collider = new Collider(this, Parent.Model);
             basicPhysics = new Physics(this, collider);
-            keyboard = new Keyboard(100, 100, 100);
+        }
 
-            keyboard.onWKey = Jump;
+        public override void Update()
+        {
+            if (Engine.Input.IsKeyPressed(System.ConsoleKey.W))
+            {
+                if (!Jumped)
+                {
+                    DoPhysics(Physics.PhysicState.Jump);
+                }
+            }
+
+            if (Engine.Input.IsKeyPressed(System.ConsoleKey.A))
+            {
+                if (!collider.Collision(Collider.Direction.Left))
+                {
+                    X--;
+
+                    if (collider.Collision(Collider.Direction.Down))
+                    {
+                        this.DoPhysics(Physics.PhysicState.Fall);
+                    }
+                }
+            }
+
+            if (Engine.Input.IsKeyPressed(System.ConsoleKey.D))
+            {
+                if (!collider.Collision(Collider.Direction.Right))
+                {
+                    X++;
+
+                    if (collider.Collision(Collider.Direction.Down))
+                    {
+                        this.DoPhysics(Physics.PhysicState.Fall);
+                    }
+                }
+            }
         }
 
         private void DoPhysics(Physics.PhysicState type)
@@ -48,40 +81,6 @@ namespace Mario_vNext.Data.Objects
                     Task FallEvent = Task.Factory.StartNew(() => basicPhysics.Fall());
 
                     break;
-            }
-        }
-
-        private void Jump()
-        {
-            if (!Jumped)
-            {
-                DoPhysics(Physics.PhysicState.Jump);
-            }
-        }
-
-        private void MoveLeft()
-        {
-            if (this.X > 0 && !collider.Collision(Collider.Direction.Left))
-            {
-                X--;
-
-                if (collider.Collision(Collider.Direction.Down))
-                {
-                    this.DoPhysics(Physics.PhysicState.Fall);
-                }
-            }
-        }
-
-        private void MoveRight()
-        {
-            if (this.X < 1000 && !collider.Collision(Collider.Direction.Right))
-            {
-                X++;
-
-                if (collider.Collision(Collider.Direction.Down))
-                {
-                    this.DoPhysics(Physics.PhysicState.Fall);
-                }
             }
         }
     }
