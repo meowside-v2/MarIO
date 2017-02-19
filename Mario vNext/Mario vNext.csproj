@@ -53,6 +53,10 @@
     <Reference Include="DKBasicEngine 1.0">
       <HintPath>..\..\DKBasicEngine-1.0\DKBasicEngine 1.0\bin\Release\DKBasicEngine 1.0.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -66,11 +70,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Components\Dialog.cs" />
-    <Compile Include="Data\Objects\WorldObject.cs" />
-    <Compile Include="Data\Objects\Player.cs" />
-    <Compile Include="Data\Scenes\NewWorld.cs" />
-    <Compile Include="Data\Scenes\WorldEditor.cs" />
     <Compile Include="Data\Sprites.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -83,26 +82,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Data\MarioBlockSpriteFile.MEX" />
     <None Include="Data\Sprites\blocks_project.psd" />
-    <None Include="Data\WorldEditor.WORLD" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Sprites\Underground\block_041.png" />
-    <None Include="Data\Sprites\Underground\block_031.png" />
-    <None Include="Data\Sprites\Underground\block_021.png" />
-    <None Include="Data\Sprites\Underground\block_011.png" />
-    <None Include="Data\Sprites\Underground\background_021.png" />
-    <None Include="Data\Sprites\Underground\background_011.png" />
-    <None Include="Data\Sprites\Pipes\pipe_051.png" />
-    <None Include="Data\Sprites\Pipes\pipe_041.png" />
-    <None Include="Data\Sprites\Pipes\pipe_031.png" />
-    <None Include="Data\Sprites\Pipes\pipe_021.png" />
-    <None Include="Data\Sprites\Pipes\pipe_011.png" />
     <EmbeddedResource Include="Data\Sprites.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Sprites.Designer.cs</LastGenOutput>
@@ -128,27 +114,6 @@
     <EmbeddedResource Include="Data\Sprites\Ground\sky_07.png" />
     <EmbeddedResource Include="Data\Sprites\Ground\water_01.png" />
     <EmbeddedResource Include="Data\Sprites\Ground\water_02.png" />
-    <None Include="Data\Sprites\Ground\block_011.png" />
-    <None Include="Data\Sprites\Ground\block_021.png" />
-    <None Include="Data\Sprites\Ground\block_031.png" />
-    <None Include="Data\Sprites\Ground\block_041.png" />
-    <None Include="Data\Sprites\Ground\bridge1.png" />
-    <None Include="Data\Sprites\Ground\bush_011.png" />
-    <None Include="Data\Sprites\Ground\bush_021.png" />
-    <None Include="Data\Sprites\Ground\bush_031.png" />
-    <None Include="Data\Sprites\Ground\bush_small1.png" />
-    <None Include="Data\Sprites\Ground\castle_big1.png" />
-    <None Include="Data\Sprites\Ground\castle_small1.png" />
-    <None Include="Data\Sprites\Ground\cloud_011.png" />
-    <None Include="Data\Sprites\Ground\cloud_021.png" />
-    <None Include="Data\Sprites\Ground\cloud_031.png" />
-    <None Include="Data\Sprites\Ground\fence1.png" />
-    <None Include="Data\Sprites\Ground\finish_flag1.png" />
-    <None Include="Data\Sprites\Ground\finish_pole1.png" />
-    <None Include="Data\Sprites\Ground\mountain1.png" />
-    <None Include="Data\Sprites\Ground\sky_071.png" />
-    <None Include="Data\Sprites\Ground\water_011.png" />
-    <None Include="Data\Sprites\Ground\water_021.png" />
     <Content Include="Data\Sprites\mario_12x16.png" />
     <EmbeddedResource Include="Data\Sprites\Pipes\pipe_01.png" />
     <EmbeddedResource Include="Data\Sprites\Pipes\pipe_02.png" />

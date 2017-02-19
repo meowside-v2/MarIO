@@ -63,6 +63,26 @@ namespace Mario_vNext.Data {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap background_01 {
+            get {
+                object obj = ResourceManager.GetObject("background_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap background_02 {
+            get {
+                object obj = ResourceManager.GetObject("background_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap block_01 {
             get {
                 object obj = ResourceManager.GetObject("block_01", resourceCulture);
@@ -233,6 +253,16 @@ namespace Mario_vNext.Data {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mario_12x16 {
+            get {
+                object obj = ResourceManager.GetObject("mario_12x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mountain {
             get {
                 object obj = ResourceManager.GetObject("mountain", resourceCulture);
@@ -296,26 +326,6 @@ namespace Mario_vNext.Data {
         internal static System.Drawing.Bitmap sky_07 {
             get {
                 object obj = ResourceManager.GetObject("sky_07", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap underground_background_01 {
-            get {
-                object obj = ResourceManager.GetObject("underground_background_01", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap underground_background_02 {
-            get {
-                object obj = ResourceManager.GetObject("underground_background_02", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
